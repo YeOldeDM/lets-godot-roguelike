@@ -41,10 +41,10 @@ asset creation and world design (which can be a huge issue if you're a one-membe
 which is, while limited, is much easier to control and develop on.  The Roguelike is a prime candidate for doing a lot with a little.
 
 ### What do I need to start this thing?
-First off, you'll need the newest stable version of the Godot Engine. This tutorial will be written using ver 2.1.3.
+First off, you'll need the newest stable version of the [Godot Engine](https://godotengine.org/). This tutorial will be written using ver 2.1.3.
 It is highly recommended that you also download the Demo Projects as well as the Export Templates, though neither is required 
 for this tutorial.  
-This project will also be using the graphics set Dungeon Crawl Stone Soup which can be found *here*. You can, of course, use whatever graphics
+This project will also be using the graphics set Dungeon Crawl Stone Soup which can be found [here](https://opengameart.org/content/dungeon-crawl-32x32-tiles). You can, of course, use whatever graphics
 you wish (as well as create your own), but if you really want to follow along you will want to download a copy of this and extract it 
 somewhere handy.  There will also be a few 'custom' graphics I have made for the project, for the occasional things we'll need that 
 the graphics pack is lacking. Those will be made available as Free For Any Use.  
