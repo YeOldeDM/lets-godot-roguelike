@@ -9,4 +9,9 @@
 .. type: text
 -->
 
-This is a test.
+This is a test.  
+![bork!][logo] This is a bunch of text to wrap around this image.
+This is a bunch of text to wrap around this image.This is a bunch of text to wrap around this image.
+This is a bunch of text to wrap around this image.This is a bunch of text to wrap around this image.
+It doesn't make any sense.
+[logo]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/master/img/PathMapChunk.png "This is a test image, for testing!"
