@@ -16,6 +16,8 @@
 
 [convert2tileset]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/convert2tileset.png "Converting our scene to a tileset resource"
 
+[examplemap]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/examplemap.png "My test dungeon. It's not very interesting."
+
 The Project
 =====
 ### New Project
@@ -85,9 +87,174 @@ We only need these two tiles to begin working with our tilemap. We will be addin
 
 Save this alonside our other scenes in `res://core/Map/Tileset.tres`. Now, we can see where we might get mixed up if we tried having `Tileset.tres` and `Tileset.tscn` living next to each other (thus the `_edit` extension for the file we use to edit the resource).
 
+Once this is done, we can return to the Map scene. Select the Map node, go to its Tile Set property in the inspector and load the new `Tileset.tres` you just created. A new dock should open on the side of your screen with the two tiles in your tileset. You also want to set the tilemap's Cell Size property to [32,32], as our tiles are 32x32 pixels in size. Go ahead now and paint some tiles on the screen. Just make sure you work within the blue rectangle (which can be hard to see over the orange tileset grid), as that is your game's viewport. Hit the Play button and note how the view from in-game compares to the view from the editor.  
+Of course --with this being a roguelike-- we'll eventually have our game generate for us an infinite supply of dungeons through the use of black magic, but for our Minimal Viable Product, we can hand-craft our own mini-dungeon to play around in for now.  
+
+![examplemap][examplemap]
+
 ## The Player
-Our Player object will be constructed as its own scene. We'll instance it as a child of our Map node.  
+We are half way there!  We have a little world space for our little game people to exist in. Now it's time to make one of those little game people. The most important and interesting little person in this game universe: The Player!
+Our Player object will be constructed as its own scene, and brought into our Map scene as an instance. If you don't understand instances too well yet, don't worry. Just keep following along and soon it will all start to click.  
+In our new scene, let's create a `Node2D` as our base node. This is the one with the blue circle.  A Node2D is node which contains transform data (its position, rotation and scale). The only thing we really need to work with is position, as we want to be able to move our Player around its world.  
+Name this Node2D "Player" and save it as `res://core/Player/Player.tscn`.  
+We also want to assign a script to this node. Right-click it and select Add Script. If we've followed The Procedure, Godot should already know where and what to call our new script and we can just hit Create. If not, we want to save our new script as `res://core/Player/Player.gd`. We'll come back to this soon and begin writing the first of our code, but before we do that our Player needs one important part added to it.  
 
 ### The Icon
-The `Node2D` has no visual elements, so we need to add some. Add a Sprite child named "Icon".  
+The `Node2D` has no visual elements, so we need to add some if we want to be able to tell where our player is on the map. Add a `Sprite` child named "Icon".  Find a good graphic to use (`\player\base\` or `\dc-mon` if you're feeling creative) and copy it to your `res://graphics/player/base/` folder. We will be utilizing all those "paperdoll" elements found in the player folder of the source later down the road, so we'll begin setting up the local structure now.  Disable the sprite's `Centered` property, as the origin of our Meeples will be the top-left corner, not their center (doesn't make sense now, will make sense later!)  
+
+### Bringing It Together
+We now have the two important elements of our Minimal Viable Product. To bring them together, let's to back to the Map scene. Select the Map node, and click the "Instance scene file as node" button and select the Player.tscn file you just created. This should bring in an instance (a unique duplicate) of that scene into our Map scene, as a child node of our Map node. This is where the line between "node" and "scene" become a little blurry, and the exact purpose of a "scene" might seem a little less obvious. Once you work with these scenes and nodes long enough, the whole thing will feel natural and intuitive, or at least less weird.  
+
+You should now have your little Player icon floating in space in the top corner of your map. Use the Move tool to move your player somewhere toward the middle of your viewport. You can enable snap to grid, and set the grid size to 16x16 (half the resolution of our tiles). This will let you easily snap your player around the map and keep it aligned with the grid.  
+
+Now, we can hit play and stare at our player standing in the middle of our mini-dungeon. You might be able to get away with calling this "a game" at this point, but probably not. We need to have a way to let the human player control his virtual player. This is where we begin writing script. This will be just the beginning of a long scripting journey, so grab some coffee and move back over to your player script. You can access it either through its instance in the Map scene, or by going back to the Player scene and opening it there.  
+
+### See Player. See Player Run. Run Player Run!
+Whenever you create a new script, godot will fill that script with some code automatically. Without touching your script yet, it should look like this:  
+
+```python
+extends Node2D
+
+# class member variables go here, for example:
+# var a = 2
+# var b = "textvar"
+
+func _ready():
+	# Called every time the node is added to the scene.
+	# Initialization here
+	pass
+```
+Delete all of the commented lines (the lines beginning with `#`).  We want the player to react to input from the computer's devices; the keyboard specifically. We tell our node we want to do this by calling `set_process_input(true)`. By calling this in the node's `_ready()` function, we ensure that this happens "right away".  
+By turning this process on, the node calls a special function called `_input()` whenever the game registers device input. By defining this function in our script, we can do things with this input, and make things happen in our game as a result.  
+
+```python
+extends Node2D
+
+func _ready():
+	set_process_input( true )
+
+func _input( event ):
+	print( event )
+```
+The `_input()` function takes one argument, which is the InputEvent it is receiving. If you play your game with this code (making sure your Player is in the scene you're playing) you should see your debugger output spewing out massive amount of data as you do things with your mouse and/or keyboard (or your controller if you have one plugged in). This is a quick and dirty test to ensure that everything is working just as it should!  
+This doesn't do us much good, though. What we need to do, is sift through all this input and just catch the events we want, and turn those events into game action. We can do this in a simple way with `actions`. If you go to Project Settings then go to the InputMap tab, you can see several actions already defined. An action is just a string key, bound to one or more (or none) keys/buttons.  You should notice four actions called `ui_up`, `ui_down`, `ui_left` and `ui_right`. We'll borrow these temporarily to act as our player's movement actions. These are bound to their respective arrow keys on the keyboard, so they'll serve our purpose well.  
+
+We can provide a condition in our `_input` function to check if the event is an action press by calling `Input.is_action_pressed("action_name")` where "action_name" is the string key of the action we want to check for.  Let's declare four local variables within `_input` and assign them booleen values based on the pressed status of their respective actions in that input event:  
+
+```python
+extends Node2D
+
+func _ready():
+	set_process_input( true )
+
+func _input( event ):
+	
+	# Input
+	var UP = event.is_action_pressed("ui_up")
+	var DOWN = event.is_action_pressed("ui_down")
+	var LEFT = event.is_action_pressed("ui_left")
+	var RIGHT = event.is_action_pressed("ui_right")
+```
+Now to transfer those input signals to actual movement, we want to use Node2D's `set_pos()` and `get_pos()` methods. Basically, we get our current position, add some value to the X or Y values of that position based on input, then set the new position. We could hard code this to get something that looks like:
+
+```python
+	if UP:
+		var pos = get_pos()
+		pos.y -= 32
+		set_pos(pos)
+	elif DOWN:
+		var pos = get_pos()
+		pos.y += 32
+		set_pos(pos)
+  ```
+but that is hard-to-maintain, redundant, rigid, and generally fugly code.  First off, we want to make our lives easier and work within the resolution of our map cells, rather than pixels. Luckily, godot makes this task pretty easy.  
+Our `TileMap` node has two very cool methods called `world_to_map()` and `map_to_world()` which converts between pixel and cell coordinates. By giving `world_to_map()` our player's pixel position (what it returns with `get_pos()`), we can get back our player's map position. By giving `map_to_world()` a cell that we wish to move the player to, we can get back the pixel coordinates we can then give to the player's `set_pos()`. 
+We encapsulate all this in a couple helper functions we can write in the player script, below the first `extends ..` line and above `_ready()`:  
+
+```python
+extends Node2D
+
+func get_map_pos():
+	pass
+
+func set_map_pos( cell ):
+	pass
+
+func _ready():
+	set_process_input( true )
+```
+We've put `pass` under these new functions as placeholders, since it's illegal for us to declare empty functions. We'll fill them in soon. First we need our player to have a programatic link to its map parent. Since the player (and everything else living in the map) will always be a direct child of the Map node, we can know that the map can be accessed by the player with `get_parent()`, so we'll assign this to a global variable at the top of our script (still below `extends`, that line should always be at the top):
+
+```python
+onready var map = get_parent()
+```
+The `onready` at the beginning tells the script to wait until after this node has called `_ready()` and established who its parent is. Otherwise, it would try (and fail) to navigate a path which doesn't exist yet, since these global vars are declared before `_ready` is called. Basic Rule of Thumb: if a global var requires the node to look outside itself, use `onready`.  
+Now that we can easily access the map from player, let's fill in those map_pos functions:
+
+```python
+func get_map_pos():
+	return map.world_to_map( get_pos() )
+
+func set_map_pos( cell ):
+	set_pos( map.map_to_world( cell ) )
+```
+Now, writing our movement code should be much easier!  We begin each loop by getting the player's map position. Then based on input, we add or subtract 1 from either the X or Y axis. If the resulting position is different than the current position, move the player to the modified position:
+
+```python
+	var new_cell = get_map_pos()
+	if UP:
+		new_cell.y -= 1
+	if DOWN:
+		new_cell.y += 1
+	if LEFT:
+		new_cell.x -= 1
+	if RIGHT:
+		new_cell.x += 1
+	
+	if new_cell != get_map_pos():
+		set_map_pos( new_cell )
+  ```
+*(maybe you're beginning to notice this pattern of creating placeholders and perpetually being in this state of "we'll fill it in later". This is Thinking Forward, and it's a good thing)*
+
+That's it!  If you've constructed your script properly, you should be able to Hit Play and procede to march your happy little player around your map with the arrow keys. Notice he always keeps his alignment snapped to the grid, even if his initial placement is odd, or you change the cell size of the tilemap(!). We could completely rehaul our tilemap's design and go with any resolution we desire, and never have to touch our code.  For the sake of completeness, here is the complete player script so far:  
+
+```python
+extends Node2D
+
+onready var map = get_parent()
+
+func get_map_pos():
+	return map.world_to_map( get_pos() )
+
+func set_map_pos( cell ):
+	set_pos( map.map_to_world( cell ) )
+
+func _ready():
+	set_process_input( true )
+
+func _input( event ):
+	
+	# Input
+	var UP = event.is_action_pressed("ui_up")
+	var DOWN = event.is_action_pressed("ui_down")
+	var LEFT = event.is_action_pressed("ui_left")
+	var RIGHT = event.is_action_pressed("ui_right")
+	
+	# get current cell
+	var new_cell = get_map_pos()
+	
+	# modify by Input
+	if UP:
+		new_cell.y -= 1
+	if DOWN:
+		new_cell.y += 1
+	if LEFT:
+		new_cell.x -= 1
+	if RIGHT:
+		new_cell.x += 1
+	
+	# change pos if needed
+	if new_cell != get_map_pos():
+		set_map_pos( new_cell )
+  ```
 
