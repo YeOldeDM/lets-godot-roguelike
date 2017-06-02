@@ -9,6 +9,28 @@
 .. type: text
 -->
 
+```
+extends Node2D
+
+# SIGNALS #
+signal active_actor_set(actor)
+
+signal announce_check(who, check, blurb)
+signal announce_roll(who, roll, blurb)
+
+# MEMBERS #
+var active_actor = null setget _set_active_actor
+
+
+
+func make_decision( who_name, message ):
+	var pop = preload( "res://Game/DecisionPrompt/DecisionPrompt.tscn" ).instance()
+	get_node( "GUI" ).add_child( pop )
+	pop.popup_centered()
+	pop.draw( who_name, message )
+	return pop
+```
+
 Introduction
 =====
 
