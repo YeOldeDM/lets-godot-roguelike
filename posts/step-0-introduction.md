@@ -9,7 +9,7 @@
 .. type: text
 -->
 
-```
+```python
 extends Node2D
 
 # SIGNALS #
