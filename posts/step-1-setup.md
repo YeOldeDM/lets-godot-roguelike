@@ -42,11 +42,11 @@ The graphics resource being used for this project is truely huge in quantity, an
 Project Settings
 =====
 Before we get to work, we want to quickly go through our project settings. There are only a couple things we need to do here, but it's important we do it now rather than later. Project Settings can be found under the Scene menu.  
-The one most important setting we need to set is under the Image Loader category. Find the `filter` and `gen_mipmaps` options and make sure they are turned *OFF* (they will be ON by default).  While filters are great for high-resolution graphics, they make low-rez pixel art like we're using look like muddy, blurry garbage.  
+The one most important setting we need to set is under the Image Loader category. Find the `filter` and `gen_mipmaps` options and make sure they are turned *OFF* (they will be ON by default).  While filters are great for high-resolution graphics, they make low-rez pixel art look like muddy, blurry garbage. We'll be using low-rez pixel art, so we want it to look good.
 ![image loader][imageloader]  
 
 
-For a bit of early polish, we can also go to the Application category of our Project Settings. There you can give your game a proper name (the default will be your project folder name) and set a custom icon (which will be what you see next to your project in the Project Manager). 
+For a bit of early polish, we can also go to the Application category of our Project Settings. There you can give your game a proper name (the default will be your project folder name) and set a custom icon. This will change the name and icon seen for your project in the Project Manager.
 
 Can We Start Yet??
 =====
@@ -58,12 +58,12 @@ and still be considered "a game". For our roguelike, we only *really* need two i
 Our first scene will be our game's Map. The Map scene will be the object representing the static world our game will exist in. In short, 
 the dungeon's floors and walls.  
 Add your first node to this scene. The node we want to add is `TileMap`.  Once you add it, it will show up in your SceneTree panel. When you select it there, you can see all its exposed properties show up in the Inspector panel. This is the primary way you will be working with nodes throughout this project.  
-There is really not much we need to do with our new TileMap's properties yet. The one thing you do want to do is rename `TileMap` to simply `Map`.  Giving your nodes meaningful names is a good habit to get into.  
+There is really not much we need to do with our new TileMap's properties yet. The one thing you do want to do is rename `TileMap` to simply `Map`.  Giving your nodes meaningful names is a good habit to get into.  Our game will only really be "one map", so its name doesn't need to be any more descriptive than this.  
 
 ![][mapscene]
 
-If you've named your node before trying to save the scene (and good for you for saving early and often if you did!) you will want to back up a little.  When you first save a new scene, Godot will automatically name the file after your base node. If we name our node before we save, then we ensure our file name matches the base node name. This is a good bit of organization we can get for free, as long as we follow the procedure!  
-We also want to find a good home for our new Map.tscn file (and it should be named "Map.tscn" by now).  For core game scenes, we'll create a new folder in `res://` called "core". Within that, we want to create a dedicated folder for our scene, which is named after our scene (which is named after its base node). The path of this new scene should be `res://core/Map/Map.tscn`. It might seem redundant, but go with it, later on we'll see why we've done it this way.  
+If you've saved your scene before renaming your base node *(and good for you for saving early and often if you did!)* you will want to back up a little.  When you first save a new scene, Godot will automatically name the file after your base node. If we name our node before we save, then we ensure our file name matches the base node name. This is a good bit of organization we can get for free, as long as we follow the procedure!  
+We also want to find a good home for our new Map.tscn file (and it should be named "Map.tscn" by now).  For core game scenes, we'll create a new folder in `res://` called "core". Within that, we want to create a dedicated folder for our scene, which is named after our scene (which is named after its base node). The path of this new scene should be `res://core/Map/Map.tscn`. It might seem redundant, but go with it, later on we'll see why we've done it this way. If you did save your scene somewhere else, go back and delete it now. Clean projects are happy projects.  
 
 **Sidenote**  
 This first node in a scene is often called the "base node" or "top node" (some also might call it the "root node", but that might be confusing with another part of your scene which is called "root", so I avoid using it). So whenever base node or top node is referred to in these articles, that is what we're talking about.
