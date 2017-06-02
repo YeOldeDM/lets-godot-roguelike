@@ -21,7 +21,7 @@ BLOG_AUTHOR = "YeOldeDM"  # (translatable)
 BLOG_TITLE = "Let's Godot Roguelike"  # (translatable)
 # This is the main URL for your site. It will be used
 # in a prominent link. Don't forget the protocol (http/https)!
-SITE_URL = "https://example.com/"
+SITE_URL = "http://lets-godot-roguelike.netlify.com/"
 # This is the URL where Nikola's output will be deployed.
 # If not set, defaults to SITE_URL
 # BASE_URL = "https://example.com/"
