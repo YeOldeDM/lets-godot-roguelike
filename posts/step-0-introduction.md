@@ -1,7 +1,7 @@
 <!--
 .. title: Step 0: So You Want To Make A Roguelike
 .. slug: step-0-introduction
-.. date: 2016-06-1 01:00:00 UTC
+.. date: 2017-06-1 01:00:00 UTC
 .. tags: 
 .. category: 
 .. link: 
