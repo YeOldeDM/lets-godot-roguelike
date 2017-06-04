@@ -18,6 +18,13 @@
 
 [examplemap]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/examplemap.png "My test dungeon. It's not very interesting."
 
+[filestruct]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/filestruct.png "The beginning of the project file structure"
+
+[topnode]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/topnode.png "There can be only one!"
+
+[tilescene]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/tilesscene.png "The Tiles_edit SceneTree"
+
+[step1scene]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/step1scene.png "The working product so far"
 
 The Project
 =====
@@ -37,7 +44,8 @@ There is, of course, an exception to all of this. And it is called `user://`. Bu
 
 ### A Decent file structure
 Just as it's important for us to make a firm early decision about our project folder location, we want to exercise the same sort of diligence when constructing the file structure within our project folder. Games are made up of a thousand tiny pieces, and trying to keep these peices organized will help us work faster and better, which is good.
-*(picture diagram of mock file structure)*  
+![][filestruct]  
+*An image of what our project folder's file structure should be like. The blacked-out folders are extra things that shouldn't have been in that screenshot...*
 
 ### Bringing in graphics  
 The graphics resource being used for this project is truely huge in quantity, and there is no way we will be using all of them by the time this thing is finished. It might be tempting to throw this resource folder into your project folder and work with it from there. **Don't do this!** Keep your source folder close, but only bring in the graphics you need, when you need them. We will be using our own `graphics/` folder with its own structure (which is close to what the source folder follows, but not quite).  
@@ -70,7 +78,8 @@ We also want to find a good home for our new Map.tscn file (and it should be nam
 One final thing we can do before we move on is to set this scene as our `main_scene`. Go to Project Settings > Application. There you will find a `main_scene` property and a field to select a file from your project folder. 
 
 **Sidenote**  
-This first node in a scene is often called the "base node" or "top node" (some also might call it the "root node", which would make sense except it might be confusing with the hidden base of your scene which is actually called "root"). So whenever base node or top node is refered to in these articles, that is what we're talking about. That node at the top of your SceneTree.
+This first node in a scene is often called the "base node" or "top node" (some also might call it the "root node", which would make sense except it might be confusing with the hidden base of your scene which is actually called "root"). So whenever base node or top node is refered to in these articles, that is what we're talking about. That node at the top of your SceneTree.  
+![][topnode]  
 Each scene can only have one base node, and once that base node is added, it can't be moved or deleted without deleting the rest of the tree. You can change the type of the base node by right-clicking it and choosing the option there, but it's another one of those cases where it's best to Get It Right The First Time, or Start Over Soon. Changing Type is also known to break nodes on occasion as well, so use the option carefully.  Godot may be pretty stable, but it's not without its faults...  
 
 ### Tilesets
@@ -83,7 +92,9 @@ But since our Tileset will be a resource that will be used exclusively by our Ma
 
 Now, let's fill our Tileset scene with tiles! As a child of Tileset, add two new `Sprite` nodes. We also need to bring in two of the dungeon tile graphics to use; one for floor tiles and one for wall tiles.  I'm using `\dc-dngn\floor\sandstone_floor0.png` and `\dc-dngn\wall\sandstone_wall0.png`, and copying them in `res://graphics/dun/floor/sandstone_floor0.png` and `res://graphics/dun/wall/sandstone_wall0.png`.  Name these sprites "Wall" and "Floor" and give them appropriate tiles (loading them from `res://graphics/`). Tilesets work on tile indicies, so the order of your sprites is important. Our first tile will be index 0, the second 1, and so on.  It will matter later which number represents walls and which are floors, so we want to be consistent. So: 
 `WALLS = 0`  `FLOORS = 1`  
-If for whatever reason, it makes more sense to you to switch them around, you can. Just pick a pattern and stick to it.  
+![][tilescene]  
+Your scene should be looking like this. The position of the sprites in this scene does not matter, though it doesn't hurt to lay them out in some organization.  
+
 We only need these two tiles to begin working with our tilemap. We will be adding much (much) more to this later, once we are ready for that. Before we can use this with our Map scene, we need to convert it to a tileset resource. Go to Scene > Convert to.. > Tileset
 
 ![][convert2tileset]
@@ -233,29 +244,35 @@ For the sake of completeness, here is the complete player script so far:
 ```python
 extends Node2D
 
+# Map node
 onready var map = get_parent()
 
+# Get our position in Map Coordinates
 func get_map_pos():
 	return map.world_to_map( get_pos() )
 
+# Set our position to Map Coordinates
 func set_map_pos( cell ):
 	set_pos( map.map_to_world( cell ) )
 
+
+# Init
 func _ready():
 	set_process_input( true )
 
+# Input
 func _input( event ):
 	
-	# Input
+	# Action flags
 	var UP = event.is_action_pressed("ui_up")
 	var DOWN = event.is_action_pressed("ui_down")
 	var LEFT = event.is_action_pressed("ui_left")
 	var RIGHT = event.is_action_pressed("ui_right")
 	
-	# get current cell
+	# get our map position to modify
 	var new_cell = get_map_pos()
 	
-	# modify by Input
+	# Modify new_cell based on actions
 	if UP:
 		new_cell.y -= 1
 	if DOWN:
@@ -265,8 +282,19 @@ func _input( event ):
 	if RIGHT:
 		new_cell.x += 1
 	
-	# change pos if needed
+	# If new_cell was modified, set our position
 	if new_cell != get_map_pos():
 		set_map_pos( new_cell )
+
+
+
+
   ```
+I've added plenty of comments to the code to remind myself of what a particular chunk of code is really doing. Get into the habit of commenting your own code, as thouroughly or sparsely as you feel you need to.  
+
+![][step1scene]  
+*Here is a screenshot of the main scene of our game.*  
+
+That's it for this step! In the next step we will make it so our player can't walk through walls, and expand on the movement mechanics we've established here. Since we spent the extra time in this step setting the stage, this next leap should be straight-forward and easy to get through.  
+See you there!  
 
