@@ -26,6 +26,8 @@
 
 [step1scene]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/step1scene.png "The working product so far"
 
+[projectfolder]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/projfold.png "Our happy little project folder, filled with happy little file dreams"
+
 The Project
 =====
 ### New Project
@@ -34,7 +36,8 @@ Start up Godot and create a new project from the Project Manager.  Find a *good 
 
 ![new project screenshot][newproject]  
 
-### The project folder
+### The project folder  
+![][projectfolder]  
 Because it's important to understand early on, I'm going to explain the project folder just a bit. If you're already familiar with working with project within Godot, you can skip to the next section.  
 
 When working on our game, we will eventually want to be able to navigate the file structure of our project, using a path string which will look something like:
