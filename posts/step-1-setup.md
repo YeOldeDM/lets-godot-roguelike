@@ -31,7 +31,7 @@
 The Project
 =====
 ### New Project
-![][newproject]
+![](https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/newproject.png)
 
 We're going to jump straight into building our project in Godot.  
 Start up Godot and create a new project from the Project Manager.  Find a *good home* for your project and create a folder there. *Make sure you are creating your project in the location you want to keep it!* You can move your project folder around your hard drive and re-import it from the new source if you need to, but it's a pain in our ass we want to avoid if we can.  
@@ -48,7 +48,8 @@ If our project was located in `C:\MyProject`, the above resource path would poin
 There is, of course, an exception to all of this. And it is called `user://`. But we will get to that much farther down the road, so there's no need to worry about it.
 
 ### A Decent file structure
-Just as it's important for us to make a firm early decision about our project folder location, we want to exercise the same sort of diligence when constructing the file structure within our project folder. Games are made up of a thousand tiny pieces, and trying to keep these peices organized will help us work faster and better, which is good.
+Just as it's important for us to make a firm early decision about our project folder location, we want to exercise the same sort of diligence when constructing the file structure within our project folder. Games are made up of a thousand tiny pieces, and trying to keep these peices organized will help us work faster and better, which is good.  
+
 ![][filestruct]  
 *An image of what our project folder's file structure should be like. The blacked-out folders are extra things that shouldn't have been in that screenshot...*
 
