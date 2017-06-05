@@ -54,7 +54,24 @@ func step( direction ):
 
 Movement
 =====
+So far, our player movement system is only okay. One feature we are going to want to add to it is the ability to move diagonally. Because of the nature of our game, using combinations of arrow keys to get diagonal movement just will not be possible. Also, once we begin adding HUD elements to our game, those `ui_` actions will be used to shift the focus of those elements, and we don't want those being confused with our movement actions. We want to dedicate a block of eight keys on our keyboard to player movement.  
 
 ### Speaking Through Actions
+If you go to Project Settings > InputMap, you can manage your game's Actions.  
 
 ### Eight Degrees Of Freedom
+In my opinion, the best keys to use for our 8-directional movement are the "outer ring" of the keypad. Unfortunately, enough keyboards out there don't have dedicated keypads. So we want to provide an alternative for those poor souls.  
+```
+7 8 9
+4 5 6
+1 2 3
+```  
+or  
+```
+Q W E
+A S D
+Z X C
+```  
+(KP5/S is not being used for movement, but we will be using these keys later)  
+
+Fortunately for us, we can assign as many input events as we like to a single action! We can bind both sets of keys to our `step_` actions.
