@@ -33,6 +33,20 @@ func is_floor( cell ):
 We can put all our movement code into a new function of player called `step( direction )`. This will attempt to move the player one cell
 along the vector of `direction`. If the player tries stepping into a wall, we can call a print statement to confirm the condition.  
 
+Directional Constants:  
+```python
+const DIRECTIONS = {
+	"N":	Vector2(0,-1),
+	"NE":	Vector2(1,-1),
+	"E":	Vector2(1,0),
+	"SE":	Vector2(1,1),
+	"S":	Vector2(0,1),
+	"SW":	Vector2(-1,1),
+	"W":	Vector2(-1,0),
+	"NW":	Vector2(-1,-1),
+	}
+```
+
 ```python
 func step( direction ):
 
