@@ -10,23 +10,23 @@
 -->
 [newproject]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/newproject.png "Our brand-new project, sitting atop our project list, eager to be filled with bugs"
 
-[imageloader]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/imageloadersettings.png "Image Loader settings will ensure our pixel art doesn't get turned into blurry goop"
+[imageloader]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/imageloadersettings.png "Image Loader settings will ensure our pixel art doesn't get turned into blurry goop"
 
-[mapscene]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/mapscene.png "Our very first scene, waiting to make the awesome happen"
+[mapscene]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/mapscene.png "Our very first scene, waiting to make the awesome happen"
 
-[convert2tileset]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/convert2tileset.png "Converting our scene to a tileset resource"
+[convert2tileset]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/convert2tileset.png "Converting our scene to a tileset resource"
 
-[examplemap]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/examplemap.png "My test dungeon. It's not very interesting."
+[examplemap]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/examplemap.png "My test dungeon. It's not very interesting."
 
-[filestruct]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/filestruct.png "The beginning of the project file structure"
+[filestruct]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/filestruct.png "The beginning of the project file structure"
 
-[topnode]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/topnode.png "There can be only one!"
+[topnode]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/topnode.png "There can be only one!"
 
-[tilescene]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/tilesscene.png "The Tiles_edit SceneTree"
+[tilescene]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/tilesscene.png "The Tiles_edit SceneTree"
 
-[step1scene]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/step1scene.png "The working product so far"
+[step1scene]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/step1scene.png "The working product so far"
 
-[projectfolder]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/projfold.png "Our happy little project folder, filled with happy little file dreams"
+[projectfolder]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/projfold.png "Our happy little project folder, filled with happy little file dreams"
 
 The Project
 =====
