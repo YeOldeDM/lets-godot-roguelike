@@ -14,9 +14,9 @@ This series of articles will go through the process of creating a roguelike game
 The Steps
 =====
 
-[Step 0: So You Want To Make A Roguelike](http://lets-godot-roguelike.netlify.com/step-0-introduction.html)  
-[Step 1: Learning To Crawl](http://lets-godot-roguelike.netlify.com/step-1-setup.html)  
-[Step 2: Learning To Walk](http://lets-godot-roguelike.netlify.com/step-2-collision.html)  
+[Step 0: So You Want To Make A Roguelike](http://cutter-janice-38234.netlify.com/step-0-introduction.html)  
+[Step 1: Learning To Crawl](http://cutter-janice-38234.netlify.com/step-1-setup.html)  
+[Step 2: Learning To Walk](http://cutter-janice-38234.netlify.com/step-2-collision.html)  
 
 
 This tutorial is currently a work in progress. New articles will be added to this list as they are made, so stay tuned!  
