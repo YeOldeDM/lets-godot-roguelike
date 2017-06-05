@@ -10,23 +10,23 @@
 -->
 [newproject]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/newproject.png "Our brand-new project, sitting atop our project list, eager to be filled with bugs"
 
-[imageloader]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/imageloadersettings.png "Image Loader settings will ensure our pixel art doesn't get turned into blurry goop"
+[imageloader]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/imageloadersettings.png "Image Loader settings will ensure our pixel art doesn't get turned into blurry goop"
 
-[mapscene]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/mapscene.png "Our very first scene, waiting to make the awesome happen"
+[mapscene]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/mapscene.png "Our very first scene, waiting to make the awesome happen"
 
-[convert2tileset]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/convert2tileset.png "Converting our scene to a tileset resource"
+[convert2tileset]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/convert2tileset.png "Converting our scene to a tileset resource"
 
-[examplemap]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/examplemap.png "My test dungeon. It's not very interesting."
+[examplemap]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/examplemap.png "My test dungeon. It's not very interesting."
 
-[filestruct]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/filestruct.png "The beginning of the project file structure"
+[filestruct]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/filestruct.png "The beginning of the project file structure"
 
-[topnode]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/topnode.png "There can be only one!"
+[topnode]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/topnode.png "There can be only one!"
 
-[tilescene]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/tilesscene.png "The Tiles_edit SceneTree"
+[tilescene]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/tilesscene.png "The Tiles_edit SceneTree"
 
-[step1scene]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/step1scene.png "The working product so far"
+[step1scene]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/step1scene.png "The working product so far"
 
-[projectfolder]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/master/img/projfold.png "Our happy little project folder, filled with happy little file dreams"
+[projectfolder]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/projfold.png "Our happy little project folder, filled with happy little file dreams"
 
 The Project
 =====
@@ -34,7 +34,8 @@ The Project
 We're going to jump straight into building our project in Godot.  
 Start up Godot and create a new project from the Project Manager.  Find a *good home* for your project and create a folder there. *Make sure you are creating your project in the location you want to keep it!* You can move your project folder around your hard drive and re-import it from the new source if you need to, but it's a pain in our ass we want to avoid if we can.  
 
-![new project screenshot][newproject]  
+![][newproject]  
+
 
 ### The project folder  
 ![][projectfolder]  
