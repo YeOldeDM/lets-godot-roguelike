@@ -1,7 +1,7 @@
 <!--
 .. title: Step 1: Learning To Crawl
 .. slug: step-1-setup
-.. date: 2017-06-1 01:00:00 UTC
+.. date: 2017-06-5 02:00:00 UTC
 .. tags: 
 .. category: 
 .. link: 
