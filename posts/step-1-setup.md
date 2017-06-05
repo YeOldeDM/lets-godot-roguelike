@@ -31,10 +31,11 @@
 The Project
 =====
 ### New Project
+![][newproject]
+
 We're going to jump straight into building our project in Godot.  
 Start up Godot and create a new project from the Project Manager.  Find a *good home* for your project and create a folder there. *Make sure you are creating your project in the location you want to keep it!* You can move your project folder around your hard drive and re-import it from the new source if you need to, but it's a pain in our ass we want to avoid if we can.  
 
-![][newproject]  
 
 
 ### The project folder  
