@@ -1,40 +1,47 @@
 <!--
 .. title: Step 1: Learning To Crawl
 .. slug: step-1-setup
-.. date: 2017-06-1 01:00:00 UTC
+.. date: 2017-06-5 02:00:00 UTC
 .. tags: 
 .. category: 
 .. link: 
 .. description: 
 .. type: text
 -->
-[newproject]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/newproject.png "Our brand-new project, sitting atop our project list, eager to be filled with bugs"
 
-[imageloader]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/imageloadersettings.png "Image Loader settings will ensure our pixel art doesn't get turned into blurry goop"
 
-[mapscene]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/mapscene.png "Our very first scene, waiting to make the awesome happen"
+[newproject]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/newproject.png "Our brand-new project, sitting atop our project list, eager to be filled with bugs"
 
-[convert2tileset]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/convert2tileset.png "Converting our scene to a tileset resource"
+[imageloader]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/imageloadersettings.png "Image Loader settings will ensure our pixel art doesn't get turned into blurry goop"
 
-[examplemap]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/examplemap.png "My test dungeon. It's not very interesting."
+[mapscene]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/mapscene.png "Our very first scene, waiting to make the awesome happen"
 
-[filestruct]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/filestruct.png "The beginning of the project file structure"
+[convert2tileset]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/convert2tileset.png "Converting our scene to a tileset resource"
 
-[topnode]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/topnode.png "There can be only one!"
+[examplemap]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/examplemap.png "My test dungeon. It's not very interesting."
 
-[tilescene]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/tilesscene.png "The Tiles_edit SceneTree"
+[filestruct]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/filestruct.png "The beginning of the project file structure"
 
-[step1scene]: https://raw.githubusercontent.com/YeOldeDM/lets-godot-roguelike/step-1/img/step1scene.png "The working product so far"
+[topnode]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/topnode.png "There can be only one!"
+
+[tilescene]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/tilesscene.png "The Tiles_edit SceneTree"
+
+[step1scene]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/step1scene.png "The working product so far"
+
+[projectfolder]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/projfold.png "Our happy little project folder, filled with happy little file dreams"
 
 The Project
 =====
 ### New Project
+![](https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/newproject.png)
+
 We're going to jump straight into building our project in Godot.  
 Start up Godot and create a new project from the Project Manager.  Find a *good home* for your project and create a folder there. *Make sure you are creating your project in the location you want to keep it!* You can move your project folder around your hard drive and re-import it from the new source if you need to, but it's a pain in our ass we want to avoid if we can.  
 
-![new project screenshot][newproject]  
 
-### The project folder
+
+### The project folder  
+![][projectfolder]  
 Because it's important to understand early on, I'm going to explain the project folder just a bit. If you're already familiar with working with project within Godot, you can skip to the next section.  
 
 When working on our game, we will eventually want to be able to navigate the file structure of our project, using a path string which will look something like:
@@ -43,7 +50,8 @@ If our project was located in `C:\MyProject`, the above resource path would poin
 There is, of course, an exception to all of this. And it is called `user://`. But we will get to that much farther down the road, so there's no need to worry about it.
 
 ### A Decent file structure
-Just as it's important for us to make a firm early decision about our project folder location, we want to exercise the same sort of diligence when constructing the file structure within our project folder. Games are made up of a thousand tiny pieces, and trying to keep these peices organized will help us work faster and better, which is good.
+Just as it's important for us to make a firm early decision about our project folder location, we want to exercise the same sort of diligence when constructing the file structure within our project folder. Games are made up of a thousand tiny pieces, and trying to keep these peices organized will help us work faster and better, which is good.  
+
 ![][filestruct]  
 *An image of what our project folder's file structure should be like. The blacked-out folders are extra things that shouldn't have been in that screenshot...*
 
@@ -170,18 +178,18 @@ func _input( event ):
 	var LEFT = event.is_action_pressed("ui_left")
 	var RIGHT = event.is_action_pressed("ui_right")
 ```
-Now to transfer those input signals to actual movement, we want to use Node2D's `set_pos()` and `get_pos()` methods. Basically, we get our current position, add some value to the X or Y values of that position based on input, then set the new position. We could hard code this to get something that looks like:
+Now to transfer those input signals to actual movement, we want to use Node2D's `set_pos()` and `get_pos()` methods. Basically, we get our current position, add some value to the X or Y values of that position based on input, then set the new position. We could hard code this to get something that looks like:  
 
 ```python
-	if UP:
-		var pos = get_pos()
-		pos.y -= 32
-		set_pos(pos)
-	elif DOWN:
-		var pos = get_pos()
-		pos.y += 32
-		set_pos(pos)
-  ```
+if UP:
+	var pos = get_pos()
+	pos.y -= 32
+	set_pos(pos)
+elif DOWN:
+	var pos = get_pos()
+	pos.y += 32
+	set_pos(pos)
+```
 but that is hard-to-maintain, redundant, rigid, and generally fugly code.  First off, we want to make our lives easier and work within the resolution of our map cells, rather than pixels. Luckily, godot makes this task pretty easy.  
 Our `TileMap` node has two very cool methods called `world_to_map()` and `map_to_world()` which converts between pixel and cell coordinates. By giving `world_to_map()` our player's pixel position (what it returns with `get_pos()`), we can get back our player's map position. By giving `map_to_world()` a cell that we wish to move the player to, we can get back the pixel coordinates we can then give to the player's `set_pos()`. 
 We encapsulate all this in a couple helper functions we can write in the player script, below the first `extends ..` line and above `_ready()`:  
@@ -199,7 +207,7 @@ func _ready():
 	set_process_input( true )
 ```
 We've put `pass`, which is an instruction to "do nothing", under these new functions as placeholders, since it's illegal for us to declare empty functions (the same thing was added to `_ready()` when our script was created). Once we fill in the functions with real code, we can delete the `pass`.  
-Yo start, we need our player to have a link to its map parent. Since the player (and everything else living in the map) will always be a direct child of the Map node, we can know that the map can be accessed by the player with `get_parent()`, so we'll assign this to a global variable at the top of our script (still below `extends`, that line should always be at the top):
+Yo start, we need our player to have a link to its map parent. Since the player (and everything else living in the map) will always be a direct child of the Map node, we can know that the map can be accessed by the player with `get_parent()`, so we'll assign this to a global variable at the top of our script (still below `extends`, that line should always be at the top):  
 
 ```python
 onready var map = get_parent()
@@ -210,7 +218,7 @@ The `onready` at the beginning tells the script to wait until after this node ha
 *a parent node is not ready until all its children are ready.*  This is an important rule to remember once we start getting a lot of nodes in our main scene trying to do funky things in their `_ready` functions.  
 
 Rule of Thumb: if a global var requires the node to look outside itself, use `onready`.  
-Now that we can easily access the map from player, let's fill in those map_pos functions:
+Now that we can easily access the map from player, let's fill in those map_pos functions:  
 
 ```python
 func get_map_pos():
@@ -219,10 +227,10 @@ func get_map_pos():
 func set_map_pos( cell ):
 	set_pos( map.map_to_world( cell ) )
 ```
-Now, writing our movement code should be much easier!  We begin each loop by getting the player's map position. Then based on input, we add or subtract 1 from either the X or Y axis. If the resulting position is different than the current position (that is, it modified the `new_cell` variable due to input), move the player to the modified position. Otherwise, don't bother. Here's what that looks like:
+Now, writing our movement code should be much easier!  We begin each loop by getting the player's map position. Then based on input, we add or subtract 1 from either the X or Y axis. If the resulting position is different than the current position (that is, it modified the `new_cell` variable due to input), move the player to the modified position. Otherwise, don't bother. Here's what that looks like:  
 
-```python
-	var new_cell = get_map_pos()
+```python	
+	# Modify new_cell based on actions
 	if UP:
 		new_cell.y -= 1
 	if DOWN:
@@ -232,10 +240,11 @@ Now, writing our movement code should be much easier!  We begin each loop by get
 	if RIGHT:
 		new_cell.x += 1
 	
+	# If new_cell was modified, set our position
 	if new_cell != get_map_pos():
 		set_map_pos( new_cell )
-  ```
-Here is an Unofficial Fundamental Game Design Pattern. `Get` some data. `Do` things to that data. `Set` the changed data. Almost everything your game does can almost always be broken down into this pattern, and thinking through problems in this way can usually lead to a good solution.
+```
+Here is a Game Design Pattern. `Get` some data. `Do` things to that data. `Set` the changed data. Almost everything your game does can almost always be broken down into this pattern, and thinking through problems in this way can usually lead to good solutions.
 
 That's it!  If you've constructed your script properly, you should be able to Hit Play and procede to march your happy little player around your map with the arrow keys. Notice he always keeps his alignment snapped to the grid, even if his initial placement is odd, or you change the cell size of the tilemap(!). We could completely rehaul our tilemap's design and go with any resolution we desire, and never have to touch our code to make it compatible. 
 
@@ -289,11 +298,13 @@ func _input( event ):
 
 
 
-  ```
-I've added plenty of comments to the code to remind myself of what a particular chunk of code is really doing. Get into the habit of commenting your own code, as thouroughly or sparsely as you feel you need to.  
+```
+I've added plenty of comments to the code to verbally illustrate what a particular chunk of code is really doing.  
 
 ![][step1scene]  
 *Here is a screenshot of the main scene of our game.*  
+
+[here](https://github.com/YeOldeDM/realms-of-todog/tree/39c93e2e5a3b4ad1002e8b989e0235a6fb650226) you can download a snapshot of the project at this current step, if you'd like something to compare to your own project.  
 
 That's it for this step! In the next step we will make it so our player can't walk through walls, and expand on the movement mechanics we've established here. Since we spent the extra time in this step setting the stage, this next leap should be straight-forward and easy to get through.  
 See you there!  
