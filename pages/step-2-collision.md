@@ -23,16 +23,89 @@ we can use this to our advantage and create our own collision system.
 From our player, when they move, we can get the map cell they are going to move into. From our map, we can see if that cell is a floor (assuming what's
 not a floor will be a wall). If we put those two pieces of information together, we can create a condition in our movement code which only
 move the player into valid cells.  
+Go ahead and add a new script to your Map node. Auto-complete here should give you the correct path and filename. Much like we did with the player script, we can delete all the text in this script except the first `extends ..` line. Our map node will soon be performing all kinds of cool functions, but for now we need just this one simple one:  
 
 ```python
+extends TileMap
+
+# Return TRUE if cell is a floor on the map
 func is_floor( cell ):
+	return get_cellv( cell ) == 1
   
 ```
+If you look through the documentation for the methods of `TileMap`, you will see both `get_cell()` and `get_cellv()` methods (as well as comperable methods for setting cells). Where the former takes two `int` arguments (X and Y), the "v" varients take one `Vector2` argument ( Vector2(X,Y) ). Since the argument we're expecting in our `is_floor( cell )` is a Vector2, it makes sense for us to use the method of our map that also takes a Vector2.  
 
 ### Stepping
 We can put all our movement code into a new function of player called `step( direction )`. This will attempt to move the player one cell
 along the vector of `direction`. If the player tries stepping into a wall, we can call a print statement to confirm the condition.  
+Add this function to the player script, just below `var map`, above the other functions:  
 
+```python
+# Step one cell in a direction
+func step( dir ):
+	# Clamp vector to 1 cell in any direction
+	dir.x = clamp( dir.x, -1, 1 )
+	dir.y = clamp( dir.y, -1, 1 )
+	
+	# Calculate new cell
+	var new_cell = get_map_pos() + dir
+	
+	# Check for valid cell to step to
+	if map.is_floor( new_cell ):
+		set_map_pos( new_cell )
+	else:
+		print( "Ow! You hit a wall!" )
+```  
+Now that all this getting and setting of map positions is being done in this function, we can remove all of this from our `_input` function and replace it with something more concise:  
+```python
+# Input
+func _input( event ):
+	
+	# Step Actions
+	if event.is_action_pressed("ui_up"):
+		step( Vector2( 0, -1 ) )
+	if event.is_action_pressed("ui_down"):
+		step( Vector2( 0, 1 ) )
+	if event.is_action_pressed("ui_left"):
+		step( Vector2( -1, 0 ) )
+	if event.is_action_pressed("ui_left"):
+		step( Vector2( 1, 0 ) )
+```  
+Remember that in Godot's 2D environment, "up" and "left" are negative, "down" and "right" are positive.  
+*(little more about Vectors)*  
+
+Movement
+=====
+So far, our player movement control is only okay. One feature we are going to want to add to it is the ability to move diagonally. Because of the nature of our game, using combinations of arrow keys to get diagonal movement just will not be possible. Also, once we begin adding HUD elements to our game, those `ui_` actions will be used to shift the focus of those elements, and we don't want those being confused with our movement actions. We want to dedicate a block of eight (nine, actually) keys on our keyboard to player movement.  
+
+### Speaking Through Actions
+If you go to Project Settings > InputMap, you can manage your game's Actions.  Because they can be expressed in a short and understandable way, we'll use "compass coordinates" to express direction. We will say "N"orth equals "Up", "W"est equals "Left", and so on.  For our action names, we'll use a convention of `step_D` where D is the compass direction we want that action to represent.  
+![InputMap image]  
+
+
+### Eight Degrees Of Freedom
+In my opinion, the best keys to use for our 8-directional movement are the "outer ring" of the keypad. Unfortunately, enough keyboards out there don't have dedicated keypads for us to be able to rely on them as a primary control scheme. So we want to provide an alternative for those poor souls.  
+```
+7 8 9
+4 5 6
+1 2 3
+```  
+or  
+```
+Q W E
+A S D
+Z X C
+```  ![keylayouts]
+(KP5/S are not being used for movement, but we will be using these keys later)  
+
+Fortunately for us, we can assign as many input events as we like to a single action! We can bind both sets of keys to our `step_` actions.  
+
+
+### Acting Is Reacting
+Putting these two bits of function together to move our player with our new custom actions is pretty straightforward.  
+
+First, we want to give ourselves a non-confusing way to convert our abstract compass coordinates to the Vector2s the script can work with. We could hard-code it like we already have it, but we should know by now that hard-coding things is (mostly) a Bad Idea.  
+We can declare a `Dictionary` in our player script, which holds Vector2 coordinates under compass coordinate keys. 
 Directional Constants:  
 ```python
 const DIRECTIONS = {
@@ -45,33 +118,39 @@ const DIRECTIONS = {
 	"W":	Vector2(-1,0),
 	"NW":	Vector2(-1,-1),
 	}
-```
+```  
+Now, all we need to do is replace the wall of ifs in our player's `_input` function with the eight directions we need. Rather than passing a Vector2 directly to `step()`, we're passing a reference to our DIRECTIONS dictionary:  
 
 ```python
-func step( direction ):
-
-```
-
-Movement
-=====
-So far, our player movement system is only okay. One feature we are going to want to add to it is the ability to move diagonally. Because of the nature of our game, using combinations of arrow keys to get diagonal movement just will not be possible. Also, once we begin adding HUD elements to our game, those `ui_` actions will be used to shift the focus of those elements, and we don't want those being confused with our movement actions. We want to dedicate a block of eight keys on our keyboard to player movement.  
-
-### Speaking Through Actions
-If you go to Project Settings > InputMap, you can manage your game's Actions.  
-
-### Eight Degrees Of Freedom
-In my opinion, the best keys to use for our 8-directional movement are the "outer ring" of the keypad. Unfortunately, enough keyboards out there don't have dedicated keypads. So we want to provide an alternative for those poor souls.  
-```
-7 8 9
-4 5 6
-1 2 3
+# Input
+func _input( event ):
+	
+	if Input.is_action_pressed( "step_n" ):
+		step( DIRECTIONS.N )
+	if Input.is_action_pressed( "step_ne" ):
+		step( DIRECTIONS.NE )
+	if Input.is_action_pressed( "step_e" ):
+		step( DIRECTIONS.E )
+	if Input.is_action_pressed( "step_se" ):
+		step( DIRECTIONS.SE )
+	if Input.is_action_pressed( "step_s" ):
+		step( DIRECTIONS.S )
+	if Input.is_action_pressed( "step_sw" ):
+		step( DIRECTIONS.SW )
+	if Input.is_action_pressed( "step_w" ):
+		step( DIRECTIONS.W )
+	if Input.is_action_pressed( "step_nw" ):
+		step( DIRECTIONS.NW )
 ```  
-or  
-```
-Q W E
-A S D
-Z X C
-```  
-(KP5/S is not being used for movement, but we will be using these keys later)  
+Now, we could probably slim this down with some programming trickery, and do the same thing with only a handful of lines. But there is a point where you're just trying to swat flies with a bazooka. This code is a little clunky, but it's easy to read (even if you don't know the programming language) and easy to work with. For our purposes, this is more important than being fancy.  
 
-Fortunately for us, we can assign as many input events as we like to a single action! We can bind both sets of keys to our `step_` actions.
+Fire up your game and you should now be able to move in all eight directions, using whatever key(s) you've bound to your step actions!  
+
+That is it for this step! The next thing we're going to work on is it's own thing, so we will give it its own step.  
+
+[here]() you can download a snapshot of the project at this current step, if you'd like something to compare to your own project. 
+
+
+
+
+
