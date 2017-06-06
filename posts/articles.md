@@ -14,7 +14,7 @@ This series of articles will go through the process of creating a roguelike game
 The Steps
 =====
 
-[Step 0: So You Want To Make A Roguelike](http://cutter-janice-38234.netlify.com/step-0-introduction.html)  
+[Step 0: So You Want To Make A Roguelike](step-0-introduction.html)  
 [Step 1: Learning To Crawl](http://cutter-janice-38234.netlify.com/step-1-setup.html)  
 [Step 2: Learning To Walk](http://cutter-janice-38234.netlify.com/step-2-collision.html)  
 
