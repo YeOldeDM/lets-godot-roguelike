@@ -9,7 +9,7 @@
 .. type: text
 -->
 
-[isfloor]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/step-2/img/isfloor.png
+[isfloor]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/step-2/img/isfloor.png
 
 [stepactions]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/step-2/img/stepactions.png "Our new InputMap, with all our new actions just barely fitting on-screen"  
 
