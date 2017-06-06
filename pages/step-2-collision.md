@@ -15,6 +15,9 @@
 
 [searchhelp]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/step-2/img/searchhelp.png  
 
+[compasscoord]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/step-2/img/compascoord.png
+
+[screencoord]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/step-2/img/screencoord.png
 
 In the last step, we began our new project, set some settings, and constructed a skeleton on which we can now begin building the rest of our game upon.  
 In this step we will be adding a collision system to our game, as well as flesh out our current player movement system.  
@@ -41,9 +44,7 @@ func is_floor( cell ):
   
 ```  
 
-![][isfloor]  
 
-*In a way, our player (and any future dungeon occupants who can move around) are playing a game of Battleship against the map.*  
 
 If you look through the documentation for the methods of `TileMap`, you will see both `get_cell()` and `get_cellv()` methods (as well as comperable methods for setting cells). Where the former takes two `int` arguments (X and Y), the "v" varients take one `Vector2` argument ( Vector2(X,Y) ). Since the argument we're expecting in our `is_floor( cell )` is a Vector2, it makes sense for us to use the method of our map that also takes a Vector2.  Don't be afraid of using the built-in Search Help or the [online docs](http://docs.godotengine.org/en/stable/) to browse through the functions available to you for the different nodes you're using in your project. 
 
@@ -73,6 +74,12 @@ func step( dir ):
 	else:
 		print( "Ow! You hit a wall!" )
 ```  
+
+![][isfloor]  
+
+*In a way, our player (and any future dungeon occupants who can move around) are playing a game of Battleship against the map.*  
+
+### Refactoring
 Now that all this getting and setting of map positions is being done in this function, we can remove all of this from our `_input` function and replace it with something more concise:  
 ```python
 # Input
@@ -88,8 +95,13 @@ func _input( event ):
 	if event.is_action_pressed("ui_left"):
 		step( Vector2( 1, 0 ) )
 ```  
-Remember that in Godot's 2D environment, "up" and "left" are negative, "down" and "right" are positive.  
-*(little more about Vectors)*  
+This process of deleting old code and replacing it with new code as we expand our objects' functionality is refered to as "refactoring our code". It's likely that most of the initial code you write will end up being refactored at least once (if not twice or thrice) over the development of your game.  
+ 
+You'll notice that we've been using a lot of these magic `Vector2` guys in our code. If "Vector Math" sounds scary to you, you might want to go give [this article](http://docs.godotengine.org/en/stable/learning/features/math/vector_math.html) a read (it's short). We probably wont be doing anything too fancy with vectors in this project; mostly we will be using them as xy coordinates.  
+
+![][screencoord]  
+*Remember that in our 2D environment, our Y axis moves **downward** along the positive axis; where most environments work with their comparable axis going positive **upward**. Since the origin of our canvas(our game window's screenspace) is in the top-left corner, this begins to make sense.*   
+
 
 Movement
 =====
@@ -113,7 +125,8 @@ Q W E
 A S D
 Z X C
 ```  
-![keylayouts]  
+![keylayouts][compasscoord]  
+*Compass coordinates gives us a nice way to convert geeky vectors to a more commonly-understood idea*  
 
 (KP5/S are not being used for movement, but we will be using these keys later)  
 
