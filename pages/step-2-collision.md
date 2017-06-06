@@ -9,6 +9,13 @@
 .. type: text
 -->
 
+[isfloor]: (https://github.com/YeOldeDM/lets-godot-roguelike/blob/step-2/img/isfloor.png) 
+
+[stepactions]: (https://github.com/YeOldeDM/lets-godot-roguelike/raw/step-2/img/stepactions.png) "Our new InputMap, with all our new actions just barely fitting on-screen"  
+
+[searchhelp]: (https://github.com/YeOldeDM/lets-godot-roguelike/raw/step-2/img/searchhelp.png)  
+
+
 In the last step, we began our new project, set some settings, and constructed a skeleton on which we can now begin building the rest of our game upon.  
 In this step we will be adding a collision system to our game, as well as flesh out our current player movement system.  
 
@@ -34,10 +41,16 @@ func is_floor( cell ):
   
 ```  
 
-![](../img/isfloor.png)  
+![][isfloor]  
+
 *In a way, our player (and any future dungeon occupants who can move around) are playing a game of Battleship against the map.*  
 
-If you look through the documentation for the methods of `TileMap`, you will see both `get_cell()` and `get_cellv()` methods (as well as comperable methods for setting cells). Where the former takes two `int` arguments (X and Y), the "v" varients take one `Vector2` argument ( Vector2(X,Y) ). Since the argument we're expecting in our `is_floor( cell )` is a Vector2, it makes sense for us to use the method of our map that also takes a Vector2.  
+If you look through the documentation for the methods of `TileMap`, you will see both `get_cell()` and `get_cellv()` methods (as well as comperable methods for setting cells). Where the former takes two `int` arguments (X and Y), the "v" varients take one `Vector2` argument ( Vector2(X,Y) ). Since the argument we're expecting in our `is_floor( cell )` is a Vector2, it makes sense for us to use the method of our map that also takes a Vector2.  Don't be afraid of using the built-in Search Help or the [online docs](http://docs.godotengine.org/en/stable/) to browse through the functions available to you for the different nodes you're using in your project. 
+
+![][searchhelp]  
+*The Search Help button will become your very best friend. It is as much of a life-saver as its icon suggests.*  
+
+
 
 ### Stepping
 We can put all our movement code into a new function of player called `step( direction )`. This will attempt to move the player one cell
@@ -84,7 +97,7 @@ So far, our player movement control is only okay. One feature we are going to wa
 
 ### Speaking Through Actions
 If you go to Project Settings > InputMap, you can manage your game's Actions.  Because they can be expressed in a short and understandable way, we'll use "compass coordinates" to express direction. We will say "N"orth equals "Up", "W"est equals "Left", and so on.  For our action names, we'll use a convention of `step_D` where D is the compass direction we want that action to represent.  
-![InputMap image](../img/stepactions.png) 
+![InputMap image][stepactions]
 
 
 ### Eight Degrees Of Freedom
