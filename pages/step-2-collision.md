@@ -27,13 +27,13 @@ Collision
 ### Roll Your Own
 For many types of games, Godot can handle complex collisions between objects using physics the bodies `KinematicBody2D`, `RigidBody2D` and `StaticBody2D`.  
 For our needs, this collision system is overkill. Since all our game's objects are going to operate purely on the grid logic of our map, 
-we can use this to our advantage and create our own collision system.  
+we can use this to our advantage and create our own collision system.  All of our "Moving Bodies" will be `Node2D`-based, and all collision will be calculated by our Map. Let's jump right in!  
 
 ### Stay On The Floor
-From our player, when they move, we can get the map cell they are going to move into. From our map, we can see if that cell is a floor (assuming what's
-not a floor will be a wall). If we put those two pieces of information together, we can create a condition in our movement code which only
-move the player into valid cells.  
-Go ahead and add a new script to your Map node. Auto-complete here should give you the correct path and filename. Much like we did with the player script, we can delete all the text in this script except the first `extends ..` line. Our map node will soon be performing all kinds of cool functions, but for now we need just this one simple one:  
+One major issue with our game at the moment is the fact that our player can walk through walls. We're looking to our map to express our position in the world and change that position, but we're not considering any conditions of the map cells themselves to see whether or not our object should be able to occupy that cell.
+From our player's `step()` function, we are already getting the cell we wish to step into. From the Map, we should be able to check that cell get the `tile index` of any tile painted on that cell. With that information we can conclude whether that cell is a floor, or something else (which we cannot enter). 
+Go ahead and add a new script to your Map node. Since this "poke the cell" behavior is something that is handled by the Map node, this function should reside in a script on that node. 
+Auto-complete here should give you the correct path and filename for your new script (otherwise save to `res://core/Map/Map.gd`). Much like we did with the player script, we can delete all the text in this script except the first `extends ..` line. Our map node will soon be performing all kinds of cool functions, but for now we need just this one simple one:  
 
 ```python
 extends TileMap
@@ -45,8 +45,12 @@ func is_floor( cell ):
 ```  
 
 
+![][isfloor]  
 
-If you look through the documentation for the methods of `TileMap`, you will see both `get_cell()` and `get_cellv()` methods (as well as comperable methods for setting cells). Where the former takes two `int` arguments (X and Y), the "v" varients take one `Vector2` argument ( Vector2(X,Y) ). Since the argument we're expecting in our `is_floor( cell )` is a Vector2, it makes sense for us to use the method of our map that also takes a Vector2.  Don't be afraid of using the built-in Search Help or the [online docs](http://docs.godotengine.org/en/stable/) to browse through the functions available to you for the different nodes you're using in your project. 
+*In a way, our player (and any future dungeon occupants who can move around) are playing a game of Battleship against the map.*  
+
+
+If you look through the documentation for the methods of `TileMap`, you will see both `get_cell()` and `get_cellv()` methods (as well as comperable methods for setting cells). Where the former takes two `int` arguments (X and Y), the "v" varients take one `Vector2` argument ( Vector2(X,Y) ). Since the argument we're expecting in our `is_floor( cell )` is a Vector2, it makes sense for us to use the method of our map that also takes a Vector2.  Don't be afraid of using the built-in Search Help or the [online docs](http://docs.godotengine.org) to browse through the functions available to you for the different nodes you're using in your project. Both sources should contain the same information (and lack of), so take whichever is more convenient for you, and keep it close.  
 
 ![][searchhelp]  
 *The Search Help button will become your very best friend. It is as much of a life-saver as its icon suggests.*  
@@ -54,8 +58,7 @@ If you look through the documentation for the methods of `TileMap`, you will see
 
 
 ### Stepping
-We can put all our movement code into a new function of player called `step( direction )`. This will attempt to move the player one cell
-along the vector of `direction`. If the player tries stepping into a wall, we can call a print statement to confirm the condition.  
+We want to take all the movement control code (the parts which take your input and turns it into output) of the player into a new function called `step( direction )`. This will attempt to move the player one cell along a local `direction` vector. If the player tries stepping into a wall, we can call a print statement to confirm the action has gone through, since "lack of movement" when we hit a wall isn't necessarily a clear indicator that the code is doing what it should.
 Add this function to the player script, just below `var map`, above the other functions:  
 
 ```python
@@ -71,13 +74,11 @@ func step( dir ):
 	# Check for valid cell to step to
 	if map.is_floor( new_cell ):
 		set_map_pos( new_cell )
+	# Announce when we bump something
 	else:
 		print( "Ow! You hit a wall!" )
 ```  
 
-![][isfloor]  
-
-*In a way, our player (and any future dungeon occupants who can move around) are playing a game of Battleship against the map.*  
 
 ### Refactoring
 Now that all this getting and setting of map positions is being done in this function, we can remove all of this from our `_input` function and replace it with something more concise:  
@@ -97,7 +98,7 @@ func _input( event ):
 ```  
 This process of deleting old code and replacing it with new code as we expand our objects' functionality is refered to as "refactoring our code". It's likely that most of the initial code you write will end up being refactored at least once (if not twice or thrice) over the development of your game.  
  
-You'll notice that we've been using a lot of these magic `Vector2` guys in our code. If "Vector Math" sounds scary to you, you might want to go give [this article](http://docs.godotengine.org/en/stable/learning/features/math/vector_math.html) a read (it's short). We probably wont be doing anything too fancy with vectors in this project; mostly we will be using them as xy coordinates.  
+You'll notice that we've been using a lot of these magic `Vector2` things in our code. If "Vector Math" sounds scary to you, you might want to go give [this article](http://docs.godotengine.org/en/stable/learning/features/math/vector_math.html) a read (it's short). We probably wont be doing anything too fancy with vectors in this project; mostly we will be using them as xy coordinates. But it doesn't hurt having at least a comfortable understanding of vectors, as they are a commonly-used thing in almost any kind of game.  
 
 ![][screencoord]  
 *Remember that in our 2D environment, our Y axis moves **downward** along the positive axis; where most environments work with their comparable axis going positive **upward**. Since the origin of our canvas(our game window's screenspace) is in the top-left corner, this begins to make sense.*   
@@ -105,7 +106,7 @@ You'll notice that we've been using a lot of these magic `Vector2` guys in our c
 
 Movement
 =====
-So far, our player movement control is only okay. One feature we are going to want to add to it is the ability to move diagonally. Because of the nature of our game, using combinations of arrow keys to get diagonal movement just will not be possible. Also, once we begin adding HUD elements to our game, those `ui_` actions will be used to shift the focus of those elements, and we don't want those being confused with our movement actions. We want to dedicate a block of eight (nine, actually) keys on our keyboard to player movement.  
+So far, our player movement control is only okay. One feature we want to add to it is the ability to move diagonally. Because of the nature of our game, using combinations of arrow keys to get diagonal movement just will not be possible. Also, once we begin adding User Interface elements to our game, those `ui_` actions could be used to shift the focus of those elements, and we don't want those being confused with our movement actions. We want to dedicate a block of eight (nine, actually) keys on our keyboard to player movement.  
 
 ### Speaking Through Actions
 If you go to Project Settings > InputMap, you can manage your game's Actions.  Because they can be expressed in a short and understandable way, we'll use "compass coordinates" to express direction. We will say "N"orth equals "Up", "W"est equals "Left", and so on.  For our action names, we'll use a convention of `step_D` where D is the compass direction we want that action to represent.  
