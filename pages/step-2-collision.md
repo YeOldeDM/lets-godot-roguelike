@@ -9,11 +9,11 @@
 .. type: text
 -->
 
-[isfloor]: (https://github.com/YeOldeDM/lets-godot-roguelike/blob/step-2/img/isfloor.png) 
+[isfloor]: https://github.com/YeOldeDM/lets-godot-roguelike/blob/step-2/img/isfloor.png
 
-[stepactions]: (https://github.com/YeOldeDM/lets-godot-roguelike/raw/step-2/img/stepactions.png) "Our new InputMap, with all our new actions just barely fitting on-screen"  
+[stepactions]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/step-2/img/stepactions.png "Our new InputMap, with all our new actions just barely fitting on-screen"  
 
-[searchhelp]: (https://github.com/YeOldeDM/lets-godot-roguelike/raw/step-2/img/searchhelp.png)  
+[searchhelp]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/step-2/img/searchhelp.png  
 
 
 In the last step, we began our new project, set some settings, and constructed a skeleton on which we can now begin building the rest of our game upon.  
