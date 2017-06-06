@@ -139,7 +139,7 @@ Putting these two bits of function together to move our player with our new cust
 
 First, we want to give ourselves a non-confusing way to convert our abstract compass coordinates to the Vector2s the script can work with. We could hard-code it like we already have it, but we should know by now that hard-coding things is (mostly) a Bad Idea.  
 We can declare a `Dictionary` in our player script, which holds Vector2 coordinates under compass coordinate keys. 
-Directional Constants:  
+
 ```python
 const DIRECTIONS = {
 	"N":	Vector2(0,-1),
@@ -152,6 +152,14 @@ const DIRECTIONS = {
 	"NW":	Vector2(-1,-1),
 	}
 ```  
+We've declared this as a `const`(constant) rather than a `var`(variable). Operationally, constants and variables work exactly the same. The only difference is that constants are *immutable*; a fancy way of saying its value cannot change. Commonly in programming, we indicate constants by typing them in all-caps, or `SCREAMCASE` if you want a cooler-sounding term.  At the risk of going on a tangent, here's a quick rundown of the "case types" typically seen in code:
+`snake_case` is what we are using for functions, variables, and most other things 
+`camelCase` or   
+`PaskalCase` are usually used for Node names and filenames
+`SCREAMCASE` is typically reserved just for constants  
+
+We'll be using snake_case for most of what we're doing for this tutorial. You can use whatever style(s) you want in your own code, just keep it consistent, or later you will be confusing yourself over whether that function you want is `do_stuff()` or `doStuff()` or `DoStuff()`! Now let's get back to our game..  
+
 Now, all we need to do is replace the wall of ifs in our player's `_input` function with the eight directions we need. Rather than passing a Vector2 directly to `step()`, we're passing a reference to our DIRECTIONS dictionary:  
 
 ```python
@@ -175,7 +183,7 @@ func _input( event ):
 	if Input.is_action_pressed( "step_nw" ):
 		step( DIRECTIONS.NW )
 ```  
-Now, we could probably slim this down with some programming trickery, and do the same thing with only a handful of lines. But there is a point where you're just trying to swat flies with a bazooka. This code is a little clunky, but it's easy to read (even if you don't know the programming language) and easy to work with. For our purposes, this is more important than being fancy.  
+Now, we could probably slim this down with some programming trickery, and do the same thing with only a handful of lines. But there is a point where you're just trying to swat flies with a bazooka. This code is a little bloated, but it's easy to understand (even if you don't know the programming language) and easy to work with. At this early stage of our project, this is more important than being optimized. While it's good to be always thinking ahead in your project and anticipating future issues, overengineering and premature optimization can lead to your design becoming too rigid and hard to add to without breaking everything else. We want our baby game to be soft and squishy, and not shatter on us when we press on it too hard.  
 
 Fire up your game and you should now be able to move in all eight directions, using whatever key(s) you've bound to your step actions!  
 
