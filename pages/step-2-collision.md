@@ -95,7 +95,9 @@ or
 Q W E
 A S D
 Z X C
-```  ![keylayouts]
+```  
+![keylayouts]  
+
 (KP5/S are not being used for movement, but we will be using these keys later)  
 
 Fortunately for us, we can assign as many input events as we like to a single action! We can bind both sets of keys to our `step_` actions.  
