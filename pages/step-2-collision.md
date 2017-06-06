@@ -32,7 +32,11 @@ extends TileMap
 func is_floor( cell ):
 	return get_cellv( cell ) == 1
   
-```
+```  
+
+![](../img/isfloor.png)  
+*In a way, our player (and any future dungeon occupants who can move around) are playing a game of Battleship against the map.*  
+
 If you look through the documentation for the methods of `TileMap`, you will see both `get_cell()` and `get_cellv()` methods (as well as comperable methods for setting cells). Where the former takes two `int` arguments (X and Y), the "v" varients take one `Vector2` argument ( Vector2(X,Y) ). Since the argument we're expecting in our `is_floor( cell )` is a Vector2, it makes sense for us to use the method of our map that also takes a Vector2.  
 
 ### Stepping
@@ -80,7 +84,7 @@ So far, our player movement control is only okay. One feature we are going to wa
 
 ### Speaking Through Actions
 If you go to Project Settings > InputMap, you can manage your game's Actions.  Because they can be expressed in a short and understandable way, we'll use "compass coordinates" to express direction. We will say "N"orth equals "Up", "W"est equals "Left", and so on.  For our action names, we'll use a convention of `step_D` where D is the compass direction we want that action to represent.  
-![InputMap image]  
+![InputMap image](../img/stepactions.png) 
 
 
 ### Eight Degrees Of Freedom
