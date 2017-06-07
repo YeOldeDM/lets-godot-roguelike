@@ -31,7 +31,7 @@ we can use this to our advantage and create our own collision system.  All of ou
 
 ### Stay On The Floor
 One major issue with our game at the moment is the fact that our player can walk through walls. We're looking to our map to express our position in the world and change that position, but we're not considering any conditions of the map cells themselves to see whether or not our object should be able to occupy that cell.
-From our player's `step()` function, we are already getting the cell we wish to step into. From the Map, we should be able to check that cell get the `tile index` of any tile painted on that cell. With that information we can conclude whether that cell is a floor, or something else (which we cannot enter). 
+From our player's `step()` function, we are already getting the cell we wish to step into. From the Map, we should be able to check that cell, and get the `tile index` of any tile painted on that cell. With that information we can conclude whether that cell is a floor, or something else (which we cannot enter). 
 Go ahead and add a new script to your Map node. Since this "poke the cell" behavior is something that is handled by the Map node, this function should reside in a script on that node. 
 Auto-complete here should give you the correct path and filename for your new script (otherwise save to `res://core/Map/Map.gd`). Much like we did with the player script, we can delete all the text in this script except the first `extends ..` line. Our map node will soon be performing all kinds of cool functions, but for now we need just this one simple one:  
 
@@ -47,7 +47,7 @@ func is_floor( cell ):
 
 ![][isfloor]  
 
-*In a way, our player (and any future dungeon occupants who can move around) are playing a game of Battleship against the map.*  
+*The Player throws coordinates at the map and uses the information returned from that to dictate its behavior.*  
 
 
 If you look through the documentation for the methods of `TileMap`, you will see both `get_cell()` and `get_cellv()` methods (as well as comperable methods for setting cells). Where the former takes two `int` arguments (X and Y), the "v" varients take one `Vector2` argument ( Vector2(X,Y) ). Since the argument we're expecting in our `is_floor( cell )` is a Vector2, it makes sense for us to use the method of our map that also takes a Vector2.  Don't be afraid of using the built-in Search Help or the [online docs](http://docs.godotengine.org) to browse through the functions available to you for the different nodes you're using in your project. Both sources should contain the same information (and lack of), so take whichever is more convenient for you, and keep it close.  
@@ -114,7 +114,7 @@ If you go to Project Settings > InputMap, you can manage your game's Actions.  B
 
 
 ### Eight Degrees Of Freedom
-In my opinion, the best keys to use for our 8-directional movement are the "outer ring" of the keypad. Unfortunately, enough keyboards out there don't have dedicated keypads for us to be able to rely on them as a primary control scheme. So we want to provide an alternative for those poor souls.  
+In my opinion, the best keys to use for our 8-directional movement are the "outer ring" of the keypad. Unfortunately, enough keyboards out there don't have dedicated keypads for us to be able to rely on them as a primary control scheme. So we want to provide an alternative for those poor souls. Fortunately for us, we can assign as many input events as we like to a single action! We can bind both sets of keys to our `step_` actions. 
 ```
 7 8 9
 4 5 6
@@ -131,7 +131,7 @@ Z X C
 
 (KP5/S are not being used for movement, but we will be using these keys later)  
 
-Fortunately for us, we can assign as many input events as we like to a single action! We can bind both sets of keys to our `step_` actions.  
+ 
 
 
 ### Acting Is Reacting
