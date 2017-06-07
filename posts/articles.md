@@ -40,7 +40,7 @@ a "big game". Because of the procedural nature of such a game, very large worlds
 asset creation and world design (which can be a huge issue if you're a one-member team). The rigid, grid-based world mechanics along with a turn-based time control lets us work within an environment
 which is, while limited, much easier to control and develop on.  The Roguelike is a prime candidate for doing a lot with a little.  
 
-![old game screen](https://github.com/YeOldeDM/lets-godot-roguelike/raw/step-2/img/oldgame.png)  
+![old game screen](https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/oldgame.png)  
 *A screenshot from an older prototype of this project. Our final product here should be an improvement on this.*  
 
 ### What do I need to start this thing?
