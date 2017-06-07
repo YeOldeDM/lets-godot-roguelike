@@ -38,7 +38,10 @@ Here's a list, chief:
 Because I want to :)  But also, it is a genre which is easily approachable to the newcomer to game dev, while also being a chance to create
 a "big game". Because of the procedural nature of such a game, very large worlds can be created with a minimal amount of time being put into
 asset creation and world design (which can be a huge issue if you're a one-member team). The rigid, grid-based world mechanics along with a turn-based time control lets us work within an environment
-which is, while limited, much easier to control and develop on.  The Roguelike is a prime candidate for doing a lot with a little.
+which is, while limited, much easier to control and develop on.  The Roguelike is a prime candidate for doing a lot with a little.  
+
+![old game screen](https://github.com/YeOldeDM/lets-godot-roguelike/raw/step-2/img/oldgame.png)  
+*A screenshot from an older prototype of this project. Our final product here should be an improvement on this.*  
 
 ### What do I need to start this thing?
 First off, you'll need the newest stable version of the [Godot Engine](https://godotengine.org/). This tutorial will be written using ver 2.1.3.
