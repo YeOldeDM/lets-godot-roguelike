@@ -2,19 +2,16 @@
 .. title: Step 3: Enter The Thing
 .. slug: step-3-things
 .. date: 2017-06-19 04:00:00 UTC
-.. tags: 
-.. category: 
-.. link: 
-.. description: 
 .. type: text
 -->
 
-# WORK IN PROGRESS
+# WORK IN PROGRESS: DO NOT READ BELOW THIS LINE
 
 In the last step, we added the all-important collision system to our game. Our player is feeling kind of lonely though, so in this step we will introduce the system we will be using to populate our dungeon with everything that isn't the dungeon itself.  
 
 
 ### The Thing
+![Picture of The Thing](url) "The Thing can take on any form"  
 Generalization. Everything inside the dungeon is a Thing.  
 Save Player.tscn as `res://things/Thing.tscn` and rename top node to "Thing"  
 `res://things/Thing.gd`  
@@ -24,22 +21,29 @@ Now, Player will inherit all members and methods of Thing. It also has its own m
 All other types of things will also inherit Thing, or inherit a script which eventually inherits Thing.  
 Godot's node system works on this same principle (`Sprite` inherits `Node2D` inherits `Node`)  
 
-Class inheritence. 
-What's a class? 
-What's inheritence? 
-Why?  
+
 
 ### The Database
 `res://things/Database.tscn`  Top node is `Node` "Database"  
-Create "category" `Node`s to organize your Things. Can really be set up however you like. 
+
+Create "category" `Node`s to organize your Things. Can really be set up however you like. This system is stupid flexible.  
+
 We're going to re-make our Player object.  
-Copy `res://core/Player/Player.gd` to `res://things/Player.tscn`
+
+Copy `res://core/Player/Player.gd` to `res://things/Player.tscn`  
+
 Start with an instance of Thing.tscn. Change its script to Player.gd (at the location you copied it to).  
-Ensure your new Player is working, then delete the old Player (the whole `res://core/Player` folder).  
+
+You will have to right-click > show children to set the texture of each Thing's Icon. Since these are instances, the scene should "hold" these modifications within the instance.  
+
+Ensure your new Player is working, then delete the old Player (the whole `res://core/Player` folder).  Nothing sucks worse than when you have duplicate files and get into a situation where you're working on one file but testing its results on another, and clawing your eyes out trying to figure out why your changes have no effect!  
+(we all are suseptable to the "Godot must be broken!" assumption when such bugs pop up. Take a deep breath. 9 times out of 10, you can be sure that it's not Godot's fault but your own. And if it's you're fault, that means it can certainly be fixed. Fail Faster, my friend!)  
+
 
 ### The Global
 `res://global/RPG.gd`  
-All global functionality is done here, and called with ease as `RPG.[x]`!  
+All global functionality is done here, and called with ease as `RPG.[x]`, where [x] is any function or variable contained within the RPG script. In the future we'll use this script for other universal functions such as rolling dice and all that fun stuff.  
+  
 RPG._db holds an instance of our Database scene  
 `RPG.make_thing( path )` Spawn a duplicate from _db path. This is how we bring new objects into our game.  
 
@@ -71,4 +75,7 @@ New Thing `export var name` with multiline string hint.  Give Database Things na
 
 Map gets new function `get_collider(cell)`. This returns a blocking Thing, the Map if cell is a wall, or null if empty floor.  
 Thing.step looks for colliders in new_cell, and prints info based on the collider.  
+
+
+We are beginning to put some real meat on our game's bones already. With what we have, we could create as many Things as we like and put them wherever we want in our dungeon. In most other game development environments, getting to such a point would take many more hours of careful and dangerous work to construct such a system. This is the power of Godot (and game engines in general!). We're not even close to done yet, though! In the next step, we will be throwing ourselves even deeper down the rabbit hole, and get algorhytmic as we create our game's precious Random Dungeon Generator. I know! I'm excited too!  [Let's do this thing!!!](../step-4-dungeongen.html)  
 
