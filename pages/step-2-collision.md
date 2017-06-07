@@ -9,15 +9,15 @@
 .. type: text
 -->
 
-[isfloor]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/step-2/img/isfloor.png
+[isfloor]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/isfloor.png
 
-[stepactions]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/step-2/img/stepactions.png "Our new InputMap, with all our new actions just barely fitting on-screen"  
+[stepactions]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/stepactions.png "Our new InputMap, with all our new actions just barely fitting on-screen"  
 
-[searchhelp]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/step-2/img/searchhelp.png  
+[searchhelp]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/searchhelp.png  
 
-[compasscoord]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/step-2/img/compascoord.png
+[compasscoord]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/compascoord.png
 
-[screencoord]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/step-2/img/screencoord.png
+[screencoord]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/screencoord.png
 
 In the last step, we began our new project, set some settings, and constructed a skeleton on which we can now begin building the rest of our game upon.  
 In this step we will be adding a collision system to our game, as well as flesh out our current player movement system.  
