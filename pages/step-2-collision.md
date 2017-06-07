@@ -24,7 +24,7 @@ In this step we will be adding a collision system to our game, as well as flesh 
 
 Collision
 =====
-*"I can only show you the door, Neo. You have to walk through it. You...have to open the door first..." -White Morpheus*  
+*"I can only show you the door, Neo. You have to walk through it. You...have to open the door first..." -White Morpheus, "Computer Boy"*  
 
 ### Roll Your Own
 For many types of games, Godot can handle complex collisions between objects using physics the bodies `KinematicBody2D`, `RigidBody2D` and `StaticBody2D`.  
