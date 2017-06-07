@@ -24,7 +24,7 @@ BLOG_TITLE = "Let's Godot Roguelike"  # (translatable)
 SITE_URL = "http://lets-godot-roguelike.netlify.com/"
 # This is the URL where Nikola's output will be deployed.
 # If not set, defaults to SITE_URL
-# BASE_URL = "https://example.com/"
+# BASE_URL = "http://lets-godot-roguelike.netlify.com/"
 BLOG_EMAIL = ""
 BLOG_DESCRIPTION = "This is a series tutorial on how to make a roguelike in Godot."  # (translatable)
 
@@ -139,7 +139,7 @@ NAVIGATION_LINKS = {
 }
 
 # Name of the theme to use.
-THEME = "bootstrap1"
+THEME = "bootstrap3"
 
 # Primary color of your theme. This will be used to customize your theme and
 # auto-generate related colors in POSTS_SECTION_COLORS. Must be a HEX value.
@@ -179,10 +179,10 @@ POSTS = (
     ("posts/*.html", "posts", "post.tmpl"),
 )
 PAGES = (
-    ("stories/*.md", "stories", "story.tmpl"),
-    ("stories/*.rst", "stories", "story.tmpl"),
-    ("stories/*.txt", "stories", "story.tmpl"),
-    ("stories/*.html", "stories", "story.tmpl"),
+    ("pages/*.md", "", "story.tmpl"),
+    ("pages/*.rst", "", "story.tmpl"),
+    ("pages/*.txt", "", "story.tmpl"),
+    ("pages/*.html", "", "story.tmpl"),
 )
 
 

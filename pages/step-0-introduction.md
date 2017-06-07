@@ -18,7 +18,7 @@ In this series of articles, we will be going through the process of creating a s
 
 ### Who is this tutorial for?
 Who this tutorial is made for, is those who have aquired the first base skills required to make a game, but lack the knowlege of how to
-put those skills to use to craft a "full game". Games are big and complex things, and the prospect of doing such a thing can seems like 
+put those skills to use to craft a "full game". Games are big and complex things, and the prospect of doing such a thing can seem like 
 an almost impossible task.  Hopefully, this will serve as a guide to help those accomplish such a task by using a method of Rapid Iterative 
 Design, Failing Faster, and Keeping It Simple.
 
@@ -40,7 +40,7 @@ Here's a list, chief:
 Because I want to :)  But also, it is a genre which is easily approachable to the newcomer to game dev, while also being a chance to create
 a "big game". Because of the procedural nature of such a game, very large worlds can be created with a minimal amount of time being put into
 asset creation and world design (which can be a huge issue if you're a one-member team). The rigid, grid-based world mechanics along with a turn-based time control lets us work within an environment
-which is, while limited, is much easier to control and develop on.  The Roguelike is a prime candidate for doing a lot with a little.
+which is, while limited, much easier to control and develop on.  The Roguelike is a prime candidate for doing a lot with a little.
 
 ### What do I need to start this thing?
 First off, you'll need the newest stable version of the [Godot Engine](https://godotengine.org/). This tutorial will be written using ver 2.1.3.
@@ -50,4 +50,6 @@ This project will also be using the graphics set Dungeon Crawl Stone Soup which 
 you wish (as well as create your own), but if you really want to follow along you will want to download a copy of this and extract it 
 somewhere handy.  There will also be a few 'custom' graphics I have made for the project, for the occasional things we'll need that 
 the graphics pack is lacking. Those will be made available as Free For Any Use.  
-Copies of the project will also be available for download and use for reference. Snapshots of the project at the end of each Step can be found [here](https://github.com/YeOldeDM/realms-of-todog).
+Copies of the project will also be available for download and use for reference. Snapshots of the project at the end of each Step can be found [here](https://github.com/YeOldeDM/realms-of-todog).  
+
+[Click here once you're ready to begin!](../step-1-setup.html)  
