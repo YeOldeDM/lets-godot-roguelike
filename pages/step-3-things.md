@@ -11,8 +11,10 @@ In the last step, we added the all-important collision system to our game. Our p
 
 
 ### The Thing
-![Picture of The Thing](url) "The Thing can take on any form"  
-Generalization. Everything inside the dungeon is a Thing.  
+![Picture of The Thing](url)  
+*"The Thing can take on any form"*  
+#### Generalization
+Everything inside the dungeon is a Thing.  
 Save Player.tscn as `res://things/Thing.tscn` and rename top node to "Thing"  
 `res://things/Thing.gd`  
 Migrate all public functions of Player.gd to Thing.gd.  
