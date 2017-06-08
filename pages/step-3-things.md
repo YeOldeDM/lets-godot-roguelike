@@ -5,7 +5,7 @@
 .. type: text
 -->
 
-# WORK IN PROGRESS: DO NOT READ BELOW THIS LINE
+# WORK IN PROGRESS: DO NOT READ BELOW THIS LINE OR YOU WILL LOSE BRAIN CELLS
 
 In the last step, we added the all-important collision system to our game. Our player is feeling kind of lonely though, so in this step we will introduce the system we will be using to populate our dungeon with everything that isn't the dungeon itself.  
 
@@ -14,10 +14,31 @@ In the last step, we added the all-important collision system to our game. Our p
 ![Picture of The Thing](url)  
 *"The Thing can take on any form"*  
 #### Generalization
+Our game will become a lot more interesting to play if we fill it with lots of interesting things to interact with.  
+We want to build our system in such a way that we're creating complex objects out of a collection of simple general parts, like virtual lego pieces.  
+This way, we can make a lot of content with just a little work, and ensure that common behavior is consistent among all objects.  
+
+Let's start by defining our most basic type of object and give it a descriptive name. I'll dub this object a Thing. 
+
 Everything inside the dungeon is a Thing.  
+
+#### Player Refactor
 Save Player.tscn as `res://things/Thing.tscn` and rename top node to "Thing"  
 `res://things/Thing.gd`  
-Migrate all public functions of Player.gd to Thing.gd.  
+
+Our most basic Thing object requires only a couple parameters. These will be parameters that everything in our game will need. They are:  
+-- Getting and settings its map position  
+-- an Icon visual representation  
+
+This list will grow as our game gets more complex, but this gives us something to work with.  
+
+We want to take all the code we've written in our player script which applies to that list above (actually, just the map position part, as our Icon requires no code yet), and move it to our new Thing script. You should be able to just cut the code from one script and paste it into the other.  
+
+Now, your player script should only contain its `_ready` and `_input` functions and their contents. If you tried playing your game at this moment, all your movement code should be broken, of course. We just ripped a bunch of code out of our script, and now the remaining code is trying to call functions that no longer exist! Why the hell would we ever do that??  
+Remember that we copied all that code into another script. It's almost as if we're setting ourselves up to have multiple scripts assigned to a single node. But as a rule, a node in the godot engine can only have one script assigned to it. So it must be non-possible for our Player node to utilize both its Player script and a Thing script, right? Not quite!  
+
+There has been one line in all our scripts we've pretty much been ignoring up to this point, but it's a very important line (the most important, one could argue).  
+
 Change Player.gd so it `extends "res://things/Thing.gd"`.  
 Now, Player will inherit all members and methods of Thing. It also has its own members and methods that are unique to the Player.  
 All other types of things will also inherit Thing, or inherit a script which eventually inherits Thing.  
