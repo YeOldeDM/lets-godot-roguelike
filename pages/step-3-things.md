@@ -37,13 +37,19 @@ We want to take all the code we've written in our player script which applies to
 Now, your player script should only contain its `_ready` and `_input` functions and their contents. If you tried playing your game at this moment, all your movement code should be broken, of course. We just ripped a bunch of code out of our script, and now the remaining code is trying to call functions that no longer exist! Why the hell would we ever do that??  
 Remember that we copied all that code into another script. It's almost as if we're setting ourselves up to have multiple scripts assigned to a single node. But as a rule, a node in the godot engine can only have one script assigned to it. So it must be non-possible for our Player node to utilize both its Player script and a Thing script, right? Not quite!  
 
-There has been one line in all our scripts we've pretty much been ignoring up to this point, but it's a very important line (the most important, one could argue).  
+There has been one line in all our scripts we've pretty much been ignoring up to this point, but it's a very important line (the most important, one could argue). The `extends` keyword tells your script which functionality it has access to, and is almost always identical to the type of node the script has been created for. The script on a Node `extends Node`. A TextureFrame node's script `extends TextureFrame`. You can think of these as extending your script to use the functions of another higher script. It's just that these "built-in" types don't have actual scripts you can have normal access to. Even though we never defined a `get_pos()` or `set_pos()` function for our player, those functions still do things, because our player extends the methods of Node2D, which *does* define a `get_pos()` and `set_pos()`.  
 
-Change Player.gd so it `extends "res://things/Thing.gd"`.  
-Now, Player will inherit all members and methods of Thing. It also has its own members and methods that are unique to the Player.  
+By using a pinch of Gogo Magic, we can tell our player script to extend one of our own scripts, instead of `Node2D`.
+
+Roll up your sleeves and say the magic words: change the first line of Player.gd so it `extends "res://things/Thing.gd"`!  
+
+Play your game now, and your player works again. Tada!  
+
+Player will inherit all members and methods of Thing. It also has its own members and methods that are unique to the Player.  
 All other types of things will also inherit Thing, or inherit a script which eventually inherits Thing.  
-Godot's node system works on this same principle (`Sprite` inherits `Node2D` inherits `Node`)  
 
+
+*Godot's node system works on this same principle (`Sprite` inherits `Node2D` inherits `Node`)*
 
 
 ### The Database
