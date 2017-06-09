@@ -8,7 +8,6 @@
 [extendsvader]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/extendsvader.png 
 [databasescene]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/databasescene.png
 
-# WORK IN PROGRESS: DO NOT READ BELOW THIS LINE OR YOU WILL LOSE BRAIN CELLS
 
 In the last step, we added the all-important collision system to our game. Our player is feeling kind of lonely though, so in this step we will introduce the system we will be using to populate our dungeon with everything that isn't the dungeon itself.  
 
