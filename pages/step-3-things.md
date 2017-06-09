@@ -214,8 +214,10 @@ func is_cell_blocked( cell ):
 			return true
 	# if no blockers here, check for walls
 	return !is_floor( cell )
-```
-You might notice (especially if you try running with this code) that the function `get_blockers()` is totally fake and doesn't exist. That's because I forgot about it. Let's make that now, somewhere near the top of your map functions:  
+```  
+The exclamaition point "!" in `!is_floor( cell )` is an operational `not` symbol. You can write this line as `return not is_floor( cell )` and get the same result, if you're not into cryptic code. Otherwise it's just a little more concise to use !. Since in this function we want to return `TRUE` if the cell is blocked, we want to return the inverse of the result of `is_floor`, which return `TRUE` if the cell is *not* blocked by a wall.  
+
+You might notice (especially if you try running with this code) that the function `get_blockers()` is totally fake and doesn't exist. *That's because I forgot about it!* Let's make that now, somewhere near the top of your map functions:  
 
 ```python
 # Return Array of all Things
@@ -226,7 +228,7 @@ func get_things():
 func get_blockers():
 	return get_tree().get_nodes_in_group("blockers")
 ```  
-For the sake of it, we also wrote a similar function to `get_things()`, because we can.  
+For the sake of it, we also wrote a similar function to `get_things()`. 
 
 Now `Thing.step()` can check for "not blocked cells" instead of just "floor" cells. In Thing.gd modify the `step()` function so it looks like:  
 
@@ -310,6 +312,7 @@ func step( dir ):
 		set_map_pos( new_cell )
 ```  
 Now our game is telling us who is hitting what. In the case of us hitting a Thing, we harmlessly punch it in the face.  
+*[talk about %s stuff]*  
 
 We are beginning to put some real meat on our game's bones already. With what we have, we could create as many Things as we like and put them wherever we want in our dungeon. In most other game development environments, getting to such a point would take many more hours of careful and dangerous work to construct such a system. This is the power of Godot (and game engines in general!). We're not even close to done yet, though! In the next step, we will be throwing ourselves even deeper down the rabbit hole, and get algorhytmic as we create our game's precious Random Dungeon Generator. I know! I'm excited too!  [Let's do this!!!](../step-4-dungeongen.html)  
 
