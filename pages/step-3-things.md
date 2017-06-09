@@ -49,7 +49,7 @@ Player will inherit all members and methods of Thing. It also has its own member
 All other types of things will also inherit Thing, or inherit a script which eventually inherits Thing.  
 
 
-*Godot's node system works on this same principle (`Sprite` inherits `Node2D` inherits `Node`)*
+![][extendsvader]  
 
 
 ### The Database
@@ -65,34 +65,187 @@ Start with an instance of Thing.tscn. Change its script to Player.gd (at the loc
 
 You will have to right-click > show children to set the texture of each Thing's Icon. Since these are instances, the scene should "hold" these modifications within the instance.  
 
+Lets add a script to the top Database node. All this script will do is take a string path argument, and return a duplicate of the node that path points to (as long as the path is valid).  
+
+```python
+extends Node
+
+# Return an instance of a node in that database at 'path'
+func spawn( path ):
+	# Find our Thing before we try returning anything
+	var thing = get_node( path )
+	if thing:
+		return thing.duplicate()
+	# Print an error message if thing doesn't drop out
+	print( "Cannot find a Thing at: " + path )
+```  
+Now if we want to add a player to our game, we would access this node, and call `spawn( "player/player" )`.  That's easy!  
+
+
+![][databasescene]  
+*The Database scene. It wont really live within our game's scenetree, but will exist in a limbo where we will be able to access its data*  
+
 Ensure your new Player is working, then delete the old Player (the whole `res://core/Player` folder).  Nothing sucks worse than when you have duplicate files and get into a situation where you're working on one file but testing its results on another, and clawing your eyes out trying to figure out why your changes have no effect!  
-(we all are suseptable to the "Godot must be broken!" assumption when such bugs pop up. Take a deep breath. 9 times out of 10, you can be sure that it's not Godot's fault but your own. And if it's you're fault, that means it can certainly be fixed. Fail Faster, my friend!)  
+
+
+
 
 
 ### The Global
-`res://global/RPG.gd`  
-All global functionality is done here, and called with ease as `RPG.[x]`, where [x] is any function or variable contained within the RPG script. In the future we'll use this script for other universal functions such as rolling dice and all that fun stuff.  
-  
-RPG._db holds an instance of our Database scene  
-`RPG.make_thing( path )` Spawn a duplicate from _db path. This is how we bring new objects into our game.  
+Much of game design logic involves having this sort of web of nodes which all communicate with each other. Designing and maintaining these communication systems can be quite a complicated task.  Sometimes, though, you just want to be able to call a function or access a variable from any point in your scene tree. This is where `global scripts` come into play. These can also be called `autoload scripts` or `singletons`. The best way to demonstrate how these work is to just make one and start using it. It's really simple!  
 
+We start by creating a new script. Unlike the scripts we've created so far, this one is not being added to any node in a scene. To do this, go to the Script Tab and select `File > New` and create a new file at `res://global/RPG.gd`. Any scripts which don't extend any particular kind of node or another script should extend `Node`.   
+
+For a quick test, let's define a constant that we can access from another script:  
+```python
+extends Node
+
+const GREETING = "Hello RPG!"
+```
+Everything else in this script can be deleted. We have one more step before we are able to use this funky rogue script (no pun intended). Open your Project Settings and find the `AutoLoad` tab. From there, you can select your RPG.gd file. You can also give it a name which should be "RPG" by default. Click Add and your script will be added to the list. Your RPG global script is now imbued into the ether of your game.  
+Pick any script now in your game that will be running once you hit Play. In that script's `_ready()` function, add the line:  
+`print( RPG.GREETING )`  
+Your Output should now greet our new beneficial RPG overlord.  
+
+
+All global functionality will done here, and called with ease as `RPG.[x]`, where [x] is any function or member contained within the RPG script. In the future we'll use this script for other universal functions such as rolling dice and all that fun stuff.  
+  
+Now let's add something real to RPG.gd (keep the `const GREETING`, we can probably use this later). The first thing we want our global script to do is hold an instance of our database scene, access its script, and use that to return an instance of a Thing from the database (which will then be added to our Map). For now, the only place we need to do this thing is from our Map script, so it could make sense to just write this into Map.gd. But the Ghost of Prototypes Past inform us that we will want to be able to do this from other places as well.  
+
+First, we want RPG to load an instance of the Database scene and store that in a variable. We also want to do this during the script's `_ready()` function so we'll use the `onready` keyword:  
+
+```python
+extends Node
+
+const GREETING = "Hello RPG!"
+
+onready var _db = preload( "res://things/Database.tscn" ).instance()
+```  
+Now that our global script has this data, it can access the scene as if it were part of the scenetree. But instead of using `get_node()` to get to this scene, we just access the `_db` member. Now we just need a simple function to relay a call to spawn an item from the Database and return the result:  
+
+```python
+extends Node
+
+const GREETING = "Hello RPG!"
+
+onready var _db = preload( "res://things/Database.tscn" ).instance()
+
+
+func make_thing( path ):
+	return _db.spawn( path )
+```
+With this, we can get an instance of any Thing in our Database, from anywhere in the universe, as long as we know its path. Lets use this new tool to spawn the player and some other things into our map programatically.  
 
 ### Spawn Points
-Map gets new `func spawn( what, where )` to programatically create and place objects.  
+Go to the Map scene, and delete anything that's in the Map. We're going to have our Map script spawn and place our Things with functions. Add this function to the map script, above all other functions:  
 
-Spawn some props in Map's `_ready`.  
-Player is spawned along with all other things.  
+```python
+# Spawn what path from Database, set position to where
+func spawn( what, where ):
+	# Add the Thing to the scene and set its pos
+	add_child( what )
+	what.set_map_pos( where )
+```  
+Select the Map (TileMap) node, and use the special header it displays to get an X Y position you want to use as the player start position. For my example, my starting position is x10, y10, but your will probably be different.
+
+We want to spawn the player on the map's `_ready` function:  
+```python
+func _ready():
+	# Test objects
+	var player = RPG.make_thing( "player/player" )
+	spawn( player, Vector2( 10,10 ) )
+```
+
+Hit Play and test your player. It should move around and behave just as it always has. If not, you might have to back up and re-do some things.  
+
+Create at least one "Prop" Thing in your Database. A Prop should be a stationary object which has no function (like the stone altar). They should be under some category like "Props".  
+
+Find a couple more spots on your map like you did with your player (these spots should be on floor tiles!). Repeat the process you did with the player to spawn your props.  
+
+```python
+func _ready():
+	# Test objects
+	var player = RPG.make_thing( "player/player" )
+	var alter1 = RPG.make_thing( "props/altar" )
+	var alter2 = RPG.make_thing( "props/altar" )
+  
+	spawn( alter1, Vector2( 8,7 ) )
+	spawn( alter2, Vector2( 14,7 ) )
+  spawn( player, Vector2( 10,10 ) )
+```
+If we were designing a game which had hand-crafted levels and all the monsters, items and other things were placed by hand, we'd have little need for a system like this. But this is a roguelike, and everything is built by magic robots, so this approach is required.  
+
 
 ### Don't Tread On Me (or Do)
-First export var: `Thing.blocks_movement`  
-Go to Database. You will see the param checkbox for `blocks_movement` in the inspector.   
+Our Prop Things look awful big and blocky, and should be something which blocks our player's movement. It would also be cool for things like monsters and doors to block our progress the same way walls do. We don't want every Thing to block movement though. Things like potions, swords and pit traps should be something we can step over. Because we want this to be a variable property of Thing, let's add a new variable to the Thing script called `blocks_movement`:  
+
+```python
+# Map node
+onready var map = get_parent()
+
+
+export(bool) var blocks_movement = false
+```
+The `export` keyword exposes this variable to the editor. In dummy captain speak, this means that we can set this variable in the inspector like we do all its other built-in parameters (like position, rotation, scale, and so on). The `(bool)` directly after it is a "hint" to the editor to treat it as a boleen switch (and not a string lineedit, or a number spinbox, or a color selector).  
+
+Go to Database and select one of your nodes which uses Thing. You will see the param checkbox for `blocks_movement` in the inspector.   
 Set Altar and Player to block movement.  
-Create a potion Thing. Set it to not block movement.  
+Create a potion Thing. Set it to not block movement. Notice that setting the parameter only affects the node you set it on. All these nodes may be sharing a common script, but they're each using a unique copy of that script, with its own values.  
 
-Have Map.spawn add Things to groups. Blockers go in a "blockers" group.  
-New Map function `is_cell_blocked(cell)` looks for blockers in the cell. If none, it checks for walls.  
+Now if we want to know if a Thing blocks our movement, we can call `if node.blocks_movement:`. We'll create a new function in the map script that can check a cell for blocking Things. To do this, we'll want to go through all Things in the map and check their map position against the Vector2 argument we will give it. If we want to do that, we want a way to logically group all these Things together into an array we can loop (or iterate) through. Godot has a very handy `Groups` tool which will help us here. We can add any node to a group by calling `add_to_group("group_name")` at any point. To get an array of all nodes in a group, we can call (from anywhere in our scene) `get_tree().get_nodes_in_group("group_name")`.  
 
-Now `Thing.step()` can check for "not blocked cells" instead of just "floor" cells.  
+We can do this as we spawn things into the map. Go to the `spawn()` function in the map script and add this:  
+```python
+	# All things go to things group
+	what.add_to_group("things")
+	# Add blocking things to a blockers group
+	if what.blocks_movement:
+		what.add_to_group("blockers")
+```
+We'll want to keep all things in a general "things" group. We've also created a special group for blocking objects called "blockers". 
+
+Now our conditions for a non-blocked cell have become slightly more complicated. Just checking whether a map cell is a floor or not isn't going to cut it anymore. We want to keep the `is_floor()` function as we will still have use for it, but we want a new function which does a slightly tighter check on a cell. Call this new function `is_cell_blocked( cell )`:  
+
+```python
+# Return TRUE if cell is blocked by anything
+func is_cell_blocked( cell ):
+	for thing in get_blockers():
+		if thing.get_map_pos() == cell:
+			return true
+	# if no blockers here, check for walls
+	return !is_floor( cell )
+```
+You might notice (especially if you try running with this code) that the function `get_blockers()` is totally fake and doesn't exist. That's because I forgot about it. Let's make that now, somewhere near the top of your map functions:  
+
+```python
+# Return Array of all Things
+func get_things():
+	return get_tree().get_nodes_in_group("things")
+
+# Return Array of all Movement-Blocking Things
+func get_blockers():
+	return get_tree().get_nodes_in_group("blockers")
+```  
+For the sake of it, we also wrote a similar function to `get_things()`, because we can.  
+
+Now `Thing.step()` can check for "not blocked cells" instead of just "floor" cells. In Thing.gd modify the `step()` function so it looks like:  
+
+```python
+# Step one cell in a direction
+func step( dir ):
+	# Clamp vector to 1 cell in any direction
+	dir.x = clamp( dir.x, -1, 1 )
+	dir.y = clamp( dir.y, -1, 1 )
+	
+	# Calculate new cell
+	var new_cell = get_map_pos() + dir
+  
+  if map.is_cell_blocked( new_cell ):
+    print( "Ow! You hit a wall!" )
+  else:
+    set_map_pos( new_cell )
+```
+Now, when your player attempts to step into a cell occupied by a blocking Prop, they will bump off of it as if they hit a wall. 
 
 Spawn some Altars and Potions in your map. You should be blocked by Altars, but be able to walk over Potions.  
 
@@ -100,11 +253,63 @@ Have Map spawn Player last, so it's drawn over other Things. We'll build a prope
 
 
 ### Watch Where You're Going!
-New Thing `export var name` with multiline string hint.  Give Database Things names.  
+Let's add one more feature before we wrap up this step. We eventually are going to want to know about the Things we bump into, especially once Monsters and Combat start coming into play! We'll begin implementing this functionality now, by having our output announce to us the name of what we bump into, or tell us we're hitting a wall if we are in fact hitting a wall.  
 
-Map gets new function `get_collider(cell)`. This returns a blocking Thing, the Map if cell is a wall, or null if empty floor.  
-Thing.step looks for colliders in new_cell, and prints info based on the collider.  
+We could use a Thing's node name (via `get_name()`) as our thing's in-game display name, but that is generally a Bad Idea. Rather, we want to create another variable of Thing which will store this name as a string. We also make this an export var so we can set it to each instance in our Database.  
 
+```python
+# Map node
+onready var map = get_parent()
 
-We are beginning to put some real meat on our game's bones already. With what we have, we could create as many Things as we like and put them wherever we want in our dungeon. In most other game development environments, getting to such a point would take many more hours of careful and dangerous work to construct such a system. This is the power of Godot (and game engines in general!). We're not even close to done yet, though! In the next step, we will be throwing ourselves even deeper down the rabbit hole, and get algorhytmic as we create our game's precious Random Dungeon Generator. I know! I'm excited too!  [Let's do this thing!!!](../step-4-dungeongen.html)  
+export(String, MULTILINE) var name = ""
+
+export(bool) var blocks_movement = false
+```
+As you can guess, the `String` hint tells godot we want to edit this as a string. the `MULTILINE` hint creates an extra button in the inspector text field for this parameter, which will pop up a large multi-line window you can use to input text. This is often easier to work with than the tiny line of space you normally get there. Especially for us who have small monitors and little screen real estate.  
+
+Now we're going to abandon the `is_cell_blocked()` function we just created (don't delete it, we'll want it later!) and create a new function. This will be real similar to `is_cell_blocked()`, but returns a reference to the node that is blocking a cell (or null if it's an "empty" floor), and is called `get_collider( cell )`:  
+
+```python
+# Return a blocking Thing, this Map, or null at cell
+func get_collider( cell ):
+	for thing in get_blockers():
+		if thing.get_map_pos() == cell:
+			# Return the blocking Thing at this map pos
+			return thing
+	# Else return me if hitting a wall, or null if hitting air
+	return self if not is_floor( cell ) else null
+```
+The last line in this function is called a `ternary operator`. With this, we are basically declaring a variable and setting it based on an if-else statement, and returning it all in one line. Doing this "the long way" would look like:  
+```
+var collider = null
+if is_floor( cell ):
+  collider = self
+return collider
+```  
+Neither way is Right or Wrong, so use the way you feel most comfortable with. Ternary operators don't show up often in this code, but I thought I would take the opportunity to demonstrate one here.  
+
+Now that we have that, we can modify our `step()` code yet again. This time, we'll construct a dynamic string that will be printed when we try walking into blocked cells that will give us info on what we're bumping into. Here's the entire final iteration of `step()` for this step (I promise!):  
+
+```python
+# Step one cell in a direction
+func step( dir ):
+	# Clamp vector to 1 cell in any direction
+	dir.x = clamp( dir.x, -1, 1 )
+	dir.y = clamp( dir.y, -1, 1 )
+	
+	# Calculate new cell
+	var new_cell = get_map_pos() + dir
+	
+	# Check for colliders at new cell
+	var collider = map.get_collider( new_cell )
+	if collider == map:
+		print( self.name + " hits the wall with a thud!" )
+	elif collider != null:
+		print( "%s punches the %s in the face!" % [self.name, collider.name] )
+	else:
+		set_map_pos( new_cell )
+```  
+Now our game is telling us who is hitting what. In the case of us hitting a Thing, we harmlessly punch it in the face.  
+
+We are beginning to put some real meat on our game's bones already. With what we have, we could create as many Things as we like and put them wherever we want in our dungeon. In most other game development environments, getting to such a point would take many more hours of careful and dangerous work to construct such a system. This is the power of Godot (and game engines in general!). We're not even close to done yet, though! In the next step, we will be throwing ourselves even deeper down the rabbit hole, and get algorhytmic as we create our game's precious Random Dungeon Generator. I know! I'm excited too!  [Let's do this!!!](../step-4-dungeongen.html)  
 
