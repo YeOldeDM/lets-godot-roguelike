@@ -55,15 +55,19 @@ All other types of things will also inherit Thing, or inherit a script which eve
 
 
 ### The Database
-`res://things/Database.tscn`  Top node is `Node` "Database"  
+*(Special Thanks to camelCase for introducing this concept. I hope they don't mind if I borrow it!)*
+
+Now that we've got The Most Important Thing re-created, we can start thinking about all the other Things we'll eventually want in our game. We need some kind of central database of Things where we can create new Things and easily maintain Things we've already created. There are many ways we could tackle this issue. We could use a `data-driven` approach and create a big dictionary of Thing data in a global script. We could take a `file-driven` approach and store Things in some kind of data file we could read from and pass to a constructor function. We're not going to do anything like this though. We are going to take, what I'm going to call, a `scene-driven` approach. We're going to construct and store all our Things in a database scene; much like we were using a scene to create our map's tileset!  
+
+Time to create a new Scene at `res://things/Database.tscn`. Top node is `Node` "Database"  
 
 Create "category" `Node`s to organize your Things. Can really be set up however you like. This system is stupid flexible.  
 
-We're going to re-make our Player object.  
+We're going to re-make our Player object. This part is important to follow closely. But if All Goes Well, we shouldn't have to do this kind of thing too often in our project, as we're striving to Get It Right The First Time.   
 
-Copy `res://core/Player/Player.gd` to `res://things/Player.tscn`  
+Using your file explorer, copy `res://core/Player/Player.gd` to `res://things/Player.gd`. All we need is a copy of the script, the scene is going to be made fresh from scratch.  
 
-Start with an instance of Thing.tscn. Change its script to Player.gd (at the location you copied it to).  
+Start with bringing in an instance of Thing.tscn to your Database. Put it under a "player" category and rename the node from "Thing" to "player". Now, go to the inspector, and down at the bottom is a Script parameter. Use this to change the script this node uses from its default `Thing.gd` to the `res://things/Player.gd` we just copied. **Triple-check** that you're selecting `res://things/Player.gd` and not the original `res://core/Player/Player.gd` we've been working with so far! You will be having a very bad time by the end of this step if you mess this part up.  
 
 You will have to right-click > show children to set the texture of each Thing's Icon. Since these are instances, the scene should "hold" these modifications within the instance.  
 
