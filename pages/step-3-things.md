@@ -5,6 +5,9 @@
 .. type: text
 -->
 
+[extendsvader]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/extendsvader.png 
+[databasescene]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/databasescene.png
+
 # WORK IN PROGRESS: DO NOT READ BELOW THIS LINE OR YOU WILL LOSE BRAIN CELLS
 
 In the last step, we added the all-important collision system to our game. Our player is feeling kind of lonely though, so in this step we will introduce the system we will be using to populate our dungeon with everything that isn't the dungeon itself.  
@@ -85,7 +88,6 @@ Now if we want to add a player to our game, we would access this node, and call 
 ![][databasescene]  
 *The Database scene. It wont really live within our game's scenetree, but will exist in a limbo where we will be able to access its data*  
 
-Ensure your new Player is working, then delete the old Player (the whole `res://core/Player` folder).  Nothing sucks worse than when you have duplicate files and get into a situation where you're working on one file but testing its results on another, and clawing your eyes out trying to figure out why your changes have no effect!  
 
 
 
@@ -314,5 +316,10 @@ func step( dir ):
 Now our game is telling us who is hitting what. In the case of us hitting a Thing, we harmlessly punch it in the face.  
 *[talk about %s stuff]*  
 
-We are beginning to put some real meat on our game's bones already. With what we have, we could create as many Things as we like and put them wherever we want in our dungeon. In most other game development environments, getting to such a point would take many more hours of careful and dangerous work to construct such a system. This is the power of Godot (and game engines in general!). We're not even close to done yet, though! In the next step, we will be throwing ourselves even deeper down the rabbit hole, and get algorhytmic as we create our game's precious Random Dungeon Generator. I know! I'm excited too!  [Let's do this!!!](../step-4-dungeongen.html)  
+
+Ensure your new Player is working, then **delete the old Player (the whole `res://core/Player` folder)**.  Nothing sucks worse than when you have duplicate files and get into a situation where you're working on one file but testing its results on another, and clawing your eyes out trying to figure out why your changes have no effect!  
+Close your project and re-open it, and try playing it. If you get any broken dependency errors now, that means you were probably still using the old player script instead of the one you put in `res://things/`. Which also means that you've probably made all your new changes to the file you just deleted. See what I mean?!  
+
+### Conclusion
+We are beginning to put some real meat on our game's bones already. With what we have, we could create as many Things as we like and put them wherever we want in our dungeon. In most other game development environments, getting to such a point would take many more hours of careful and dangerous work to construct such a system. This is the power of Godot (and game engines in general!). We're not even close to done yet, though! In the next step, we will be throwing ourselves in a totally different direction, and get algorhytmic as we create our game's precious Random Dungeon Generator. I know! I'm excited too!  [Let's do this!!!](../step-4-dungeongen.html)  
 
