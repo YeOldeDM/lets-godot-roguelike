@@ -319,6 +319,10 @@ Now our game is telling us who is hitting what. In the case of us hitting a Thin
 Ensure your new Player is working, then **delete the old Player (the whole `res://core/Player` folder)**.  Nothing sucks worse than when you have duplicate files and get into a situation where you're working on one file but testing its results on another, and clawing your eyes out trying to figure out why your changes have no effect!  
 Close your project and re-open it, and try playing it. If you get any broken dependency errors now, that means you were probably still using the old player script instead of the one you put in `res://things/`. Which also means that you've probably made all your new changes to the file you just deleted. See what I mean?!  
 
+
+
+[here](https://github.com/YeOldeDM/realms-of-todog/tree/28465f2ad40ea38aabd71a67876b7f464e8870bd) you can download a snapshot of the project at this current step, if you'd like something to compare to your own project. 
+
 ### Conclusion
 We are beginning to put some real meat on our game's bones already. With what we have, we could create as many Things as we like and put them wherever we want in our dungeon. In most other game development environments, getting to such a point would take many more hours of careful and dangerous work to construct such a system. This is the power of Godot (and game engines in general!). We're not even close to done yet, though! In the next step, we will be throwing ourselves in a totally different direction, and get algorhytmic as we create our game's precious Random Dungeon Generator. I know! I'm excited too!  [Let's do this!!!](../step-4-dungeongen.html)  
 
