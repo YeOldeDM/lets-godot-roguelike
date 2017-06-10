@@ -30,6 +30,8 @@
 
 [projectfolder]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/projfold.png "Our happy little project folder, filled with happy little file dreams"
 
+*"The secret of getting ahead is getting started. The secret of getting started is breaking your complex overwhelming task into small manageable tasks, and then starting on the first one." -Mark Twain  
+
 The Project
 =====
 ### New Project

@@ -27,6 +27,16 @@ experience with *gdscript* (Godot's scripting language, which is similar to *Pyt
 be trying to touch on concepts as we encounter them in the project, but going into such things in detail would make this thing way too long.
 There are a ton of other resources out there that cover these things, which are written by people who are certainly much smarter than me.  
 
+Here are a few resources containing many tutorials and how-tos covering different aspects of the Godot engine. Any aspect of the engine we work with in this tutorial is most likely covered more in-depth somewhere within these links:  
+
+[Godot 101](https://www.youtube.com/playlist?list=PLsk-HSGFjnaFISfGRTXxp65FXOa9UkYc5) by KidsCanCode  
+
+[30 Tutorials In 30 Days](https://www.youtube.com/playlist?list=PLhqJJNjsQ7KEr_YlibZ3SBuzfw9xwGduK) and [Learn the Godot Engine and Create a Platform Game](https://www.youtube.com/playlist?list=PLhqJJNjsQ7KEbSXHacP9eD37xyoPJz9gm) by GDquest  
+
+[Godot Game Engine Tutorial Series](http://www.gamefromscratch.com/page/Godot-Game-Engine-tutorial-series.aspx) by Gamefromscratch (these have become pretty outdated, but still worth looking at)  
+
+[Godot Docs Step-by-Step](http://docs.godotengine.org/en/stable/learning/step_by_step/index.html)  
+
 ### Why Godot?
 Here's a list, chief:  
 -- Godot is FREE. As in, free free  
@@ -47,10 +57,9 @@ which is, while limited, much easier to control and develop on.  The Roguelike i
 First off, you'll need the newest stable version of the [Godot Engine](https://godotengine.org/). This tutorial will be written using ver 2.1.3.
 It is highly recommended that you also download the Demo Projects as well as the Export Templates, though neither is required 
 for this tutorial.  
-This project will also be using the graphics set Dungeon Crawl Stone Soup which can be found [here](https://opengameart.org/content/dungeon-crawl-32x32-tiles). You can, of course, use whatever graphics
-you wish (as well as create your own), but if you really want to follow along you will want to download a copy of this and extract it 
-somewhere handy.  There will also be a few 'custom' graphics I have made for the project, for the occasional things we'll need that 
-the graphics pack is lacking. Those will be made available as Free For Any Use.  
+
+### This project will also be using the graphics set from **Dungeon Crawl Stone Soup** which can be found [here](https://opengameart.org/content/dungeon-crawl-32x32-tiles).
+You can, of course, use whatever graphics you wish (as well as create your own), but if you really want to follow along you will want to download a copy of this and extract it somewhere handy.  There will also be a few 'custom' graphics I have made for the project, for the occasional things we'll need that the graphics pack is lacking. Those will be made available as Free For Any Use.  
 Copies of the project will also be available for download and use for reference. Links to a snapshot of the project as it is at the end of each step is available at the end of each article.  
 
 The Steps
@@ -65,4 +74,7 @@ This tutorial is currently a work in progress. New articles will be added to thi
 
 
 
+# Credits
+This tutorial series is based upon and inspired by [this tutorial by Jotaf](http://www.roguebasin.com/index.php?title=Complete_Roguelike_Tutorial,_using_python%2Blibtcod)  
+I'd also like to shout out special thanks to Verbalshadow, Zygliplix, ChuuniMage, and everyone else who has helped make this thing happen.  
 

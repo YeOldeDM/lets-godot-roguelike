@@ -19,11 +19,13 @@
 
 [screencoord]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/screencoord.png
 
-In the last step, we began our new project, set some settings, and constructed a skeleton on which we can now begin building the rest of our game upon.  
+In the last step, we began our new project, set some settings, and constructed a scaffolding on which we can now begin building the rest of our game upon.  
 In this step we will be adding a collision system to our game, as well as flesh out our current player movement system.  
 
 Collision
 =====
+*"I can only show you the door, Neo. You have to walk through it. You...have to open the door first..." -White Morpheus, "Computer Boy"*  
+
 ### Roll Your Own
 For many types of games, Godot can handle complex collisions between objects using physics the bodies `KinematicBody2D`, `RigidBody2D` and `StaticBody2D`.  
 For our needs, this collision system is overkill. Since all our game's objects are going to operate purely on the grid logic of our map, 
