@@ -11,7 +11,7 @@
 [globalcloud]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/globalcloud.png
 [mapxy]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/mapxy.png
 [step3fin]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/step3fin.png
-
+[fuuu]: http://www.officialpsds.com/images/thumbs/FUUUUU-2-psd81145.png
 
 
 In the last step, we added the all-important collision system to our game. Our player is feeling kind of lonely though, so in this step we will introduce the system we will be using to populate our dungeon with everything that isn't the dungeon itself.
@@ -31,7 +31,7 @@ Everything inside the dungeon beside its walls and floors is going to be a `Thin
 
 #### Player Refactor
 Save Player.tscn as `res://things/Thing.tscn` and rename top node to "Thing"  
-`res://things/Thing.gd`  
+In the inspector, clear the Thing's script, then add a new one at `res://things/Thing.gd`  
 
 Our most basic Thing object requires only a couple parameters. These will be parameters that every Thing in our game will need. They are:  
 -- Getting and settings its map position  
@@ -39,6 +39,7 @@ Our most basic Thing object requires only a couple parameters. These will be par
 
 This list will grow as our game gets more complex, but this gives us something to work with.  
 
+We already have all this code written in our player script.  
 We want to take all the code we've written in our player script which applies to that list above (actually, just the map position part, as our Icon requires no code yet), and move it to our new Thing script. You should be able to just cut the code from one script and paste it into the other.  
 
 Now, your player script should only contain its `_ready` and `_input` functions and their contents. If you tried playing your game at this moment, all your movement code should be broken, of course. We just ripped a bunch of code out of our script, and now the remaining code is trying to call functions that no longer exist! Why the hell would we ever do that??  
@@ -337,12 +338,16 @@ Now our game is telling us who is hitting what. In the case of us hitting a Thin
 
 Ensure your new Player is working, then **delete the old Player (the whole `res://core/Player` folder)**.  Nothing sucks worse than when you have duplicate files and get into a situation where you're working on one file but testing its results on another, and clawing your eyes out trying to figure out why your changes have no effect!  
 Close your project and re-open it, and try playing it. If you get any broken dependency errors now, that means you were probably still using the old player script instead of the one you put in `res://things/`. Which also means that you've probably made all your new changes to the file you just deleted. See what I mean?!  
-
-![step3fin]  
-*The final result at the end of this step. We've built ourselves a virtual punching bag to help us channel our frustration. Namaste!*  
+![fuuu]  
+*Here's what we do when our $#!T bricks on us. Don't worry, it happens to the best of us*  
+ 
 
 [here](https://github.com/YeOldeDM/realms-of-todog/tree/28465f2ad40ea38aabd71a67876b7f464e8870bd) you can download a snapshot of the project at this current step, if you'd like something to compare to your own project. 
 
 ### Conclusion
 We are beginning to put some real meat on our game's bones already. With what we have, we could create as many Things as we like and put them wherever we want in our dungeon. In most other game development environments, getting to such a point would take many more hours of careful and dangerous work to construct such a system. This is the power of Godot (and game engines in general!). We're not even close to done yet, though! In the next step, we will be throwing ourselves in a totally different direction, and get algorhytmic as we create our game's precious Random Dungeon Generator. I know! I'm excited too!  [Let's do this!!!](../step-4-dungeongen.html)  
+
+![step3fin]  
+*The final result at the end of this step. We've built ourselves a virtual punching bag to help us channel our frustration. Namaste!*  
+
 
