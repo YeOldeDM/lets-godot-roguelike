@@ -7,14 +7,15 @@
 
 [extendsvader]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/extendsvader.png 
 [databasescene]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/databasescene.png
+[dathing]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/dathing.png
 
 
-In the last step, we added the all-important collision system to our game. Our player is feeling kind of lonely though, so in this step we will introduce the system we will be using to populate our dungeon with everything that isn't the dungeon itself.  
+In the last step, we added the all-important collision system to our game. Our player is feeling kind of lonely though, so in this step we will introduce the system we will be using to populate our dungeon with everything that isn't the dungeon itself.
 
 
 ### The Thing
-![Picture of The Thing](url)  
-*"The Thing can take on any form"*  
+![dathing]  
+
 #### Generalization
 Our game will become a lot more interesting to play if we fill it with lots of interesting things to interact with.  
 We want to build our system in such a way that we're creating complex objects out of a collection of simple general parts, like virtual lego pieces.  
