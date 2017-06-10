@@ -5,14 +5,14 @@
 .. type: text
 -->
 
-[extendsvader]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/extendsvader.png 
-[databasescene]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/databasescene.png
-[dathing]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/dathing.png
-[globalcloud]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/globalcloud.png
-[mapxy]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/mapxy.png
-[step3fin]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/step3fin.png
+[extendsvader]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/extendsvader.png 
+[databasescene]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/databasescene.png
+[dathing]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/dathing.png
+[globalcloud]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/globalcloud.png
+[mapxy]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/mapxy.png
+[step3fin]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/step3fin.png
 [fuuu]: http://www.officialpsds.com/images/thumbs/FUUUUU-2-psd81145.png
-[editchildren]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/editchildren.png
+[editchildren]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/editchildren.png
 
 
 In the last step, we added the all-important collision system to our game. Our player is feeling kind of lonely though, so in this step we will introduce the system we will be using to populate our dungeon with everything that isn't the dungeon itself.
