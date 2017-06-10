@@ -9,6 +9,8 @@
 [databasescene]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/databasescene.png
 [dathing]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/dathing.png
 [globalcloud]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/globalcloud.png
+[mapxy]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/mapxy.png
+[step3fin]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/step3fin.png
 
 
 
@@ -101,8 +103,8 @@ Now if we want to add a player to our game, we would access this node, and take 
 
 
 ### The Global
-![globalcloud]
-Much of game design logic involves having this sort of web of nodes which all communicate with each other. Designing and maintaining these communication systems can be quite a complicated task.  Sometimes, though, you just want to be able to call a function or access a variable from any point in your scene tree. This is where `global scripts` come into play. These can also be called `autoload scripts` or `singletons`. The best way to demonstrate how these work is to just make one and start using it. It's really simple!  
+
+Much of Godot logic structure involves having this sort of web of nodes which all communicate with each other. Designing and maintaining these communication systems can be quite a complicated task.  Sometimes, though, you just want to be able to call a function or access a variable from any point in your scene tree. This is where `global scripts` come into play. These can also be called `autoload scripts` or `singletons`. The best way to demonstrate how these work is to just make one and start using it. It's really simple!  
 
 We start by creating a new script. Unlike the scripts we've created so far, this one is not being added to any node in a scene. To do this, go to the Script Tab and select `File > New` and create a new file at `res://global/RPG.gd`. Any scripts which don't extend any particular kind of node or another script should extend `Node`.   
 
@@ -119,7 +121,9 @@ Your Output should now greet our new beneficial RPG overlord.
 
 
 All global functionality will done here, and called with ease as `RPG.[x]`, where [x] is any function or member contained within the RPG script. In the future we'll use this script for other universal functions such as rolling dice and all that fun stuff.  
-  
+
+![globalcloud]  
+
 Now let's add something real to RPG.gd (keep the `const GREETING`, we can probably use this later). The first thing we want our global script to do is hold an instance of our database scene, access its script, and use that to return an instance of a Thing from the database (which will then be added to our Map). For now, the only place we need to do this thing is from our Map script, so it could make sense to just write this into Map.gd. But the Ghost of Prototypes Past inform us that we will want to be able to do this from other places as well.  
 
 First, we want RPG to load an instance of the Database scene and store that in a variable. We also want to do this during the script's `_ready()` function so we'll use the `onready` keyword:  
@@ -146,6 +150,9 @@ func make_thing( path ):
 ```
 With this, we can get an instance of any Thing in our Database, from anywhere in the universe, as long as we know its path. Lets use this new tool to spawn the player and some other things into our map programatically.  
 
+Why don't we just make the Database scene itself an AutoLoad? This was the original approach to this system.  
+You can assign scenes as singletons in Godot, so in theory we could eliminate the RPG middleman here. The only problem with this is that if the Database scene is loaded as a singleton it will actually add that scene as a node in the tree, which means it will draw all the Things that are placed in that scene over the normal game. We don't need this mess, so we sidestep it by just instancing it and not adding it to the tree. Since we already require a global functions script for other uses, this is a small comprimise.  
+
 ### Spawn Points
 Go to the Map scene, and delete anything that's in the Map. We're going to have our Map script spawn and place our Things with functions. Add this function to the map script, above all other functions:  
 
@@ -156,7 +163,10 @@ func spawn( what, where ):
 	add_child( what )
 	what.set_map_pos( where )
 ```  
-Select the Map (TileMap) node, and use the special header it displays to get an X Y position you want to use as the player start position. For my example, my starting position is x10, y10, but your will probably be different.
+Select the Map (TileMap) node, and use the special header it displays to get an X Y position you want to use as the player start position. For my example, my starting position is x10, y10, but your will probably be different.  
+
+![mapxy]  
+*This will likely be the one and only time we're going to be hard-coding positions like this. Procedural Generation will do this job for us real soon*  
 
 We want to spawn the player on the map's `_ready` function:  
 ```python
@@ -328,7 +338,8 @@ Now our game is telling us who is hitting what. In the case of us hitting a Thin
 Ensure your new Player is working, then **delete the old Player (the whole `res://core/Player` folder)**.  Nothing sucks worse than when you have duplicate files and get into a situation where you're working on one file but testing its results on another, and clawing your eyes out trying to figure out why your changes have no effect!  
 Close your project and re-open it, and try playing it. If you get any broken dependency errors now, that means you were probably still using the old player script instead of the one you put in `res://things/`. Which also means that you've probably made all your new changes to the file you just deleted. See what I mean?!  
 
-
+![step3fin]  
+*The final result at the end of this step. We've built ourselves a virtual punching bag to help us channel our frustration. Namaste!*  
 
 [here](https://github.com/YeOldeDM/realms-of-todog/tree/28465f2ad40ea38aabd71a67876b7f464e8870bd) you can download a snapshot of the project at this current step, if you'd like something to compare to your own project. 
 
