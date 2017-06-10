@@ -19,6 +19,7 @@ In the last step, we added the all-important collision system to our game. Our p
 
 
 ### The Thing
+
 ![dathing]  
 
 #### Generalization
