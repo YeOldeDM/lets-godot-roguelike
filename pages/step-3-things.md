@@ -12,6 +12,7 @@
 [mapxy]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/mapxy.png
 [step3fin]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/step3fin.png
 [fuuu]: http://www.officialpsds.com/images/thumbs/FUUUUU-2-psd81145.png
+[editchildren]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/editchildren.png
 
 
 In the last step, we added the all-important collision system to our game. Our player is feeling kind of lonely though, so in this step we will introduce the system we will be using to populate our dungeon with everything that isn't the dungeon itself.
@@ -76,7 +77,10 @@ Using your file explorer, copy `res://core/Player/Player.gd` to `res://things/Pl
 
 Start with bringing in an instance of `res://thing/Thing.tscn` to your Database. Put it under a "player" category and rename the node from "Thing" to "player". Now, go to the inspector, and down at the bottom is a Script parameter. Use this to change the script this node uses from its default `Thing.gd` to the `res://things/Player.gd` we just copied. **Triple-check** that you're selecting `res://things/Player.gd` and not the original `res://core/Player/Player.gd` we've been working with so far! You will be having a very bad time by the end of this step if you mess this part up.  
 
-You will have to right-click > show children to set the texture of each Thing's Icon. Since these are instances, the scene should "hold" these modifications within the instance.  
+By default, when you bring in an instance of a scene into another scene, it treats this scene as another node of the tree, and doesn't let you get to the instanced scene's children. We want to be able to get to our Thing's Icon node and change its texture, so we need to fix that. Click the icon next to the scene that looks like a movie clapper thing (I don't know what to call it) and enable the "Editable Children" option. You can now expand your instanced scene within the scenetree and access its now-orange children.  
+
+![editchildren]  
+*This allows you to hack into your instanced scene and do things to its insides*  
 
 Lets add a script to the top Database node. All this script will do is take a string path argument, and return a duplicate of the node that path points to (as long as the path is valid).  
 
@@ -121,7 +125,7 @@ Pick any script now in your game that will be running once you hit Play. In that
 Your Output should now greet our new beneficial RPG overlord.  
 
 
-All global functionality will done here, and called with ease as `RPG.[x]`, where [x] is any function or member contained within the RPG script. In the future we'll use this script for other universal functions such as rolling dice and all that fun stuff.  
+All global functionality will be done here, and called with ease as `RPG.[x]`, where [x] is any function or member contained within the RPG script. In the future we'll use this script for other universal functions such as rolling dice and all that fun stuff.  
 
 ![globalcloud]  
 
@@ -179,7 +183,7 @@ func _ready():
 
 Hit Play and test your player. It should move around and behave just as it always has. If not, you might have to back up and re-do some things.  
 
-Create at least one "Prop" Thing in your Database. A Prop should be a stationary object which has no function (like the stone altar). They should be under some category like "Props".  
+Create at least one "Prop" Thing in your Database. A Prop should be a stationary object which has no function (like the stone altar). They should be under some category like "Props". Do this the same way you did for the new Player, but don't touch its script. We don't want our props to move around when we hit movement keys. That would be weird. Make your prop's children editable and bring in a graphic from your source folder to act as the prop's Icon. I chose a completely generic stone alter but you do you.  
 
 Find a couple more spots on your map like you did with your player (these spots should be on floor tiles!). Repeat the process you did with the player to spawn your props.  
 
@@ -236,7 +240,7 @@ func is_cell_blocked( cell ):
 	# if no blockers here, check for walls
 	return !is_floor( cell )
 ```  
-The exclamation point "!" in `!is_floor( cell )` is an operational `not` symbol. You can write this line as `return not is_floor( cell )` and get the same result, if you're not into cryptic code. Otherwise it's just a little more concise to use !. Since in this function we want to return `TRUE` if the cell is blocked, we want to return the inverse of the result of `is_floor`, which return `TRUE` if the cell is *not* blocked by a wall.  
+The exclamation point "!" in `!is_floor( cell )` is an operational `not` symbol. You can write this line as `return not is_floor( cell )` and get the same result, if you're not into cryptic code. Otherwise it's just a little more concise to use !. Since in this function we want to return `TRUE` if the cell is blocked, we want to return the inverse of the result of `is_floor`, which returns `TRUE` if the cell is *not* blocked by a wall.  
 
 You might notice (especially if you try running with this code) that the function `get_blockers()` is totally fake and doesn't exist. *That's because I forgot about it!* Let's make that now, somewhere near the top of your map functions:  
 
@@ -333,19 +337,19 @@ func step( dir ):
 		set_map_pos( new_cell )
 ```  
 Now our game is telling us who is hitting what. In the case of us hitting a Thing, we harmlessly punch it in the face.  
-*[talk about %s stuff]*  
+For the last print statement in that code we are using `string formatting`. If this looks alien to you, [take a quick break and read this](http://docs.godotengine.org/en/stable/learning/scripting/gdscript/gdscript_format_string.html#multiple-placeholders). We'll probably be using string formats with some regularity down the road.  
 
 
 Ensure your new Player is working, then **delete the old Player (the whole `res://core/Player` folder)**.  Nothing sucks worse than when you have duplicate files and get into a situation where you're working on one file but testing its results on another, and clawing your eyes out trying to figure out why your changes have no effect!  
 Close your project and re-open it, and try playing it. If you get any broken dependency errors now, that means you were probably still using the old player script instead of the one you put in `res://things/`. Which also means that you've probably made all your new changes to the file you just deleted. See what I mean?!  
 ![fuuu]  
-*Here's what we do when our $#!T bricks on us. Don't worry, it happens to the best of us*  
+*Here's what we do when our $#!T bricks on us. Don't worry, it happens to the best of us. Stay Strong!*  
  
 
 [here](https://github.com/YeOldeDM/realms-of-todog/tree/28465f2ad40ea38aabd71a67876b7f464e8870bd) you can download a snapshot of the project at this current step, if you'd like something to compare to your own project. 
 
 ### Conclusion
-We are beginning to put some real meat on our game's bones already. With what we have, we could create as many Things as we like and put them wherever we want in our dungeon. In most other game development environments, getting to such a point would take many more hours of careful and dangerous work to construct such a system. This is the power of Godot (and game engines in general!). We're not even close to done yet, though! In the next step, we will be throwing ourselves in a totally different direction, and get algorithmic as we create our game's glorious Random Dungeon Generator. I know! I'm excited too!  [Let's do this!!!](../step-4-dungeongen.html)  
+We are beginning to put some real meat on our game's bones already. With what we have, we could create as many Things as we like and put them wherever we want in our dungeon. We're not even close to done yet, though! In the next step, we will be throwing ourselves in a totally different direction, and get algorithmic as we create our game's glorious Random Dungeon Generator. I know! I'm excited too!  [Let's do this!!!](../step-4-dungeongen.html)  
 
 ![step3fin]  
 *The final result at the end of this step. We've built ourselves a virtual punching bag to help us channel our frustration. Namaste!*  
