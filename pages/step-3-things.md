@@ -149,10 +149,10 @@ onready var _db = preload( "res://things/Database.tscn" ).instance()
 func make_thing( path ):
 	return _db.spawn( path )
 ```
-With this, we can get an instance of any Thing in our Database, from anywhere in the universe, as long as we know its path. Lets use this new tool to spawn the player and some other things into our map programatically.  
+With this, we can get an instance of any Thing in our Database, from anywhere in the universe, as long as we know its path. Lets use this new tool to spawn the player and some other things into our map programmatically.  
 
 Why don't we just make the Database scene itself an AutoLoad? This was the original approach to this system.  
-You can assign scenes as singletons in Godot, so in theory we could eliminate the RPG middleman here. The only problem with this is that if the Database scene is loaded as a singleton it will actually add that scene as a node in the tree, which means it will draw all the Things that are placed in that scene over the normal game. We don't need this mess, so we sidestep it by just instancing it and not adding it to the tree. Since we already require a global functions script for other uses, this is a small comprimise.  
+You can assign scenes as singletons in Godot, so in theory we could eliminate the RPG middleman here. The only problem with this is that if the Database scene is loaded as a singleton it will actually add that scene as a node in the tree, which means it will draw all the Things that are placed in that scene over the normal game. We don't need this mess, so we sidestep it by just instancing it and not adding it to the tree. Since we already require a global functions script for other uses, this is a small compromise.  
 
 ### Spawn Points
 Go to the Map scene, and delete anything that's in the Map. We're going to have our Map script spawn and place our Things with functions. Add this function to the map script, above all other functions:  
@@ -207,7 +207,7 @@ onready var map = get_parent()
 
 export(bool) var blocks_movement = false
 ```
-The `export` keyword exposes this variable to the editor. In dummy captain speak, this means that we can set this variable in the inspector like we do all its other built-in parameters (like position, rotation, scale, and so on). The `(bool)` directly after it is a "hint" to the editor to treat it as a boleen switch (and not a string lineedit, or a number spinbox, or a color selector).  
+The `export` keyword exposes this variable to the editor. In dummy captain speak, this means that we can set this variable in the inspector like we do all its other built-in parameters (like position, rotation, scale, and so on). The `(bool)` directly after it is a "hint" to the editor to treat it as a booleen switch, and not a string lineedit, or a number spinbox, or a color selector.  
 
 Go to Database and select one of your nodes which uses Thing. You will see the param checkbox for `blocks_movement` in the inspector.   
 Set Altar and Player to block movement.  
@@ -236,7 +236,7 @@ func is_cell_blocked( cell ):
 	# if no blockers here, check for walls
 	return !is_floor( cell )
 ```  
-The exclamaition point "!" in `!is_floor( cell )` is an operational `not` symbol. You can write this line as `return not is_floor( cell )` and get the same result, if you're not into cryptic code. Otherwise it's just a little more concise to use !. Since in this function we want to return `TRUE` if the cell is blocked, we want to return the inverse of the result of `is_floor`, which return `TRUE` if the cell is *not* blocked by a wall.  
+The exclamation point "!" in `!is_floor( cell )` is an operational `not` symbol. You can write this line as `return not is_floor( cell )` and get the same result, if you're not into cryptic code. Otherwise it's just a little more concise to use !. Since in this function we want to return `TRUE` if the cell is blocked, we want to return the inverse of the result of `is_floor`, which return `TRUE` if the cell is *not* blocked by a wall.  
 
 You might notice (especially if you try running with this code) that the function `get_blockers()` is totally fake and doesn't exist. *That's because I forgot about it!* Let's make that now, somewhere near the top of your map functions:  
 
@@ -345,7 +345,7 @@ Close your project and re-open it, and try playing it. If you get any broken dep
 [here](https://github.com/YeOldeDM/realms-of-todog/tree/28465f2ad40ea38aabd71a67876b7f464e8870bd) you can download a snapshot of the project at this current step, if you'd like something to compare to your own project. 
 
 ### Conclusion
-We are beginning to put some real meat on our game's bones already. With what we have, we could create as many Things as we like and put them wherever we want in our dungeon. In most other game development environments, getting to such a point would take many more hours of careful and dangerous work to construct such a system. This is the power of Godot (and game engines in general!). We're not even close to done yet, though! In the next step, we will be throwing ourselves in a totally different direction, and get algorhytmic as we create our game's precious Random Dungeon Generator. I know! I'm excited too!  [Let's do this!!!](../step-4-dungeongen.html)  
+We are beginning to put some real meat on our game's bones already. With what we have, we could create as many Things as we like and put them wherever we want in our dungeon. In most other game development environments, getting to such a point would take many more hours of careful and dangerous work to construct such a system. This is the power of Godot (and game engines in general!). We're not even close to done yet, though! In the next step, we will be throwing ourselves in a totally different direction, and get algorithmic as we create our game's glorious Random Dungeon Generator. I know! I'm excited too!  [Let's do this!!!](../step-4-dungeongen.html)  
 
 ![step3fin]  
 *The final result at the end of this step. We've built ourselves a virtual punching bag to help us channel our frustration. Namaste!*  
