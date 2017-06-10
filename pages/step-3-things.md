@@ -8,6 +8,8 @@
 [extendsvader]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/extendsvader.png 
 [databasescene]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/databasescene.png
 [dathing]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/dathing.png
+[globalcloud]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/3-things/img/globalcloud.png
+
 
 
 In the last step, we added the all-important collision system to our game. Our player is feeling kind of lonely though, so in this step we will introduce the system we will be using to populate our dungeon with everything that isn't the dungeon itself.
@@ -21,15 +23,15 @@ Our game will become a lot more interesting to play if we fill it with lots of i
 We want to build our system in such a way that we're creating complex objects out of a collection of simple general parts, like virtual lego pieces.  
 This way, we can make a lot of content with just a little work, and ensure that common behavior is consistent among all objects.  
 
-Let's start by defining our most basic type of object and give it a descriptive name. I'll dub this object a Thing. 
+Let's start by defining our most basic type of object and give it a descriptive name. I'll dub this object a `Thing`. 
 
-Everything inside the dungeon is a Thing.  
+Everything inside the dungeon beside its walls and floors is going to be a `Thing`.  
 
 #### Player Refactor
 Save Player.tscn as `res://things/Thing.tscn` and rename top node to "Thing"  
 `res://things/Thing.gd`  
 
-Our most basic Thing object requires only a couple parameters. These will be parameters that everything in our game will need. They are:  
+Our most basic Thing object requires only a couple parameters. These will be parameters that every Thing in our game will need. They are:  
 -- Getting and settings its map position  
 -- an Icon visual representation  
 
@@ -38,9 +40,10 @@ This list will grow as our game gets more complex, but this gives us something t
 We want to take all the code we've written in our player script which applies to that list above (actually, just the map position part, as our Icon requires no code yet), and move it to our new Thing script. You should be able to just cut the code from one script and paste it into the other.  
 
 Now, your player script should only contain its `_ready` and `_input` functions and their contents. If you tried playing your game at this moment, all your movement code should be broken, of course. We just ripped a bunch of code out of our script, and now the remaining code is trying to call functions that no longer exist! Why the hell would we ever do that??  
-Remember that we copied all that code into another script. It's almost as if we're setting ourselves up to have multiple scripts assigned to a single node. But as a rule, a node in the godot engine can only have one script assigned to it. So it must be non-possible for our Player node to utilize both its Player script and a Thing script, right? Not quite!  
+Remember that we copied all that code into another script. It's almost as if we're setting ourselves up to have multiple scripts assigned to a single node. But as a rule, *a node in the godot engine can only have one script assigned to it*. So it must be non-possible for our Player node to utilize both its Player script and a Thing script, right? Not quite!  
 
-There has been one line in all our scripts we've pretty much been ignoring up to this point, but it's a very important line (the most important, one could argue). The `extends` keyword tells your script which functionality it has access to, and is almost always identical to the type of node the script has been created for. The script on a Node `extends Node`. A TextureFrame node's script `extends TextureFrame`. You can think of these as extending your script to use the functions of another higher script. It's just that these "built-in" types don't have actual scripts you can have normal access to. Even though we never defined a `get_pos()` or `set_pos()` function for our player, those functions still do things, because our player extends the methods of Node2D, which *does* define a `get_pos()` and `set_pos()`.  
+##### Extends
+There has been one line in all our scripts that we've basically been ignoring up to this point, but it's a very important line (the most important, one could argue). The `extends` keyword tells your script which functionality it has access to, and is almost always identical to the type of node the script has been created for. The script on a Node `extends Node`. A TextureFrame node's script `extends TextureFrame`. You can think of these as extending your script to use the functions of another higher script. It's just that these "built-in" types don't have actual scripts you can have normal access to. Even though we never defined a `get_pos()` or `set_pos()` function for our player, those functions still do things, because our player extends the methods of Node2D, which *does* define a `get_pos()` and `set_pos()`.  
 
 By using a pinch of Gogo Magic, we can tell our player script to extend one of our own scripts, instead of `Node2D`.
 
@@ -60,7 +63,7 @@ All other types of things will also inherit Thing, or inherit a script which eve
 
 Now that we've got The Most Important Thing re-created, we can start thinking about all the other Things we'll eventually want in our game. We need some kind of central database of Things where we can create new Things and easily maintain Things we've already created. There are many ways we could tackle this issue. We could use a `data-driven` approach and create a big dictionary of Thing data in a global script. We could take a `file-driven` approach and store Things in some kind of data file we could read from and pass to a constructor function. We're not going to do anything like this though. We are going to take, what I'm going to call, a `scene-driven` approach. We're going to construct and store all our Things in a database scene; much like we were using a scene to create our map's tileset!  
 
-Time to create a new Scene at `res://things/Database.tscn`. Top node is `Node` "Database"  
+Time to create a new Scene and create its top node as `Node` "Database". Save the scene as `res://things/Database.tscn`.  
 
 Create "category" `Node`s to organize your Things. Can really be set up however you like. This system is stupid flexible.  
 
@@ -68,7 +71,7 @@ We're going to re-make our Player object. This part is important to follow close
 
 Using your file explorer, copy `res://core/Player/Player.gd` to `res://things/Player.gd`. All we need is a copy of the script, the scene is going to be made fresh from scratch.  
 
-Start with bringing in an instance of Thing.tscn to your Database. Put it under a "player" category and rename the node from "Thing" to "player". Now, go to the inspector, and down at the bottom is a Script parameter. Use this to change the script this node uses from its default `Thing.gd` to the `res://things/Player.gd` we just copied. **Triple-check** that you're selecting `res://things/Player.gd` and not the original `res://core/Player/Player.gd` we've been working with so far! You will be having a very bad time by the end of this step if you mess this part up.  
+Start with bringing in an instance of `res://thing/Thing.tscn` to your Database. Put it under a "player" category and rename the node from "Thing" to "player". Now, go to the inspector, and down at the bottom is a Script parameter. Use this to change the script this node uses from its default `Thing.gd` to the `res://things/Player.gd` we just copied. **Triple-check** that you're selecting `res://things/Player.gd` and not the original `res://core/Player/Player.gd` we've been working with so far! You will be having a very bad time by the end of this step if you mess this part up.  
 
 You will have to right-click > show children to set the texture of each Thing's Icon. Since these are instances, the scene should "hold" these modifications within the instance.  
 
@@ -86,11 +89,11 @@ func spawn( path ):
 	# Print an error message if thing doesn't drop out
 	print( "Cannot find a Thing at: " + path )
 ```  
-Now if we want to add a player to our game, we would access this node, and call `spawn( "player/player" )`.  That's easy!  
+Now if we want to add a player to our game, we would access this node, and take what `spawn( "player/player" )` returns. That's easy!  
 
 
 ![][databasescene]  
-*The Database scene. It wont really live within our game's scenetree, but will exist in a limbo where we will be able to access its data*  
+*The Database scene. This will be the virtual Toybox from which we will grab out game pieces to place on our game board.*  
 
 
 
@@ -98,6 +101,7 @@ Now if we want to add a player to our game, we would access this node, and call 
 
 
 ### The Global
+![globalcloud]
 Much of game design logic involves having this sort of web of nodes which all communicate with each other. Designing and maintaining these communication systems can be quite a complicated task.  Sometimes, though, you just want to be able to call a function or access a variable from any point in your scene tree. This is where `global scripts` come into play. These can also be called `autoload scripts` or `singletons`. The best way to demonstrate how these work is to just make one and start using it. It's really simple!  
 
 We start by creating a new script. Unlike the scripts we've created so far, this one is not being added to any node in a scene. To do this, go to the Script Tab and select `File > New` and create a new file at `res://global/RPG.gd`. Any scripts which don't extend any particular kind of node or another script should extend `Node`.   
