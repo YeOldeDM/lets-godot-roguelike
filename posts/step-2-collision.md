@@ -1,7 +1,7 @@
 <!--
 .. title: Step 2: Learning To Walk (Into Walls)
 .. slug: step-2-collision
-.. date: 2017-06-12 03:00:00 UTC
+.. date: 2017-06-07 03:00:00 UTC
 .. tags: 
 .. category: 
 .. link: 

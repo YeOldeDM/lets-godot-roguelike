@@ -1,7 +1,7 @@
 <!--
 .. title: Step 3: Enter The Thing
 .. slug: step-3-things
-.. date: 2017-06-19 04:00:00 UTC
+.. date: 2017-06-11 04:00:00 UTC
 .. type: text
 -->
 
