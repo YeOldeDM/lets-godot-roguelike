@@ -173,18 +173,17 @@ THEME_COLOR = '#5670d4'
 #
 
 POSTS = (
-    ("posts/*.md", "posts", "post.tmpl"),
-    ("posts/*.rst", "posts", "post.tmpl"),
-    ("posts/*.txt", "posts", "post.tmpl"),
-    ("posts/*.html", "posts", "post.tmpl"),
+    ("posts/*.md", "tutorials", "post.tmpl"),
+    ("posts/*.rst", "tutorials", "post.tmpl"),
+    ("posts/*.txt", "tutorials", "post.tmpl"),
+    ("posts/*.html", "tutorials", "post.tmpl"),
 )
 PAGES = (
-    ("pages/*.md", "", "story.tmpl"),
+    ("posts/*.md", "", "story.tmpl"),
     ("pages/*.rst", "", "story.tmpl"),
     ("pages/*.txt", "", "story.tmpl"),
     ("pages/*.html", "", "story.tmpl"),
 )
-
 
 # Below this point, everything is optional
 
@@ -472,7 +471,7 @@ HIDDEN_AUTHORS = ['Guest']
 
 # Final location for the main blog page and sibling paginated pages is
 # output / TRANSLATION[lang] / INDEX_PATH / index-*.html
-# INDEX_PATH = ""
+INDEX_PATH = "tutorials"
 
 # Optional HTML that displayed on “main” blog index.html files.
 # May be used for a greeting. (translatable)
