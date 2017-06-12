@@ -33,7 +33,7 @@ we can use this to our advantage and create our own collision system.  All of ou
 
 ### Stay On The Floor
 One major issue with our game at the moment is the fact that our player can walk through walls. We're looking to our map to express our position in the world and change that position, but we're not considering any conditions of the map cells themselves to see whether or not our object should be able to occupy that cell.
-From our player's `step()` function, we are already getting the cell we wish to step into. From the Map, we should be able to check that cell, and get the `tile index` of any tile painted on that cell. With that information we can conclude whether that cell is a floor, or something else (which we cannot enter). 
+From the Player, we will be able to get the cell we wish to step into. From the Map, we should be able to check that cell, and get the `tile index` of any tile painted on that cell. With that information we can conclude whether that cell is a floor, or something else (which we cannot enter). 
 Go ahead and add a new script to your Map node. Since this "poke the cell" behavior is something that is handled by the Map node, this function should reside in a script on that node. 
 Auto-complete here should give you the correct path and filename for your new script (otherwise save to `res://core/Map/Map.gd`). Much like we did with the player script, we can delete all the text in this script except the first `extends ..` line. Our map node will soon be performing all kinds of cool functions, but for now we need just this one simple one:  
 
