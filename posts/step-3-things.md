@@ -23,8 +23,8 @@ In the last step, we added the all-important collision system to our game. Our p
 ![dathing]  
 
 #### Generalization
-Our game will become a lot more interesting to play if we fill it with lots of interesting things to interact with.  
-We want to build our system in such a way that we're creating complex objects out of a collection of simple general parts, like virtual lego pieces.  
+Our game would become a lot more interesting to play if we fill it with lots of interesting things to interact with.  
+We will want to build our system in such a way that we're able to create complex objects out of a collection of simple general parts. 
 This way, we can make a lot of content with just a little work, and ensure that common behavior is consistent among all objects.  
 
 Let's start by defining our most basic type of object and give it a descriptive name. I'll dub this object a `Thing`. 
