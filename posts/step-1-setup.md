@@ -79,7 +79,7 @@ and still be considered "a game". For our roguelike, we only *really* need two i
 Our first scene will be our game's Map. The Map scene will be the object representing the static world our game will exist in. In short, 
 the dungeon's floors and walls.  
 Add your first node to this scene. The node we want to add is `TileMap`.  Once you add it, it will show up in your SceneTree panel. When you select it there, you can see all its exposed properties show up in the Inspector panel. This is the primary way you will be working with nodes throughout this project.  
-There is really not much we need to do with our new TileMap's properties yet. The one thing you do want to do is rename `TileMap` to simply `Map`.  Giving your nodes meaningful names is a good habit to get into.  Our game will only really be "one map", so its name doesn't need to be any more descriptive than this.  
+There is really not much we need to do with our new TileMap's properties yet. The one thing you do want to do is rename `TileMap` to simply `Map`.  Giving your nodes meaningful names is a good habit to get into.  Our game will only really be "one map", so its name doesn't need to be any more descriptive than this. You also want to set the Map's Cell Size to [32,32]; the tile graphics we'll be using are all 32x32 pixels in size, and we want our map cells to match this. You can find this property in the inspector tab while the Map node is selected.  
 
 ![][mapscene]
 
@@ -111,7 +111,7 @@ We only need these two tiles to begin working with our tilemap. We will be addin
 
 Save this alonside our other scenes in `res://core/Map/Tileset.tres`. Now, we can see where we might get mixed up if we tried having `Tileset.tres` and `Tileset.tscn` living next to each other (thus the `_edit` extension for the file we use to edit the resource).
 
-Once this is done, we can return to the Map scene. Select the Map node, go to its Tile Set property in the inspector and load the new `Tileset.tres` you just created. A new dock should open on the side of your screen with the two tiles in your tileset. You also want to set the tilemap's Cell Size property to `[32,32]`, as our tiles are 32x32 pixels in size. Go ahead now and paint some tiles on the screen to make sure things are looking right. Just make sure you work within the blue rectangle (which can be hard to see over the orange tileset grid), as that is your game's viewport. Hit the Play button and note how the view from in-game compares to the view from the editor.  
+Once this is done, we can return to the Map scene. Select the Map node, go to its Tile Set property in the inspector and load the new `Tileset.tres` you just created. A new dock should open on the side of your screen with the two tiles in your tileset. Go ahead now and paint some tiles on the screen to make sure things are looking right. Just make sure you work within the blue rectangle (which can be hard to see over the orange tileset grid), as that is your game's viewport. Hit the Play button and note how the view from in-game compares to the view from the editor.  
 Of course --with this being a roguelike-- we'll eventually have our game generate for us an *infinite supply of dungeons through the use of black magic*, but for our Minimal Viable Product, we can hand-craft our own mini-dungeons to play around in for now.  
 
 ![examplemap][examplemap]
