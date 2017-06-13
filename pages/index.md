@@ -65,7 +65,7 @@ Copies of the project will also be available for download and use for reference.
 The Steps
 =====
 
-[Step 1: Learning To Crawl](../step-1-setup.html)  
+[Step 1: Learning To Crawl](../tutorials/step-1-setup.html)  
 [Step 2: Learning To Walk](../step-2-collision.html)  
 [Step 3: Enter The Thing](../step-3-things.html)  
 
