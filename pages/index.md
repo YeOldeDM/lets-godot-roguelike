@@ -66,8 +66,8 @@ The Steps
 =====
 
 [Step 1: Learning To Crawl](../tutorials/step-1-setup.html)  
-[Step 2: Learning To Walk](../step-2-collision.html)  
-[Step 3: Enter The Thing](../step-3-things.html)  
+[Step 2: Learning To Walk](../tutorials/step-2-collision.html)  
+[Step 3: Enter The Thing](../tutorials/step-3-things.html)  
 
 
 This tutorial is currently a work in progress. New articles will be added to this list as they are made, so stay tuned!  
