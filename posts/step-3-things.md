@@ -23,32 +23,45 @@ In the last step, we added the all-important collision system to our game. Our p
 ![dathing]  
 
 #### Generalization
-Our game will become a lot more interesting to play if we fill it with lots of interesting things to interact with.  
-We want to build our system in such a way that we're creating complex objects out of a collection of simple general parts, like virtual lego pieces.  
+Our game would become a lot more interesting to play if we fill it with lots of interesting things to interact with.  
+We will want to build our system in such a way that we're able to create complex objects out of a collection of simple general parts. 
 This way, we can make a lot of content with just a little work, and ensure that common behavior is consistent among all objects.  
 
 Let's start by defining our most basic type of object and give it a descriptive name. I'll dub this object a `Thing`. 
 
-Everything inside the dungeon beside its walls and floors is going to be a `Thing`.  
+Everything inside the dungeon beside its walls and floors is going to be a `Thing`. We'll begin bringing our new Thing to life by creating a scene with some nodes and a script, much like we did for the Player. Let's begin!  
 
 #### Player Refactor
-Save Player.tscn as `res://things/Thing.tscn` and rename top node to "Thing"  
-In the inspector, clear the Thing's script, then add a new one at `res://things/Thing.gd`  
+Actually, we're going to create our Thing by cloning our Player scene. It has all the same nodes we'll need, mostly set up the way we want them. The easiest way to clone a scene is to `File > Save As..` and save the scene in a different location under a different filename.   
+Open your `res://core/Player/Player.tscn` if it's not already, and re-save the scene as `res://things/Thing.tscn`.  
+I said the Player scene was mostly set up the way we want for our Thing. There are only a couple changes you need to make:  
+First, rename top node to "Thing". A simple change, but an easy one to look over. You also want to clear the script assigned to the Thing top node, and create a new one. If you scroll to the bottom of your scripted node in the inspector, you can find the Script parameter, where you can click the drop-down menu and clear the script. You can also give the Thing's Icon a suitable texture. In the system we'll create around Things, an object which is just "A Thing" and not something which extends Thing (we'll get to this next) is essencially a "Prop", a dumb object whose only purpose is to occupy its position on the map. So find a suitable graphic to serve this purpose. I chose a generic stone alter at `/dc-dngn/altars/dngn_altar.png`. This scene will be a kind of template, everything that is created out of it will get its own Icon texture, so your choice in this texture is really no big deal.  
 
-Our most basic Thing object requires only a couple parameters. These will be parameters that every Thing in our game will need. They are:  
--- Getting and settings its map position  
--- an Icon visual representation  
+We popped a fresh script into our Thing, but we haven't done anything with it yet. Before we do, let's think for a minute about what our script needs.  
+Our most basic Thing script requires only two things so far: a way to get its map position, and a way to set its map position.  
 
-This list will grow as our game gets more complex, but this gives us something to work with.  
+Actually, this is code we've already written. It's in the `Player.gd` script as `get_map_pos()` and `set_map_pos( cell )`. Take this portion of the Player script: 
 
-We already have all this code written in our player script.  
-We want to take all the code we've written in our player script which applies to that list above (actually, just the map position part, as our Icon requires no code yet), and move it to our new Thing script. You should be able to just cut the code from one script and paste it into the other.  
+```python
+# Map node
+onready var map = get_parent()
 
-Now, your player script should only contain its `_ready` and `_input` functions and their contents. If you tried playing your game at this moment, all your movement code should be broken, of course. We just ripped a bunch of code out of our script, and now the remaining code is trying to call functions that no longer exist! Why the hell would we ever do that??  
-Remember that we copied all that code into another script. It's almost as if we're setting ourselves up to have multiple scripts assigned to a single node. But as a rule, *a node in the godot engine can only have one script assigned to it*. So it must be non-possible for our Player node to utilize both its Player script and a Thing script, right? Not quite!  
+# Get our position in Map Coordinates
+func get_map_pos():
+	return map.world_to_map( get_pos() )
+
+# Set our position to Map Coordinates
+func set_map_pos( cell ):
+	set_pos( map.map_to_world( cell ) )
+```  
+Copy this code and paste it into the Thing script. Once you do that you can delete the same code from the Player script. It's good practice to preserve any code you move around like this at its original source, until you're sure the original code doesn't belong there anymore. Re-writing bad code to make it good code feels great. Re-writing good code that gets lost just sucks.  
+
+
+Now, your Player script should only contain its `_ready` and `_input` functions and their contents. If you tried playing your game at this moment, all your movement code should be broken, of course. We just ripped a bunch of code out of our script, and now the remaining code is trying to call functions that no longer exist! Why the hell would we ever do that??  
+Remember that you moved all that code into another script. It's almost as if we're setting ourselves up to have multiple scripts assigned to a single node. But as a rule, *a node in the godot engine can only have one script assigned to it*. So it must be non-possible for our Player node to utilize both its Player script and a Thing script, right? Not quite!  
 
 ##### Extends
-There has been one line in all our scripts that we've basically been ignoring up to this point, but it's a very important line (the most important, one could argue). The `extends` keyword tells your script which functionality it has access to, and is almost always identical to the type of node the script has been created for. The script on a Node `extends Node`. A TextureFrame node's script `extends TextureFrame`. You can think of these as extending your script to use the functions of another higher script. It's just that these "built-in" types don't have actual scripts you can have normal access to. Even though we never defined a `get_pos()` or `set_pos()` function for our player, those functions still do things, because our player extends the methods of Node2D, which *does* define a `get_pos()` and `set_pos()`.  
+There has been one line in all our scripts that we've basically been ignoring up to this point, but it's a very important line (the most important, one could argue). The `extends` keyword tells your script which functionality it has access to, and is almost always identical to the type of node the script has been created for. The script on a Node `extends Node`. A TextureFrame node's script `extends TextureFrame`. You can think of these as extending your script to use the functions of some higher code. Even though we never defined a `get_pos()` or `set_pos()` function for our player, those functions still do things, because our player extends the methods of Node2D, which *does* define a `get_pos()` and `set_pos()`.  
 
 By using a pinch of Gogo Magic, we can tell our player script to extend one of our own scripts, instead of `Node2D`.
 
