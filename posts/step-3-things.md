@@ -57,7 +57,7 @@ func set_map_pos( cell ):
 Copy this code and paste it into the Thing script. Once you do that you can delete the same code from the Player script. It's good practice to preserve any code you move around like this at its original source, until you're sure the original code doesn't belong there anymore. Re-writing bad code to make it good code feels great. Re-writing good code that gets lost just sucks.  
 
 
-Now, your Player script should only contain its `_ready` and `_input` functions and their contents. If you tried playing your game at this moment, all your movement code should be broken, of course. We just ripped a bunch of code out of our script, and now the remaining code is trying to call functions that no longer exist! Why the hell would we ever do that??  
+Now, your Player script should only contain its `_ready` and `_input` functions and their contents, as well as our custom `step()` function. If you tried playing your game at this moment, all your movement code should be broken, of course. We just ripped a bunch of code out of our script, and now the remaining code is trying to call functions that no longer exist! Why the hell would we ever do that??  
 Remember that you moved all that code into another script. It's almost as if we're setting ourselves up to have multiple scripts assigned to a single node. But as a rule, *a node in the godot engine can only have one script assigned to it*. So it must be non-possible for our Player node to utilize both its Player script and a Thing script, right? Not quite!  
 
 ##### Extends
@@ -234,6 +234,7 @@ Create a potion Thing. Set it to not block movement. Notice that setting the par
 Now if we want to know if a Thing blocks our movement, we can call `if node.blocks_movement:`. We'll create a new function in the map script that can check a cell for blocking Things. To do this, we'll want to go through all Things in the map and check their map position against the Vector2 argument we will give it. If we want to do that, we want a way to logically group all these Things together into an array we can loop (or iterate) through. Godot has a very handy `Groups` tool which will help us here. We can add any node to a group by calling `add_to_group("group_name")` at any point. To get an array of all nodes in a group, we can call (from anywhere in our scene) `get_tree().get_nodes_in_group("group_name")`.  
 
 We can do this as we spawn things into the map. Go to the `spawn()` function in the map script and add this:  
+
 ```python
 	# All things go to things group
 	what.add_to_group("things")
@@ -241,6 +242,7 @@ We can do this as we spawn things into the map. Go to the `spawn()` function in 
 	if what.blocks_movement:
 		what.add_to_group("blockers")
 ```
+
 We'll want to keep all things in a general "things" group. We've also created a special group for blocking objects called "blockers". 
 
 Now our conditions for a non-blocked cell have become slightly more complicated. Just checking whether a map cell is a floor or not isn't going to cut it anymore. We want to keep the `is_floor()` function as we will still have use for it, but we want a new function which does a slightly tighter check on a cell. Call this new function `is_cell_blocked( cell )`:  
@@ -254,6 +256,7 @@ func is_cell_blocked( cell ):
 	# if no blockers here, check for walls
 	return !is_floor( cell )
 ```  
+
 The exclamation point "!" in `!is_floor( cell )` is an operational `not` symbol. You can write this line as `return not is_floor( cell )` and get the same result, if you're not into cryptic code. Otherwise it's just a little more concise to use !. Since in this function we want to return `TRUE` if the cell is blocked, we want to return the inverse of the result of `is_floor`, which returns `TRUE` if the cell is *not* blocked by a wall.  
 
 You might notice (especially if you try running with this code) that the function `get_blockers()` is totally fake and doesn't exist. *That's because I forgot about it!* Let's make that now, somewhere near the top of your map functions:  
@@ -267,9 +270,10 @@ func get_things():
 func get_blockers():
 	return get_tree().get_nodes_in_group("blockers")
 ```  
+
 For the sake of it, we also wrote a similar function to `get_things()`. 
 
-Now `Thing.step()` can check for "not blocked cells" instead of just "floor" cells. In Thing.gd modify the `step()` function so it looks like:  
+Now `Player.step()` can check for "not blocked cells" instead of just "floor" cells. In Player.gd modify the `step()` function so it looks like:  
 
 ```python
 # Step one cell in a direction
@@ -286,6 +290,7 @@ func step( dir ):
   else:
     set_map_pos( new_cell )
 ```
+
 Now, when your player attempts to step into a cell occupied by a blocking Prop, they will bump off of it as if they hit a wall. 
 
 Spawn some Altars and Potions in your map. You should be blocked by Altars, but be able to walk over Potions.  
@@ -306,6 +311,7 @@ export(String, MULTILINE) var name = ""
 
 export(bool) var blocks_movement = false
 ```
+
 As you can guess, the `String` hint tells godot we want to edit this as a string. the `MULTILINE` hint creates an extra button in the inspector text field for this parameter, which will pop up a large multi-line window you can use to input text. This is often easier to work with than the tiny line of space you normally get there. Especially for us who have small monitors and little screen real estate.  
 
 Now we're going to abandon the `is_cell_blocked()` function we just created (don't delete it, we'll want it later!) and create a new function. This will be real similar to `is_cell_blocked()`, but returns a reference to the node that is blocking a cell (or null if it's an "empty" floor), and is called `get_collider( cell )`:  
@@ -320,13 +326,16 @@ func get_collider( cell ):
 	# Else return me if hitting a wall, or null if hitting air
 	return self if not is_floor( cell ) else null
 ```
+
 The last line in this function is called a `ternary operator`. With this, we are basically declaring a variable and setting it based on an if-else statement, and returning it all in one line. Doing this "the long way" would look like:  
-```
+
+```python
 var collider = null
 if is_floor( cell ):
   collider = self
 return collider
 ```  
+
 Neither way is Right or Wrong, so use the way you feel most comfortable with. Ternary operators don't show up often in this code, but I thought I would take the opportunity to demonstrate one here.  
 
 Now that we have that, we can modify our `step()` code yet again. This time, we'll construct a dynamic string that will be printed when we try walking into blocked cells that will give us info on what we're bumping into. Here's the entire final iteration of `step()` for this step (I promise!):  
