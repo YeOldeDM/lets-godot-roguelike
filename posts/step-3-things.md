@@ -314,7 +314,7 @@ export(bool) var blocks_movement = false
 
 As you can guess, the `String` hint tells godot we want to edit this as a string. the `MULTILINE` hint creates an extra button in the inspector text field for this parameter, which will pop up a large multi-line window you can use to input text. This is often easier to work with than the tiny line of space you normally get there. Especially for us who have small monitors and little screen real estate.  
 
-Now we're going to abandon the `is_cell_blocked()` function we just created (don't delete it, we'll want it later!) and create a new function. This will be real similar to `is_cell_blocked()`, but returns a reference to the node that is blocking a cell (or null if it's an "empty" floor), and is called `get_collider( cell )`:  
+Now we need a new function in our Map script which will replace `is_cell_blocked()`. This will be real similar to `is_cell_blocked()`, but returns a reference to the node that is blocking a cell (or null if it's an "empty" floor), and is called `get_collider( cell )`:  
 
 ```python
 # Return a blocking Thing, this Map, or null at cell
@@ -327,13 +327,15 @@ func get_collider( cell ):
 	return self if not is_floor( cell ) else null
 ```
 
-The last line in this function is called a `ternary operator`. With this, we are basically declaring a variable and setting it based on an if-else statement, and returning it all in one line. Doing this "the long way" would look like:  
+Don't delete the `is_cell_blocked()` function, we may want to use it later!  
+
+The last line in `get_collider()` is called a `ternary operator`. With this, we are basically declaring a variable and setting it based on an if-else statement, and returning it all in one line. A "long way" of doing this might look like:  
 
 ```python
-var collider = null
-if is_floor( cell ):
-  collider = self
-return collider
+if not is_floor( cell ):
+  return self
+else:
+  return null
 ```  
 
 Neither way is Right or Wrong, so use the way you feel most comfortable with. Ternary operators don't show up often in this code, but I thought I would take the opportunity to demonstrate one here.  
@@ -369,7 +371,7 @@ Close your project and re-open it, and try playing it. If you get any broken dep
 *Here's what we do when our $#!T bricks on us. Don't worry, it happens to the best of us. Stay Strong!*  
  
 
-[here](https://github.com/YeOldeDM/realms-of-todog/tree/28465f2ad40ea38aabd71a67876b7f464e8870bd) you can download a snapshot of the project at this current step, if you'd like something to compare to your own project. 
+[here](https://github.com/YeOldeDM/realms-of-todog/tree/28465f2ad40ea38aabd71a67876b7f464e8870bd) you can download a snapshot of the project at this current step, if you'd like something to compare to your own project. *NOTE: There is an error in this project folder! The `step()` function is located in the Thing script, when it should be in the Player script!*  
 
 ### Conclusion
 We are beginning to put some real meat on our game's bones already. With what we have, we could create as many Things as we like and put them wherever we want in our dungeon. We're not even close to done yet, though! In the next step, we will be throwing ourselves in a totally different direction, and get algorithmic as we create our game's glorious Random Dungeon Generator. I know! I'm excited too!  [Let's do this!!!](../step-4-dungeongen.html)  
