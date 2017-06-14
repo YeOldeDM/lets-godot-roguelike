@@ -307,12 +307,14 @@ We could use a Thing's node name (via `get_name()`) as our thing's in-game displ
 # Map node
 onready var map = get_parent()
 
-export(String, MULTILINE) var name = ""
+export(String, MULTILINE) var name = "Something"
 
 export(bool) var blocks_movement = false
 ```
 
 As you can guess, the `String` hint tells godot we want to edit this as a string. the `MULTILINE` hint creates an extra button in the inspector text field for this parameter, which will pop up a large multi-line window you can use to input text. This is often easier to work with than the tiny line of space you normally get there. Especially for us who have small monitors and little screen real estate.  
+
+Since we've created a place to store a name for our Things, we want to go back to our Database scene and fill in the new Name property for the Things we've created. This will be the name that shows up in the game, so name your player after your best friend, or your dog!  
 
 Now we need a new function in our Map script which will replace `is_cell_blocked()`. This will be real similar to `is_cell_blocked()`, but returns a reference to the node that is blocking a cell (or null if it's an "empty" floor), and is called `get_collider( cell )`:  
 
