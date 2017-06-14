@@ -231,7 +231,10 @@ func set_map_pos( cell ):
 ```
 Now, writing our movement code should be much easier!  We begin each loop by getting the player's map position. Then based on input, we add or subtract 1 from either the X or Y axis. If the resulting position is different than the current position (that is, it modified the `new_cell` variable due to input), move the player to the modified position. Otherwise, don't bother. Here's what that looks like:  
 
-```python	
+```python
+	# Define a vector to modify
+	var new_cell = get_map_cell()
+	
 	# Modify new_cell based on actions
 	if UP:
 		new_cell.y -= 1
