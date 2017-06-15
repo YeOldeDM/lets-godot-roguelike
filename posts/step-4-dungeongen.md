@@ -58,7 +58,7 @@ Now our Generate function is generating all our data. We want to return this dat
 `return {"map": map, "start_pos": start_pos}`  
 Our Map script will use this package of data to create the game's world and spawn the player at some logical starting point.  
 
-By now, our dungeon generator script is nearly complete already! We will be tweaking it a little in future steps, but for now it's doing all the things we need it to do, so let's move on and integrate this new big tool into the rest of our game..  
+By now, our dungeon generator script is nearly complete already! We will be tweaking it a little in future steps, but for now it's doing all the things we need it to do, so let's move on and integrate this big shiny new tool into the rest of our game..  
 
 ## The Art of Building Without Building
 Now that our DunGen script can return something we can work with, let's use that data to paint the actual cells into our Map node. Before, we were simply painting our dungeons by hand. Now it's time to have it start doing this in code. Our data map is an array of integers that correlate to our map's cell indicies, so this is real straight-forward. Go to the Map.gd script and change the code under `_ready` like so:  
@@ -66,7 +66,18 @@ Now that our DunGen script can return something we can work with, let's use that
 
 We now delete the code spawning all our non-player things. Modify the player spawn call to use the start_pos value returned by `DunGen.Generate()`.  
 
+## Little Big Picture
+If our generated map is larger than our game's window (it probably is), it can be hard to visualize your dungeon's layout in its entirety. Being able to see the "big picture" of the results of your dungeon generator is important for tweaking your code and getting things looking the way you want them to.  
+We can write this little function in Map.gd to convert our 2D map array to a .png image, where each pixel represents 1 cell of the map. We can choose two colors to represent wall and floor cells:  
+
+`func map_2_png( map )`  
+
+Call this function some time after the map is generated, giving it the `map` contents of your generated dictionary.  
+
+This will dump a new png file to your `res://` folder. Note that this will only be viable while playing the game through the editor. If we wanted this functionality in the exported version of our game, we'd have to do it a little different. But this is just a little thing for us, so we don't need to do that.  
 
 ## Conclusion
 Get excited! You can now run around and explore your procedurally-generated dungeon! Play around with your Generate parameters to see what kind of results you can get.  
 That's going to be it for this step. In the next step, we'll expand on this and have our code fill our dungeon's rooms with Things. We'll also modify our Map so it paints random variations of a set of tiles, so our dungeon doesn't look so blah!  
+
+[Here](link) is the complete `DunGen.gd` script so far.  
