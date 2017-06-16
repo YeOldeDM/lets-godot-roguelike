@@ -19,11 +19,20 @@ Create a new AutoLoad "DunGen" at `res://global/DunGen.gd`. Unless stated otherw
 
 ### Digital Dice, and How To Roll Them
 This will actually be the first time our game requires random numbers. Since Godot doesn't provide a built-in solution for the kind of RNG we need, we want a helper function:  
-`func rnd(n,m)`  
+
+```python
+# Return a random int between 'n' and 'm'
+func rnd( n,m ):
+	# in case our args are out of order..
+	var low = min( n,m )
+	var high = max( n,m )
+	# Return random int from low to high
+	return  randi() % int( high - low + 1 )  + low
+```
 
 ### Mother Method Most Mysterious
 Our script should work in such a way that we only need to call one function of DunGen in order for it to do its thing. DunGen in turn will work entirely within itself, and return a package of data representing our generated dungeon.  
-`func Generate()`  
+
 We want some parameters we can feed to Generate. By providing default values to these arguments in our function declaration, we can call `Generate()` without any arguments, or only *some of the arguments*.  
 Vector2 map_size  
 Vector2 room_size  
@@ -31,53 +40,328 @@ int room_count
 var floor_id  
 var wall_id  
 
-*[randomize and declare start_pos]*  
+We also need a variable to store our map grid, and an array of Rect2s representing our rooms. We'll need to share this data between the different functions we'll be writing in our script, so we want to keep these variables in our script's global scope. Declare these variables at the top of the script, above `rnd()`:  
 
-*[Construct 2D array of wall_id]*
+```python
+extends Node
+
+
+# Global vars
+var map = []
+var rooms = []
+
+
+# Return a random int between 'n' and 'm'
+func rnd( n,m ):
+	..
+```
+
+Now, below `rnd()`, we'll begin by defining the `Generate()` function:  
+
+```python
+# Generate the Datamap
+func Generate( map_size=Vector2(120,100), room_count=50, room_size=Vector2(5,16), wall_id=0, floor_id=1 ):
+	randomize()
+	# Initialize an empty map
+	var start_pos = Vector2()
+	self.map = []
+	self.rooms = []
+	
+	# Build a blank map
+	for x in range( map_size.x ):
+		var col = []
+		for y in range( map_size.y ):
+			col.append( wall_id )
+		self.map.append( col )
+  
+  # Return the map
+  return self.map
+```
+
+This will create a blank map, in the form of a 2D array, which is filled with the value we've defined for `wall_id`. Other functions in our script will be "carving" rooms and halls into this solid map by assigning the value of `floor_id` to the appropriate places in the map array.  
+
+
 
 ### Rooms
-`func create_room( room_size, floor_id )`  
-`func carve_room( room, floor_id )`  
-Have Map iterate through room_count, create_rooms and append to an array.  
-Check intersections between new rooms and existing rooms.  
+Now that we have something to carve in to, we want to be able to generate rooms. The rooms in our dungeons will all be rectangles, defined as Rect2. We'll create two new functions to handle our room generation. Place these under `rnd()` and above `Generate()`:  
+
+```python
+# Define a rectangle of room_size dimension,
+# at a position within the map rect
+func create_room( map_size, room_size ):
+	# Roll room width/height
+	var w = rnd( room_size.x, room_size.y )
+	var h = rnd( room_size.x, room_size.y )
+	# Roll room X/Y origin 
+	var x = rnd(0, map_size.x - w-1)
+	var y = rnd(0, map_size.y - h-1)
+	# Return a Rectangle
+	return Rect2( x, y, w, h )
+```
+
+Create_room will use our `rnd()` function along with the arguments passed to the function to roll up a random rectangle which should fit within the boundries of the map.  
+
+```python
+# Set floor_id to cells in a Room rect
+func carve_room( room, floor_id ):
+	for x in range( room.size.x - 2 ):
+		for y in range( room.size.y - 2 ):
+			self.map[room.pos.x+x+1][room.pos.y+y+1] = floor_id
+```
+
+Carve_room will take a `room` Rect2 that was created by `create_room()` and use it to carve a rectangle of `floor_id` values into the map data. We're doing this in such a way that we're leaving a 1-cell border or walls around our room rectangles. This ensure that rooms that happen to land next to each other will still be seperated by a wall.  
+
+Now, we can have our `Generate()` function use these functions to generate some rooms. We will try `room_count` times, generating a room and checking if it intersects any existing rooms. If a new room does intersect an old room, that room is rejected and the function tries again.    
+
+Add this code to the end of `Generate()`, but above the last `return self.map` line (make sure that line stays at the end of the function):  
+
+```python
+	# Generate Rooms
+	for r in range( room_count ):
+		var new_room = create_room( map_size, room_size )
+		
+		var passed = true
+		if not self.rooms.empty():
+			for room in self.rooms:
+				if new_room.intersects( room ):
+					passed = false
+		if passed:
+			self.rooms.append( new_room )
+```
+
+Once we've created our array of Rooms, we can iterate through those and carve them into the map:  
+
+```python
+	# Carve Rooms
+	for i in range( self.rooms.size() - 1 ):
+		var room = self.rooms[i]
+		carve_room( room, floor_id )
+```
+
+
 
 #### Room Center
-We need another helper function so we can find the center cell of our room Rect2s.  
-`func rect_center( rect ):`  
+We're going to use the centers of our room rectangles to use as the start and end points of our connecting hallways. The `Rect2` class doesn't have a built-in function to find its center, so we'll have to write one. This can live up near the top of the script, just underneath `rnd()`:  
+
+```python
+# Get the center of a rectangle
+func rect_center( rect ):
+	var x = ceil( rect.size.width / 2.0 )
+	var y = ceil( rect.size.height / 2.0 )
+	return Vector2( rect.pos.x + x, rect.pos.y + y )
+```
 
 ### Halls
-As we carve rooms into our map, we also want to carve hallways that connect those rooms together.  
-After carving the first room, we get the center point between the new room, and the previously-created room. We then carve an L-shaped hallway between them.  
-`func carve_h_hall()`  
-`func carve_v_hall()`  
-`func carve_hall( A,B )`  
-After carving the first room, we'll designate its center as our player start_pos.  
+Just like we did with Rooms, we're going to define a couple (three, actually) functions to help us carve hallways into our map. This block of code can go between `carve_room()` and `Generate()`:  
 
-### Putting It All Together
-Now our Generate function is generating all our data. We want to return this data as a dictionary:  
-`return {"map": map, "start_pos": start_pos}`  
+```python
+# Set floor_id to cells along a vertical line
+func carve_h_hall( x1, x2, y, floor_id ):
+	for x in range( min(x1,x2), max(x1,x2) + 1 ):
+		self.map[x][y] = floor_id
+
+
+# Set floor_id to cells along a horizontal line
+func carve_v_hall( y1, y2, x, floor_id ):
+	for y in range( min(y1,y2), max(y1,y2) + 1 ):
+		self.map[x][y] = floor_id
+
+
+func carve_hall( A, B, floor_id ):
+#	# flip a coin..
+	if randi()%2 == 0:
+#		# Carve horizontal then vertical
+		carve_h_hall( A.x, B.x, A.y, floor_id )
+		carve_v_hall( A.y, B.y, B.x, floor_id )
+	else:
+#		# or Carve vertical then horizontal
+		carve_v_hall( A.y, B.y, A.x, floor_id )
+		carve_h_hall( A.x, B.x, B.y, floor_id )
+```
+
+As we carve rooms into our map, we also want to carve hallways that connect those rooms together.  
+After carving the first room, we get the center point between the new room, and the previously-created room. We then call `carve_hall()` using those two points.  
+When we carve the first room, we'll designate its center as our player start_pos, instead of carving a hall. Change the bottom part of `Generate()` to look like this:  
+
+```python
+# Carve Rooms
+	for i in range( self.rooms.size() - 1 ):
+		var room = self.rooms[i]
+		carve_room( room, floor_id )
+		if i > 0:
+			# Carve halls between rooms
+			var new_center = rect_center( room )
+			var prev_center = rect_center( self.rooms[i-1] )
+			
+			carve_hall( prev_center, new_center, floor_id )
+		else:
+			# Set the Dungeon start position
+			start_pos = rect_center( room )
+```
+
+Since we also want to return the start_pos variable, we'll change our return call to return a dictionary. This way we can pass both peices of data (and more when we decide we need it) in one tidy package:  
+
+```python
+	#	# Return map dictionary
+	return {
+		"map":			self.map,
+		"start_pos":	start_pos,
+		}
+```
+
+Here is the complete DunGen.gd script:  
+
+```python
+extends Node
+
+
+# Global vars
+var map = []
+var rooms = []
+
+
+# Return a random int between 'n' and 'm'
+func rnd( n,m ):
+	# in case our args are out of order..
+	var low = min( n,m )
+	var high = max( n,m )
+	# Return random int from low to high
+	return  randi() % int( high - low + 1 )  + low
+
+
+# Get the center of a rectangle
+func rect_center( rect ):
+	var x = ceil( rect.size.width / 2.0 )
+	var y = ceil( rect.size.height / 2.0 )
+	return Vector2( rect.pos.x + x, rect.pos.y + y )
+
+
+# Define a rectangle of room_size dimension,
+# at a position within the map rect
+func create_room( map_size, room_size ):
+	# Roll room width/height
+	var w = rnd( room_size.x, room_size.y )
+	var h = rnd( room_size.x, room_size.y )
+	# Roll room X/Y origin 
+	var x = rnd(0, map_size.x - w-1)
+	var y = rnd(0, map_size.y - h-1)
+	# Return a Rectangle
+	return Rect2( x, y, w, h )
+
+
+# Set floor_id to cells in a Room rect
+func carve_room( room, floor_id ):
+	for x in range( room.size.x - 2 ):
+		for y in range( room.size.y - 2 ):
+			self.map[room.pos.x+x+1][room.pos.y+y+1] = floor_id
+
+
+# Set floor_id to cells along a vertical line
+func carve_h_hall( x1, x2, y, floor_id ):
+	for x in range( min(x1,x2), max(x1,x2) + 1 ):
+		self.map[x][y] = floor_id
+
+
+# Set floor_id to cells along a horizontal line
+func carve_v_hall( y1, y2, x, floor_id ):
+	for y in range( min(y1,y2), max(y1,y2) + 1 ):
+		self.map[x][y] = floor_id
+
+
+func carve_hall( A, B, floor_id ):
+#	# flip a coin..
+	if randi()%2 == 0:
+#		# Carve horizontal then vertical
+		carve_h_hall( A.x, B.x, A.y, floor_id )
+		carve_v_hall( A.y, B.y, B.x, floor_id )
+	else:
+#		# or Carve vertical then horizontal
+		carve_v_hall( A.y, B.y, A.x, floor_id )
+		carve_h_hall( A.x, B.x, B.y, floor_id )
+
+
+# Generate the Datamap
+func Generate( map_size=Vector2(120,100), room_count=50, room_size=Vector2(5,16), wall_id=0, floor_id=1 ):
+	randomize()
+	# Initialize an empty map
+	var start_pos = Vector2()
+	self.map = []
+	self.rooms = []
+	
+	# Build a blank map
+	for x in range( map_size.x ):
+		var col = []
+		for y in range( map_size.y ):
+			col.append( wall_id )
+		self.map.append( col )
+	
+	# Generate Rooms
+	for r in range( room_count ):
+		var new_room = create_room( map_size, room_size )
+		
+		var passed = true
+		if not self.rooms.empty():
+			for room in self.rooms:
+				if new_room.intersects( room ):
+					passed = false
+		if passed:
+			self.rooms.append( new_room )
+	
+	# Carve Rooms
+	for i in range( self.rooms.size() - 1 ):
+		var room = self.rooms[i]
+		carve_room( room, floor_id )
+		if i > 0:
+			# Carve halls between rooms
+			var new_center = rect_center( room )
+			var prev_center = rect_center( self.rooms[i-1] )
+			
+			carve_hall( prev_center, new_center, floor_id )
+		else:
+			# Set the Dungeon start position
+			start_pos = rect_center( room )
+
+	#	# Return map dictionary
+	return {
+		"map":			self.map,
+		"start_pos":	start_pos,
+		}
+```
+
+It's important this script correct, and there are a few spots in the code that are easy to get mixed up. So if you want to avoid future breakage, go through your code if you need to and double/triple check your work. 
+
+### Putting It All Together 
 Our Map script will use this package of data to create the game's world and spawn the player at some logical starting point.  
 
-By now, our dungeon generator script is nearly complete already! We will be tweaking it a little in future steps, but for now it's doing all the things we need it to do, so let's move on and integrate this big shiny new tool into the rest of our game..  
+Because it makes our work easier, we're going to encapsulate thes functionality into its own function and call it `draw_map()`:  
+
+```python
+# Draw map cells from map 2DArray
+func draw_map( map ):
+	for x in range( map.size() - 1 ):
+		for y in range( map[x].size() - 1 ):
+			set_cell( x,y, map[x][y] )
+```
+Just to be clear, this is being added to `Map.gd`. We are done working with `DunGen.gd` for now..  
+After all the scripting we just did on the other script, this should feel like a breeze! All this is doing is taking our 2D array and setting the map's cells to match the values in the array.  
+
 
 ## The Art of Building Without Building
-Now that our DunGen script can return something we can work with, let's use that data to paint the actual cells into our Map node. Before, we were simply painting our dungeons by hand. Now it's time to have it start doing this in code. Our data map is an array of integers that correlate to our map's cell indicies, so this is real straight-forward. Go to the Map.gd script and change the code under `_ready` like so:  
+We can generate dungeons now. We can package that map data and give it to our Map. Our Map can take this data and draw a real map based on that. The last step is to bring these together. This is also pretty easy to do. Change the Map script's `_ready` function. We also have a `start_pos` stored in our data variable also, so let's use that to spawn the player and set its position:  
 
+```python
+# Init
+func _ready():
+	var data = DungeonGen.Generate()
+	draw_map( data.map )
 
-We now delete the code spawning all our non-player things. Modify the player spawn call to use the start_pos value returned by `DunGen.Generate()`.  
-
-## Little Big Picture
-If our generated map is larger than our game's window (it probably is), it can be hard to visualize your dungeon's layout in its entirety. Being able to see the "big picture" of the results of your dungeon generator is important for tweaking your code and getting things looking the way you want them to.  
-We can write this little function in Map.gd to convert our 2D map array to a .png image, where each pixel represents 1 cell of the map. We can choose two colors to represent wall and floor cells:  
-
-`func map_2_png( map )`  
-
-Call this function some time after the map is generated, giving it the `map` contents of your generated dictionary.  
-
-This will dump a new png file to your `res://` folder. Note that this will only be viable while playing the game through the editor. If we wanted this functionality in the exported version of our game, we'd have to do it a little different. But this is just a little thing for us, so we don't need to do that.  
+	# Spawn Player
+	var player = RPG.make_thing( "player/player" )
+	spawn( player, data.start_pos )
+```
+Bam!  
 
 ## Conclusion
 Get excited! You can now run around and explore your procedurally-generated dungeon! Play around with your Generate parameters to see what kind of results you can get.  
 That's going to be it for this step. In the next step, we'll expand on this and have our code fill our dungeon's rooms with Things. We'll also modify our Map so it paints random variations of a set of tiles, so our dungeon doesn't look so blah!  
-
-[Here](link) is the complete `DunGen.gd` script so far.  
+ 
