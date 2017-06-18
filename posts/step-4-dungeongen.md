@@ -1,7 +1,7 @@
 <!--
-.. title: Step 4: Enter The Dungeon Generator
+.. title: Step 4: Enter The DunGen
 .. slug: step-4-dungeongen
-.. date: 2017-06-19 04:00:00 UTC
+.. date: 2017-06-18 04:00:00 UTC
 .. type: text
 -->
 
@@ -10,15 +10,26 @@
 In this step, we will be creating a random dungeon generator for our game. Things like this can be incredibly complex and involve all kinds of advanced concepts. But we will be making something that is pretty basic and easy to work with, and still produces interesting results.  
 
 ## DunGen
-Create a new AutoLoad "DunGen" at `res://global/DunGen.gd`. Unless stated otherwise, all code being written in this step will be in this file.   
+Create a new AutoLoad "DunGen" at `res://global/DunGen.gd`. Unless stated otherwise, all code being written in this step will be in this file.
 
 ### Concepts
+This step will be covering a few new concepts we haven't run into yet in our project. So let's go over them real quick:  
+
 #### RNG  
+Random Number Generation. The meat & potatos of any respectable roguelike. RNG is the programmatic equivelant to rolling dice, flipping a coin, drawing a number from a hat, or whatever. Most of the random numbers in our game will come in the flavor of picking a random integer between two other integers (pick a number between 1 and 10), or flipping a coin ( a 50% chance to do A, or do B ).  
+
 #### 2D Array  
+An array is a list of stuff. An item in a list can be just about anything...even another list! A list of lists gives us a way to express data in a grid, or a `two-dimensional array`. 
+
 #### Rect2  
+With Godot, we have a built-in class called Rect2, which defines the position and dimensions of a simple rectangle. In this step, we'll be using the power of Rect2 to define our dungeon's rooms, which will be wonderfully rectangular in shape!  
+
+
+
 
 ### Digital Dice, and How To Roll Them
-This will actually be the first time our game requires random numbers. Since Godot doesn't provide a built-in solution for the kind of RNG we need, we want a helper function:  
+So far, we've managed to build a lot of Roguelike stuff without having to use any random numbers. Not anymore!  
+Since Godot doesn't provide a built-in solution for the kind of RNG we need, we want a helper function:  
 
 ```python
 # Return a random int between 'n' and 'm'
@@ -28,10 +39,12 @@ func rnd( n,m ):
 	var high = max( n,m )
 	# Return random int from low to high
 	return  randi() % int( high - low + 1 )  + low
-```
+```  
+
 
 ### Mother Method Most Mysterious
-Our script should work in such a way that we only need to call one function of DunGen in order for it to do its thing. DunGen in turn will work entirely within itself, and return a package of data representing our generated dungeon.  
+Our script should work in such a way that we only need to call one function of DunGen in order for it to do its thing. DunGen in turn will work entirely within itself, and return a package of data representing our generated dungeon. Keeping our code seperated like this prevents us from turning our game's structure into spaghetti. We like big chunky meat-ball code, not sloppy noodle code.  
+Another big benefit of working like this, is that it will make it much easier for us to bring this code into other projects where we would want a random dungeon generator, and easily integrate it into that project. Recycling code is a good thing!  
 
 We want some parameters we can feed to Generate. By providing default values to these arguments in our function declaration, we can call `Generate()` without any arguments, or only *some of the arguments*.  
 Vector2 map_size  
@@ -56,7 +69,7 @@ func rnd( n,m ):
 	..
 ```
 
-Now, below `rnd()`, we'll begin by defining the `Generate()` function:  
+Now, below `rnd()`, we'll begin by defining the `Generate()` function, giving it the parameters we defined above as its arguments, and giving them all default values:  
 
 ```python
 # Generate the Datamap
@@ -128,7 +141,7 @@ Add this code to the end of `Generate()`, but above the last `return self.map` l
 		if passed:
 			self.rooms.append( new_room )
 ```
-
+The `Rect2` class has a built-in `intersects( other_rect )` method which makes this task easy on us.  
 Once we've created our array of Rooms, we can iterate through those and carve them into the map:  
 
 ```python
@@ -328,7 +341,7 @@ func Generate( map_size=Vector2(120,100), room_count=50, room_size=Vector2(5,16)
 		}
 ```
 
-It's important this script correct, and there are a few spots in the code that are easy to get mixed up. So if you want to avoid future breakage, go through your code if you need to and double/triple check your work. 
+It's important this script correct, and there are a few spots in the code that are easy to get mixed up (especially if you're a little dyslexic like me!). So if you want to avoid future breakage, go through your code if you need to and double/triple check your work. 
 
 ### Putting It All Together 
 Our Map script will use this package of data to create the game's world and spawn the player at some logical starting point.  
@@ -358,10 +371,14 @@ func _ready():
 	# Spawn Player
 	var player = RPG.make_thing( "player/player" )
 	spawn( player, data.start_pos )
-```
-Bam!  
+```  
+### Camera
+Bam! Run your game, and there is a pretty good chance that your player will spawn on some point on the map that's outside our viewport. This is no good, but easy to fix!  
+We need a way to have our game follow the player around, keeping him in the center of our view. Godot makes this easy enough it almost hurts.  
+Hop over to your Database scene, where you have your Player object. Select this node (the instance in Database, not the Thing base scene!), and add a new `Camera2D` node to that. A camera is made so it will follow whatever node it's parented to. Before the camera will actually be used, you need to enable its "Current" property. Play the game now, and you should see your player at center screen, no matter where you end up spawning in your map.  
+A couple little tweaks before we are done with this. When we added the camera to the player node, it defaults to track the player's origin, which if you remember is the upper-left corner. We want to track the player's center, so set the camera's Position (its farther down the inspector list) to be half of what our cell size is ( 16,16 if you're following along ). We also want to disable Drag Margins. You may or may not want to enable Smoothing; try it both on and off, and with various smoothing values, and see what looks best for you. Personally, I think it looks best with smoothing enabled, and with a fairly fast smoothing rate of 15 or so. You can also play with your camera's Zoom settings here. If those 32x32 tiles are looking too tiny to you, try setting the Camera's Zoom factors to 0.5, making the pixels in its view "twice as large".  
 
 ## Conclusion
-Get excited! You can now run around and explore your procedurally-generated dungeon! Play around with your Generate parameters to see what kind of results you can get.  
+Get excited! You can now run around and explore your procedurally-generated dungeon! You can play around with your generator's parameters and get lots of different results!  
 That's going to be it for this step. In the next step, we'll expand on this and have our code fill our dungeon's rooms with Things. We'll also modify our Map so it paints random variations of a set of tiles, so our dungeon doesn't look so blah!  
  
