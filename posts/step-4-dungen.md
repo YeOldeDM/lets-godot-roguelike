@@ -330,7 +330,9 @@ func _ready():
 If you try playing your game now, assuming it doesn't crash, you'll probably notice that you don't see your player on the screen! It will be very likely that we've spawned our player at a position which is currently outside our current viewport. This is because there was a very small (but very important) task I forgot to do in the last step! What we need to do is add a Camera object to our player.  
 
 Open up your Database scene. Select your Player node, and add a new `Camera2D` node to it as a child. Under the camera's properties, enable `Current` and disable both `Drag Margin` checkboxes. You can play with these settings to get the setup you prefer though, of course. Just make sure the Camera is set to "Current", or our game wont use it.  
-**Now** try playing your game. Your player should show up at center screen. Move the player around, and the camera follows automagically!  
+When we add the Camera, it defaults to center on the origin of the node it's parented to. The origins of our Things are in their upper-left corner, which isn't quite the true center of the object. You can offset this by changing the camera's Pos property to offset it by half our cell size, which would be `(16,16)`.  
+
+**Now** try playing your game! Your player should show up at center screen. Move the player around, and the camera follows automagically!  
 
 ## Conclusion
 Get Excited! We've just given our game the ability to procedurally generate a whole world for us! At this point, you might find yourself spending more time playing your game than you do working on it, and that is a good thing! Try giving your Generate function different arguments and see what results you can get. If you're feeling adventurous, you can try making changes to your generator and experiment with it!  
