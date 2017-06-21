@@ -184,37 +184,155 @@ Within the same scope as "Process generated rooms", add this code. It will be th
 		else:
 			# Carve a hall between this room and the last room
 			var prev_room = rooms[i-1]
-			var A = _center( room )
-			var B = _center( prev_room )
+			var A = center( room )
+			var B = center( prev_room )
       
 			# Flip a coin..
 			if randi() % 2 == 0:
 				#carve vertical -> horizontal hall
-				_hline( A.x, B.x, A.y )
-				_vline( A.y, B.y, B.x )
+				hline( A.x, B.x, A.y )
+				vline( A.y, B.y, B.x )
 			else:
 				#carve horizontal -> vertical hall
-				_vline( A.y, B.y, A.x )
-				_hline( A.x, B.x, B.y )
+				vline( A.y, B.y, A.x )
+				hline( A.x, B.x, B.y )
 ```  
-Now, this code as it is, is broken, so don't try running anything at this point. 
+Now, this code as it is, is broken, so don't try running anything at this point. This incomplete code will be an outline for our hall-carving process. What we're doing, is getting the center tiles of both the current room, and the previous room. We want to carve a hallway between these two points. The catch though is, these two points could be at any two points on our map. The only way we could connect these with straight lines would be to create something like an L shaped hallway: either go left/right from A and carve up/down to B, or go up/down from A and carve left/right to B.  
 
+We're calling a few functions here that don't yet exist, so let's remedy that.  
 
-
-### Private Parts
-We'll also have a couple small helper functions, which will be meant to be called *only* through our `Generate()` function. To reinforce this, we'll be writing these as *private functions*, which have their names prefixed with an underscore `_`. We've already dealt with private functions already. Every script we create has a `_ready()` function defined, which is a private function that is meant only to be called internally by the game engine. You should, in most cases, never see a call to `_ready()` written anywhere in any script. Functions which are not private are considered *public functions*:  
+Write these functions down at the bottom of our script, below `Generate()`. Generate is our big mother function, so we want to keep her at the top for maximum visibility. The first helper function, `center()` will find the center cell within a Rect2 we'll give it as its argument:  
 
 ```python
-# Public Function
-func add(a,b):
-  return a+b
+# Find the global center of a Rect2
+func center( rect ):
+	var x = ceil(rect.size.width / 2)
+	var y = ceil(rect.size.height / 2)
+	return rect.pos + Vector2(x,y)
+```  
+We then have two other helper functions; `hline()` and `vline()`. These will return to us an array of Vector2 map coordinates representing the "line" of our hallway. They both do very similar things, but are different enough to warrent two different functions:  
 
-# Private Function
-func _add(a,b):
-  return a+b
-```
-Know that there is really no such thing as privacy in gdscript. There is really nothing stopping you from calling `DunGen._private_func()` from anywhere else in the program; the private designation is more of a suggestion than a hard restriction. If making these helper functions public feels better to you, it will make no difference.  
+```python
+# Get Vector2 along x1 - x2, y
+func hline( x1, x2, y ):
+	var line = []
+	for x in range( min(x1,x2), max(x1,x2) + 1 ):
+		line.append( Vector2(x,y) )
+	return line
 
+# Get Vector2 along x, y1 - y2
+func vline( y1, y2, x ):
+	var line = []
+	for y in range( min(y1,y2), max(y1,y2) + 1 ):
+		line.append( Vector2(x,y) )
+	return line
+```  
+Now that we have functions that do stuff, let's refactor our broken code so it's no longer broken!  
+
+```python
+		...
+		else:
+			# Carve a hall between this room and the last room
+			var prev_room = rooms[i-1]
+			var A = center( room )
+			var B = center( prev_room )
+			
+			# Flip a coin..
+			if randi() % 2 == 0:
+				# carve vertical -> horizontal hall
+				for cell in hline( A.x, B.x, A.y ):
+					map[cell.x][cell.y] = floor_id
+				for cell in vline( A.y, B.y, B.x ):
+					map[cell.x][cell.y] = floor_id
+			else:
+				# carve horizontal -> vertical hall
+				for cell in vline( A.y, B.y, A.x ):
+					map[cell.x][cell.y] = floor_id
+				for cell in hline( A.x, B.x, B.y ):
+					map[cell.x][cell.y] = floor_id
+```  
+Now, one piece of information we'd like our generator to make for us will be a starting position for the dungeon. We can keep things simple, and designate the center of the first generated room to be our starting point.  
+First, we want to add another local var to our `Generate()` function, up where we declared `map` and `rooms`:  
+
+```python
+	# initialize data
+	var map = []
+	var rooms = []
+	var start_pos = Vector2()
+```  
+Now, where we were skipping over the first room in our hall-carver block, we can instead have it use our new `center()` function to define our `start_pos`:  
+
+```python
+		...
+		if i == 0:
+			# Define the start_pos in the first room
+			start_pos = center( room )
+		else:
+			# Carve a hall between this room and the last room
+			var prev_room = rooms[i-1]
+			var A = center( room )
+			var B = center( prev_room )
+```  
+We're almost done!  
+
+The last operation of our `Generate()` function will return the `map` grid back to the sender. But now we have more information we want to return. We'll do this by packaging all the data into a dictionary and returning that. For now, all we need is `map` and `start_pos`, but later we will also want to access our `rooms` array, so we'll include that in our dictionary also.  The end of Generate will look like so:  
+
+```python
+	return {
+		"map":		map,
+		"rooms":	rooms,
+		"start_pos":	start_pos,
+		}
+```  
+With this, our DunGen script is complete, at least for now! From here, it wont take much to have our game utilize our new awesome tool!  
 ## Putting DunGen To Work
+Bring yourself now back to your Map.gd script. Down in its `_ready` function, we can have it call our DunGen singleton:  
+
+```python
+# Init
+func _ready():
+	var data = DunGen.Generate()
+```  
+Since we defined default values for all our generation parameters, we don't need to pass any arguments to the function!  
+
+Now, we need a little function in Map that will take the `map` data we've generated and use it to paint the tiles on our TileMap. We'll call this guy `draw_map()`, and place it at the bottom of the script, but above `_ready`:    
+
+```python
+# Draw map cells from map 2DArray
+func draw_map( map ):
+	for x in range( map.size() - 1 ):
+		for y in range( map[x].size() - 1 ):
+			set_cell( x,y, map[x][y] )
+```  
+
+Once we have that, we can call it in `_ready` after we get our data:  
+
+```python
+# Init
+func _ready():
+	var data = DunGen.Generate()
+	draw_map( data.map )
+```  
+
+The final step is to spawn the player into the map. We already have all this set up, we just need to feed it our `start_pos` data from the generator:  
+
+```python
+# Init
+func _ready():
+	var data = DunGen.Generate()
+	draw_map( data.map )
+
+	# Spawn Player
+	var player = RPG.make_thing( "player/player" )
+	spawn( player, data.start_pos )
+```  
+### Who Is Camera?!
+If you try playing your game now, assuming it doesn't crash, you'll probably notice that you don't see your player on the screen! It will be very likely that we've spawned our player at a position which is currently outside our current viewport. This is because there was a very small (but very important) task I forgot to do in the last step! What we need to do is add a Camera object to our player.  
+
+Open up your Database scene. Select your Player node, and add a new `Camera2D` node to it as a child. Under the camera's properties, enable `Current` and disable both `Drag Margin` checkboxes. You can play with these settings to get the setup you prefer though, of course. Just make sure the Camera is set to "Current", or our game wont use it.  
+**Now** try playing your game. Your player should show up at center screen. Move the player around, and the camera follows automagically!  
 
 ## Conclusion
+Get Excited! We've just given our game the ability to procedurally generate a whole world for us! At this point, you might find yourself spending more time playing your game than you do working on it, and that is a good thing! Try giving your Generate function different arguments and see what results you can get. If you're feeling adventurous, you can try making changes to your generator and experiment with it!  
+
+*In the next step, we'll expand on our map's `draw_map()` function, add a whole mess of new tiles to our dungeon tileset in a painless way, and paint our dungeons up to make them a lot more interesting to look at. Once you're ready to move on, [step 5 is just around the corner!](link)*
