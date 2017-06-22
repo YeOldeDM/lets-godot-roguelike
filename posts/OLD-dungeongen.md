@@ -1,6 +1,6 @@
 <!--
 .. title: Step 4: Enter The DunGen
-.. slug: step-4-dungeongen
+.. slug: old-dungeongen
 .. date: 2017-06-18 04:00:00 UTC
 .. type: text
 -->
