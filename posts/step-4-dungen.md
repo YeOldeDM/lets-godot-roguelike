@@ -154,7 +154,7 @@ Now we have a list of all the non-intersecting rooms our dungeon will contain. I
 		else:	rooms.append(new_room)
 	
 	# Process generated rooms
-	for i in range( rooms.size() - 1 ):
+	for i in range( rooms.size() ):
 		var room = rooms[i]
 		# Carve room
 		for x in range( room.size.width - 2 ):
@@ -300,8 +300,8 @@ Now, we need a little function in Map that will take the `map` data we've genera
 ```python
 # Draw map cells from map 2DArray
 func draw_map( map ):
-	for x in range( map.size() - 1 ):
-		for y in range( map[x].size() - 1 ):
+	for x in range( map.size() ):
+		for y in range( map[x].size() ):
 			set_cell( x,y, map[x][y] )
 ```  
 
