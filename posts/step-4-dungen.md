@@ -90,7 +90,7 @@ Let's add the code to generate the rooms:
 			column.append( wall_id )
 		map.append( column )
   
-  # Generate Rooms
+	<div style="background-color:green"># Generate Rooms
 	for r in range( room_count ):
 		# Roll Random Room Rect
 		# Width & Height
@@ -101,6 +101,7 @@ Let's add the code to generate the rooms:
 		var y = int( round( rand_range( 0, map_size.y - h - 1 ) ) )
 		# Construct Rect2
 		var new_room = Rect2( x, y, w, h )
+		</div>
   
   # return data
   return map
