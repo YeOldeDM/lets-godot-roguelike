@@ -286,6 +286,8 @@ The last operation of our `Generate()` function will return the `map` grid back 
 		}
 ```  
 With this, our DunGen script is complete, at least for now! From here, it wont take much to have our game utilize our new awesome tool!  
+**[Here is the complete DunGen.gd script](https://gist.github.com/YeOldeDM/2cfdf25fb6a34d88c7ec67b385cffada)**.  
+
 ## Putting DunGen To Work
 Bring yourself now back to your Map.gd script. Down in its `_ready` function, we can have it call our DunGen singleton:  
 
@@ -331,7 +333,7 @@ func _ready():
 If you try playing your game now, assuming it doesn't crash, you'll probably notice that you don't see your player on the screen! It will be very likely that we've spawned our player at a position which is currently outside our current viewport. This is because there was a very small (but very important) task I forgot to do in the last step! What we need to do is add a Camera object to our player.  
 
 Open up your Database scene. Select your Player node, and add a new `Camera2D` node to it as a child. Under the camera's properties, enable `Current` and disable both `Drag Margin` checkboxes. You can play with these settings to get the setup you prefer though, of course. Just make sure the Camera is set to "Current", or our game wont use it.  
-When we add the Camera, it defaults to center on the origin of the node it's parented to. The origins of our Things are in their upper-left corner, which isn't quite the true center of the object. You can offset this by changing the camera's Pos property to offset it by half our cell size, which would be `(16,16)`.  
+When we add the Camera, it defaults to center on the origin of the node it's parented to. The origins of our Things are in their upper-left corner, which isn't quite the true center of the object. You can offset this by changing the camera's Pos property to offset it by half our cell size, which would be `(16,16)`.  *The Ghost of Future Prototypes have reported that we will be having to re-create the Things in our database scene soon, so don't spend too much time making your settings here perfect.*  
 
 **Now** try playing your game! Your player should show up at center screen. Move the player around, and the camera follows automagically!  
 
