@@ -12,9 +12,12 @@ Introduction.
 ## Part Title
 Body.  
 
-## Sub-Part
+### Sub-Part
+Body.  
+
+#### Sub Sub-Part
 Body.  
 
 ## Conclusion  
 Body.  
-**Invitation to [the next step!](link)**
+*Invitation to [the next step!](link)*
