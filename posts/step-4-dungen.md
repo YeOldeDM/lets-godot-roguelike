@@ -339,4 +339,4 @@ When we add the Camera, it defaults to center on the origin of the node it's par
 ## Conclusion
 Get Excited! We've just given our game the ability to procedurally generate a whole world for us! At this point, you might find yourself spending more time playing your game than you do working on it, and that is a good thing! Try giving your Generate function different arguments and see what results you can get. If you're feeling adventurous, you can try making changes to your generator and experiment with it!  
 
-*In the next step, we'll expand on our map's `draw_map()` function, add a whole mess of new tiles to our dungeon tileset in a painless way, and paint our dungeons up to make them a lot more interesting to look at. Once you're ready to move on, [step 5 is just around the corner!](link)*
+*In the next step, we'll expand on our map's `draw_map()` function, add a whole mess of new tiles to our dungeon tileset in a painless way, and paint our dungeons up to make them a lot more interesting to look at. Once you're ready to move on, [step 5 is just around the corner!](../step-5-tilefamily.html)*
