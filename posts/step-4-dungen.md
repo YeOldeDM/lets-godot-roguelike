@@ -33,11 +33,11 @@ func Generate():
   # return data
   return map
 ```  
-We're not doing much yet, but let's break it down. The first thing we do is call this magic golden function `randomize()`, which will cause all random number generation afterward become truely random. Because of some mysterious quirk of Godot, random numbers will be  generated in the same sequence every time you play your game, until `randomize()` is called (or a seed is defined, but we wont get into those). Anyway...
+We're not doing much yet, but let's break it down. The first thing we do is call this magic golden function `randomize()`, which will cause all random number generation afterward become truely random. Because of some mysterious quirk of Godot, random numbers will be  generated in the same sequence every time you play your game, until `randomize()` is called (or a seed is defined, but we wont get into that). Anyway...
 Next, we're defining a new empty array called `map`. This will become a 2D array which will hold the indicies (0 or 1) which will tell our Map which of its tiles should be Walls and which tiles should be Floors. Finally, we're returning the currently-empty and useless array back to the caller.  
 
 ### It's Arrays All The Way Down
-There are several methods we could use to hold our `map` data. Since our dungeon floorspace will always be a regular rectangle made of of tiles we'll want to refer to by X Y coordinates (Battleship-style), a *multi-dimensional array* will be ideal. To be specific, we'll use a two-dimensional array. If you're not yet familiar enough with this sort of data structure, it might hard to wrap your head around at first (it was for me, at least). But keep at it, make sure your code is correct, and in the end it should Just Work. I think once you see everything working together in the end, the concept will start to click. And once that happens, the idea of a multi-dimensional array is actually pretty simple, if a little abstract.  
+There are several methods we could use to hold our `map` data. Since our dungeon floorspace will always be a regular rectangle made of of tiles we'll want to refer to by X Y coordinates (Battleship-style), a *multi-dimensional array* will be ideal. To be specific, we'll use a two-dimensional array. If you're not yet familiar enough with this sort of data structure, it might be hard to wrap your head around at first (it was for me, at least). But keep at it! Make sure your code is correct, and in the end it should Just Work. I think once you see everything working together in the end, the concept will start to click. And once that happens, the idea of a multi-dimensional array is actually pretty simple, if a little abstract.  
 
 Let's expand on our `Generate()` function to have it construct for us one of these fancy 2D arrays for our `map` var. We'll also need to introduce some arguments for our generator to take. We'll give all these arguments *default values*, so we will be able to call `Generate()` without necessarily needing to fill in all the arguments if we don't want to.  
 
@@ -63,11 +63,11 @@ func Generate( map_size=Vector2(80,70), wall_id=0 ):
   # return data
   return map
 ```  
-Our default values will also describe to us what type of variable we're expecting for each of our arguments. If you're writing your scripts in Godot's built-in script editor, you should get a nice tooltip to appear when you type a call to this function, telling you what types of vars it wants for each of the arguments, along with their name. This is pure gold for anyone other than the author of the script who is trying to use it, and even super-helpful to us as well. It's easy to forget what your own code is doing, so reminders like this save a lot of time and effort.  
-To populate our `map` array, we iterate over the length of `map_size.x`. For each iteration "row", we create a new list "column". We then iterate over the length of `map_size.y` and assign the value of `wall_id` that many times into the column array. The column is then appended to the map array, and the iteration begins again for the new value of `x`. Since we're representing our walls with indicies (map tiles are defined by index), we'll define index `0` as our wall_id. In theory, wall_id could be anything!  
+Our default values will also describe to us what type of variable we're expecting for each of our arguments. If you're writing your scripts in Godot's built-in script editor, you should get a nice tooltip to appear when you type a call to this function, telling you what types of vars it wants for each of the arguments, along with their name. This is pure gold for anyone other than the author of the script who is trying to use it, and even super-helpful to us as well. It's easy to forget what your own code is doing, so reminders like this save a lot of time and effort in the long run.  
+To populate our `map` array, we iterate over the length of `map_size.x`. For each iteration "row", we create a new list "column". We then iterate over the length of `map_size.y` and assign the value of `wall_id` that many times into the column array. The column is then appended to the map array, and the iteration begins again for the new value of `x`. Since we're representing our walls with indicies (map tiles are defined by index), we'll define index `0` as our wall_id.   
 
 ### We Have Rooms To Grow
-By now, we've effectively created for ourselves a dungeon consisting of solid rock. Not very interesting. From this solid block, we want to carve out spaces to represent rooms and hallways. To do this, we need to add some more arguments to our function. The order of these *are* important:  
+By now, we've effectively created for ourselves a dungeon consisting of solid rock which isn't very interesting. From this solid block, we want to carve out spaces to represent rooms and hallways. To do this, we need to add some more arguments to our function. The order of these *are* important:  
 
 ```python
 func Generate( map_size=Vector2(80,70), room_count=35, room_size=Vector2(5,16), wall_id=0, floor_id=1 ):
@@ -90,7 +90,6 @@ Let's add the code to generate the rooms:
 			column.append( wall_id )
 		map.append( column )
   
-	<div style="background-color:green"># Generate Rooms
 	for r in range( room_count ):
 		# Roll Random Room Rect
 		# Width & Height
@@ -101,7 +100,7 @@ Let's add the code to generate the rooms:
 		var y = int( round( rand_range( 0, map_size.y - h - 1 ) ) )
 		# Construct Rect2
 		var new_room = Rect2( x, y, w, h )
-		</div>
+
   
   # return data
   return map
