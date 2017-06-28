@@ -34,7 +34,7 @@ func Generate():
   return map
 ```  
 We're not doing much yet, but let's break it down. The first thing we do is call this magic golden function `randomize()`, which will cause all random number generation afterward become truely random. Because of some mysterious quirk of Godot, random numbers will be  generated in the same sequence every time you play your game, until `randomize()` is called (or a seed is defined, but we wont get into that). Anyway...
-Next, we're defining a new empty array called `map`. This will become a 2D array which will hold the indicies (0 or 1) which will tell our Map which of its tiles should be Walls and which tiles should be Floors. Finally, we're returning the currently-empty and useless array back to the caller.  
+Next, we're defining a new empty array called `map`. This will become a 2D array which will hold the indices (0 or 1) which will tell our Map which of its tiles should be Walls and which tiles should be Floors. Finally, we're returning the currently-empty and useless array back to the caller.  
 
 ### It's Arrays All The Way Down
 There are several methods we could use to hold our `map` data. Since our dungeon floorspace will always be a regular rectangle made of of tiles we'll want to refer to by X Y coordinates (Battleship-style), a *multi-dimensional array* will be ideal. To be specific, we'll use a two-dimensional array. If you're not yet familiar enough with this sort of data structure, it might be hard to wrap your head around at first (it was for me, at least). But keep at it! Make sure your code is correct, and in the end it should Just Work. I think once you see everything working together in the end, the concept will start to click. And once that happens, the idea of a multi-dimensional array is actually pretty simple, if a little abstract.  
@@ -64,7 +64,7 @@ func Generate( map_size=Vector2(80,70), wall_id=0 ):
   return map
 ```  
 Our default values will also describe to us what type of variable we're expecting for each of our arguments. If you're writing your scripts in Godot's built-in script editor, you should get a nice tooltip to appear when you type a call to this function, telling you what types of vars it wants for each of the arguments, along with their name. This is pure gold for anyone other than the author of the script who is trying to use it, and even super-helpful to us as well. It's easy to forget what your own code is doing, so reminders like this save a lot of time and effort in the long run.  
-To populate our `map` array, we iterate over the length of `map_size.x`. For each iteration "row", we create a new list "column". We then iterate over the length of `map_size.y` and assign the value of `wall_id` that many times into the column array. The column is then appended to the map array, and the iteration begins again for the new value of `x`. Since we're representing our walls with indicies (map tiles are defined by index), we'll define index `0` as our wall_id.   
+To populate our `map` array, we iterate over the length of `map_size.x`. For each iteration "row", we create a new list "column". We then iterate over the length of `map_size.y` and assign the value of `wall_id` that many times into the column array. The column is then appended to the map array, and the iteration begins again for the new value of `x`. Since we're representing our walls with indices (map tiles are defined by index), we'll define index `0` as our wall_id.   
 
 ### We Have Rooms To Grow
 By now, we've effectively created for ourselves a dungeon consisting of solid rock which isn't very interesting. From this solid block, we want to carve out spaces to represent rooms and hallways. To do this, we need to add some more arguments to our function. The order of these *are* important:  
@@ -110,9 +110,9 @@ Here we have our first use of random number generation! It might look weird at f
 `rand_range(a,b)` returns a random `float` between a and b. We want all these values to be integers. Since these random values will eventually be used to reference an index in an array, it *needs* to be an integer type.  
 We could use `int( rand_range(a,b) )` but that would round our floats down to the nearest integer. This would favor low numbers over higher ones, which isn't fair.  
 You'd think that `round()` would return an integer, but it doesn't *(needs confirmation?)*. `round(3.14)` will return `3.0` and not `3`. We want `3`. So we need to round our random float, then convert to `int`. Whew!  
-**For our game proper, we'll be rolling our own RNG functions which will be much more elegant to work with. But in the spirit of keeping this script independent from the rest of the program, we'll opt for this "brute force" approach. It will probably be the one and only time we'll be doing this `int(round(rand_range()))` madness.**  
+**For our game proper, we'll be rolling our own RNG functions which will be much more elegant to work with. But in the spirit of keeping this script independent from the rest of the program, we'll opt for this ugly approach. It will probably be the one and only time we'll be doing this `int(round(rand_range()))` madness.**  
 
-Because we want our rooms to fit within the boundries of our map's size, we'll roll our room's width and height first. All we're doing here is getting two random numbers `w`idth and `h`eight, which will be between `room_size.x` and `room_size.y`. To get the position of the room on the map, we roll two more numbers `x` and `y` which are between `0` and `map_size.x` and `.y` respectively. The maximum numbers to roll are then offset by subtracting `w` and `h` respectively. Because our map indicies begin at 0, we also want to make our max numbers one less than our size.  
+Because we want our rooms to fit within the boundaries of our map's size, we'll roll our room's width and height first. All we're doing here is getting two random numbers `w`idth and `h`eight, which will be between `room_size.x` and `room_size.y`. To get the position of the room on the map, we roll two more numbers `x` and `y` which are between `0` and `map_size.x` and `.y` respectively. The maximum numbers to roll are then offset by subtracting `w` and `h` respectively. Because our map indices begin at 0, we also want to make our max numbers one less than our size.  
 We end the chunk of code by declaring a new variable `new_room` and assigning it to a `Rect2()` object. Just like we use `Vector2` to define a cell position on our map, we can use `Rect2` to define a rectangular area of cells on our map. We can create a Rect2 object by giving it our `x`, `y`, `w`, and `h` random values.  
 
 Now that we've rolled up the abstract definition of our room rectangle, we need to do something with it. We need to store our `Rect2` rooms so we can use them later. Let's declare a new array `rooms` at the top of the function, just under `var map = []`:  
@@ -172,7 +172,7 @@ Now we don't need to worry about it!  A room given the size of `(3,3)` will now 
 
 
 
-### Horrible Hall Hacking
+### Happy Hall Hacking
 Our rooms, by design, should be completely cut off from each other. Unless we want to make a digging-based dungeon crawler (neat idea, but out of the scope of our project) we need some way to connect these rooms together, so the player can, you know, crawl through them.  
 We carve our hallways much the same way we did our rooms. But halls are not special like rooms. We don't need to keep them in any list. We don't care if hallways intersect other hallways, or even other rooms! The halls should be able slash their way freely through our dungeon, giving us an interesting result which is highly variable, but usually doesn't look too "random".  
 Within the same scope as "Process generated rooms", add this code. It will be the skeleton of our hall-carving algorithm:  
@@ -210,7 +210,7 @@ func center( rect ):
 	var y = ceil(rect.size.height / 2)
 	return rect.pos + Vector2(x,y)
 ```  
-We then have two other helper functions; `hline()` and `vline()`. These will return to us an array of Vector2 map coordinates representing the "line" of our hallway. They both do very similar things, but are different enough to warrent two different functions:  
+We then have two other helper functions; `hline()` and `vline()`. These will return to us an array of Vector2 map coordinates representing the "line" of our hallway. They both do very similar things, but are different enough to warrant two different functions:  
 
 ```python
 # Get Vector2 along x1 - x2, y
@@ -275,7 +275,7 @@ Now, where we were skipping over the first room in our hall-carver block, we can
 ```  
 We're almost done!  
 
-The last operation of our `Generate()` function will return the `map` grid back to the sender. But now we have more information we want to return. We'll do this by packaging all the data into a dictionary and returning that. For now, all we need is `map` and `start_pos`, but later we will also want to access our `rooms` array, so we'll include that in our dictionary also.  The end of Generate will look like so:  
+The last operation of our `Generate()` function will return the `map` grid back to the sender. But now we have more information we want to return. We'll do this by packaging all the data into a dictionary and returning that. For now, all we need is `map` and `start_pos`, but later we will also want to access our `rooms` array, so we'll include that in our dictionary also.  The end of Generate will look like this:  
 
 ```python
 	return {
@@ -297,7 +297,7 @@ func _ready():
 ```  
 Since we defined default values for all our generation parameters, we don't need to pass any arguments to the function!  
 
-Now, we need a little function in Map that will take the `map` data we've generated and use it to paint the tiles on our TileMap. We'll call this guy `draw_map()`, and place it at the bottom of the script, but above `_ready`:    
+Now, we need a little function in Map that will take the `map` data we've generated and use it to paint the tiles on our TileMap. We'll call this little guy `draw_map()`, and place it at the bottom of the script, but above `_ready`:    
 
 ```python
 # Draw map cells from map 2DArray
@@ -332,7 +332,7 @@ func _ready():
 If you try playing your game now, assuming it doesn't crash, you'll probably notice that you don't see your player on the screen! It will be very likely that we've spawned our player at a position which is currently outside our current viewport. This is because there was a very small (but very important) task I forgot to do in the last step! What we need to do is add a Camera object to our player.  
 
 Open up your Database scene. Select your Player node, and add a new `Camera2D` node to it as a child. Under the camera's properties, enable `Current` and disable both `Drag Margin` checkboxes. You can play with these settings to get the setup you prefer though, of course. Just make sure the Camera is set to "Current", or our game wont use it.  
-When we add the Camera, it defaults to center on the origin of the node it's parented to. The origins of our Things are in their upper-left corner, which isn't quite the true center of the object. You can offset this by changing the camera's Pos property to offset it by half our cell size, which would be `(16,16)`.  *The Ghost of Future Prototypes have reported that we will be having to re-create the Things in our database scene soon, so don't spend too much time making your settings here perfect.*  
+When we add the Camera, it defaults to center on the origin of the node it's parented to. The origins of our Things are in their upper-left corner, which isn't the true visual center of the object. You can offset this by changing the camera's Pos property to offset it by half our cell size, which would be `(16,16)`.  *The Ghost of Future Prototypes have reported that we will be having to re-create the Things in our database scene soon, so don't spend too much time making your settings here perfect.*  
 
 **Now** try playing your game! Your player should show up at center screen. Move the player around, and the camera follows automagically!  
 
