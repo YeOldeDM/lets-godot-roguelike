@@ -5,11 +5,18 @@
 .. type: text
 -->
 
+[dungeonmoon]""
+[2darray]""
+[arghints]""
+[playeraddcamera]""
+
 # WORK IN PROGRESS: DO NOT READ BELOW THIS LINE OR YOU WILL LOSE BRAIN CELLS
 
 
 
 In this step, we will be creating a random dungeon generator for our game. We'll be making our generator in the form of a self-contained, "modular" script which will be loaded as a singleton. By creating our dungeon generator this way, you could easily import this script into any other project which requires a similar system, with a minimal amount of integration required.  
+
+![dungeonmoon][dungeonmoon]
 
 Let's begin the step by creating a new script file at `res://global/DunGen.gd`. Let's also add this script to the AutoLoad list in Project Settings now, so we don't forget to do it later!  
 
@@ -39,6 +46,8 @@ Next, we're defining a new empty array called `map`. This will become a 2D array
 ### It's Arrays All The Way Down
 There are several methods we could use to hold our `map` data. Since our dungeon floorspace will always be a regular rectangle made of of tiles we'll want to refer to by X Y coordinates (Battleship-style), a *multi-dimensional array* will be ideal. To be specific, we'll use a two-dimensional array. If you're not yet familiar enough with this sort of data structure, it might be hard to wrap your head around at first (it was for me, at least). But keep at it! Make sure your code is correct, and in the end it should Just Work. I think once you see everything working together in the end, the concept will start to click. And once that happens, the idea of a multi-dimensional array is actually pretty simple, if a little abstract.  
 
+![2darray][2darray]
+
 Let's expand on our `Generate()` function to have it construct for us one of these fancy 2D arrays for our `map` var. We'll also need to introduce some arguments for our generator to take. We'll give all these arguments *default values*, so we will be able to call `Generate()` without necessarily needing to fill in all the arguments if we don't want to.  
 
 ```python
@@ -64,6 +73,9 @@ func Generate( map_size=Vector2(80,70), wall_id=0 ):
   return map
 ```  
 Our default values will also describe to us what type of variable we're expecting for each of our arguments. If you're writing your scripts in Godot's built-in script editor, you should get a nice tooltip to appear when you type a call to this function, telling you what types of vars it wants for each of the arguments, along with their name. This is pure gold for anyone other than the author of the script who is trying to use it, and even super-helpful to us as well. It's easy to forget what your own code is doing, so reminders like this save a lot of time and effort in the long run.  
+
+![arghints][arghints]
+
 To populate our `map` array, we iterate over the length of `map_size.x`. For each iteration "row", we create a new list "column". We then iterate over the length of `map_size.y` and assign the value of `wall_id` that many times into the column array. The column is then appended to the map array, and the iteration begins again for the new value of `x`. Since we're representing our walls with indices (map tiles are defined by index), we'll define index `0` as our wall_id.   
 
 ### We Have Rooms To Grow
@@ -330,6 +342,8 @@ func _ready():
 ```  
 ### Who Is Camera?!
 If you try playing your game now, assuming it doesn't crash, you'll probably notice that you don't see your player on the screen! It will be very likely that we've spawned our player at a position which is currently outside our current viewport. This is because there was a very small (but very important) task I forgot to do in the last step! What we need to do is add a Camera object to our player.  
+
+![playeraddcamera][playeraddcamera]
 
 Open up your Database scene. Select your Player node, and add a new `Camera2D` node to it as a child. Under the camera's properties, enable `Current` and disable both `Drag Margin` checkboxes. You can play with these settings to get the setup you prefer though, of course. Just make sure the Camera is set to "Current", or our game wont use it.  
 When we add the Camera, it defaults to center on the origin of the node it's parented to. The origins of our Things are in their upper-left corner, which isn't the true visual center of the object. You can offset this by changing the camera's Pos property to offset it by half our cell size, which would be `(16,16)`.  *The Ghost of Future Prototypes have reported that we will be having to re-create the Things in our database scene soon, so don't spend too much time making your settings here perfect.*  
