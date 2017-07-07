@@ -5,10 +5,13 @@
 .. type: text
 -->
 
-[dungeonmoon]""
-[2darray]""
-[arghints]""
-[playeraddcamera]""
+[dungeonmoon]""  
+[2darray]""  
+[arghints]""  
+[playeraddcamera]""  
+[roomwalls]""  
+[roomhalls]""  
+[startpos]""  
 
 # WORK IN PROGRESS: DO NOT READ BELOW THIS LINE OR YOU WILL LOSE BRAIN CELLS
 
@@ -93,8 +96,8 @@ We've added three new arguments:
 Let's add the code to generate the rooms:  
 
 ```python
-  ...
-  
+func Generate( map_size=Vector2(80,70), room_count=35, room_size=Vector2(5,16), wall_id=0, floor_id=1 ):
+
   # Populate map array
 	for x in range( map_size.x ):
 		var column = []
@@ -113,7 +116,6 @@ Let's add the code to generate the rooms:
 		# Construct Rect2
 		var new_room = Rect2( x, y, w, h )
 
-  
   # return data
   return map
 ```  
@@ -173,7 +175,7 @@ Now we have a list of all the non-intersecting rooms our dungeon will contain. I
 			for y in range( room.size.height - 2 ):
 				map[ room.pos.x + x + 1 ][ room.pos.y + y + 1] = floor_id
 ```
-Much like we did when we created our "blank" map, we're using this double-for loop, iterating through Y through X. This time though, we already have a value assigned to the index we're going for. Instead, we're accessing that x y position in our data grid and assigning it a new value -- our `floor_id`. The math here looks a little wonky, but it's there for a reason. We're carving our rooms in such a way that the outer border of the room is not carved. This ensures that every room has at least one tile of wall surrounding it, otherwise rooms which are right next to each other but not overlapping, would have no barrier between the edge where they meet. This means that you should consider that your `room_size` parameters will be two tiles shorter than the numbers you give it.  
+Much like we did when we created our "blank" map, we're using this double-for loop, iterating through Y through X. This time though, we already have a value assigned to the index we're going for. Instead, we're accessing that x y position in our data grid and assigning it a new value -- our `floor_id` argument. The math here looks a little wonky, but it's there for a reason. We're carving our rooms in such a way that the outer border of the room is not carved. This ensures that every room has at least one tile of wall surrounding it, otherwise rooms which are right next to each other but not overlapping, would have no barrier between the edge where they meet. This means that you should consider that your `room_size` parameters will be two tiles shorter than the numbers you give it.  
 In fact, we can compensate for that in our code, by adding two to the numbers we give our RNG for width and height of the room! Let's back up to that part of the code and give it a tweak:  
 
 ```python
@@ -181,7 +183,7 @@ In fact, we can compensate for that in our code, by adding two to the numbers we
 		var h = int( round( rand_range( room_size.x + 2, room_size.y + 2 ) ) )
 ```  
 Now we don't need to worry about it!  A room given the size of `(3,3)` will now have a `3x3` floor, not a `1x1` floor. Take a tile here...add a tile there...the math should all work out in the end.  
-
+![roomwalls][roomwalls]
 
 
 ### Happy Hall Hacking
@@ -263,6 +265,10 @@ Now that we have functions that do stuff, let's refactor our broken code so it's
 				for cell in hline( A.x, B.x, B.y ):
 					map[cell.x][cell.y] = floor_id
 ```  
+
+![roomhalls][roomhalls]  
+*Rooms A, B and C are generated in order. The two different colored "paths" represent either of the two options we give our hall-carver to make a passageway between it and the room preceding it.*  
+
 Now, one piece of information we'd like our generator to make for us will be a starting position for the dungeon. We can keep things simple, and designate the center of the first generated room to be our starting point.  
 First, we want to add another local var to our `Generate()` function, up where we declared `map` and `rooms`:  
 
@@ -285,6 +291,9 @@ Now, where we were skipping over the first room in our hall-carver block, we can
 			var A = center( room )
 			var B = center( prev_room )
 ```  
+
+![startpos][startpos]  
+
 We're almost done!  
 
 The last operation of our `Generate()` function will return the `map` grid back to the sender. But now we have more information we want to return. We'll do this by packaging all the data into a dictionary and returning that. For now, all we need is `map` and `start_pos`, but later we will also want to access our `rooms` array, so we'll include that in our dictionary also.  The end of Generate will look like this:  
