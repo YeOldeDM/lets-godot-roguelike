@@ -13,8 +13,6 @@
 [roomhalls]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/roomhalls.png 
 [startpos]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/startpos.png
 
-# WORK IN PROGRESS: DO NOT READ BELOW THIS LINE OR YOU WILL LOSE BRAIN CELLS
-
 
 
 In this step, we will be creating a random dungeon generator for our game. We'll be making our generator in the form of a self-contained, "modular" script which will be loaded as a singleton. By creating our dungeon generator this way, you could easily import this script into any other project which requires a similar system, with a minimal amount of integration required.  
