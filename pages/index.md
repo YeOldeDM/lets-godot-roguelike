@@ -71,7 +71,17 @@ The Steps
 
 [Step 3: Enter The Thing](../tutorials/step-3-things.html)  
 
-***WIP***[Step 4: Dungeonmaster](../tutorials/step-4-dungeongen.html)***WIP***  
+[Step 4: Enter The DunGen](../tutorials/step-4-dungeongen.html)
+
+***WIP***[Step 5: Tile Families](../tutorials/step-5-tilefamilies.html)***WIP***  
+
+***WIP***[Step 6: Thing Management](../tutorials/step-6-thingmanagement.html)***WIP***  
+
+***WIP***[Step 7: Fields of View, Fogs of War](../tutorials/step-7-fov.html)***WIP***  
+
+***WIP***[Step 8: The Fighter](../tutorials/step-8-fighter.html)***WIP***  
+
+***WIP***[Step 9: The Fight](../tutorials/step-9-combat.html)***WIP***  
 
 
 
