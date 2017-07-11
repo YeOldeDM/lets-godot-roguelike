@@ -33,13 +33,13 @@ extends Node
 func Generate():
   
     # Randomize
-	randomize()
+    randomize()
   
     # initialize data
-	var map = []
+    var map = []
   
     # return data
-	return map
+    return map
 ```  
 We're not doing much yet, but let's break it down. The first thing we do is call this magic golden function `randomize()`, which will cause all random number generation afterward become truely random. Because of some mysterious quirk of Godot, random numbers will be  generated in the same sequence every time you play your game, until `randomize()` is called (or a seed is defined, but we wont get into that). Anyway...
 Next, we're defining a new empty array called `map`. This will become a 2D array which will hold the indices (0 or 1) which will tell our Map which of its tiles should be Walls and which tiles should be Floors. Finally, we're returning the currently-empty and useless array back to the caller.  
@@ -61,7 +61,7 @@ func Generate( map_size=Vector2(80,70), wall_id=0 ):
     randomize()
   
     # initialize data
-	var map = []
+    var map = []
   
     # Populate map array
 	for x in range( map_size.x ):
