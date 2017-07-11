@@ -32,14 +32,14 @@ extends Node
 # Generate the Datamap
 func Generate():
   
-  # Randomize
+    # Randomize
 	randomize()
   
-  # initialize data
+    # initialize data
 	var map = []
   
-  # return data
-  return map
+    # return data
+	return map
 ```  
 We're not doing much yet, but let's break it down. The first thing we do is call this magic golden function `randomize()`, which will cause all random number generation afterward become truely random. Because of some mysterious quirk of Godot, random numbers will be  generated in the same sequence every time you play your game, until `randomize()` is called (or a seed is defined, but we wont get into that). Anyway...
 Next, we're defining a new empty array called `map`. This will become a 2D array which will hold the indices (0 or 1) which will tell our Map which of its tiles should be Walls and which tiles should be Floors. Finally, we're returning the currently-empty and useless array back to the caller.  
@@ -57,21 +57,21 @@ extends Node
 # Generate the Datamap
 func Generate( map_size=Vector2(80,70), wall_id=0 ):
   
-  # Randomize
-	randomize()
+    # Randomize
+    randomize()
   
-  # initialize data
+    # initialize data
 	var map = []
   
-  # Populate map array
+    # Populate map array
 	for x in range( map_size.x ):
 		var column = []
 		for y in range( map_size.y ):
 			column.append( wall_id )
 		map.append( column )
   
-  # return data
-  return map
+    # return data
+    return map
 ```  
 Our default values will also describe to us what type of variable we're expecting for each of our arguments. If you're writing your scripts in Godot's built-in script editor, you should get a nice tooltip to appear when you type a call to this function, telling you what types of vars it wants for each of the arguments, along with their name. This is pure gold for anyone other than the author of the script who is trying to use it, and even super-helpful to us as well. It's easy to forget what your own code is doing, so reminders like this save a lot of time and effort in the long run.  
 
@@ -96,7 +96,7 @@ Let's add the code to generate the rooms:
 ```python
 func Generate( map_size=Vector2(80,70), room_count=35, room_size=Vector2(5,16), wall_id=0, floor_id=1 ):
 
-  # Populate map array
+    # Populate map array
 	for x in range( map_size.x ):
 		var column = []
 		for y in range( map_size.y ):
@@ -114,8 +114,8 @@ func Generate( map_size=Vector2(80,70), room_count=35, room_size=Vector2(5,16), 
 		# Construct Rect2
 		var new_room = Rect2( x, y, w, h )
 
-  # return data
-  return map
+    # return data
+    return map
 ```  
 
 Here we have our first use of random number generation! It might look weird at first to be doing this, but here is why:  
@@ -347,6 +347,7 @@ func _ready():
 	var player = RPG.make_thing( "player/player" )
 	spawn( player, data.start_pos )
 ```  
+
 ### Who Is Camera?!
 If you try playing your game now, assuming it doesn't crash, you'll probably notice that you don't see your player on the screen! It will be very likely that we've spawned our player at a position which is currently outside our current viewport. This is because there was a very small (but very important) task I forgot to do in the last step! What we need to do is add a Camera object to our player.  
 
