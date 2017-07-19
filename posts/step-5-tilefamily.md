@@ -4,6 +4,9 @@
 .. date: 2017-06-26 05:00:00 UTC
 .. type: text
 -->
+  
+[tilehelper_search] ""  
+
 
 # WORK IN PROGRESS: DO NOT READ BELOW THIS LINE OR YOU WILL LOSE BRAIN CELLS
 
@@ -25,6 +28,8 @@ If you look at the contents of `/dc-dngn/wall/` and `dc-dngn/floor/` you'll noti
 Take the contents of the source folder `dc-dngn/wall/` and copy it to `res://graphics/dun/wall/`. Do the same with `dc-dngn/floor/` and copy it to `res://graphics/dun/floor`.  
 
 **There are some "unique" graphics we're not interested in. Don't include those.  
+Basically, we are only using the graphics which end in a number. We are also excluding the `shadow` and `tree` wall sets, and the `dirt` and `pedestal` sets from floors. We only want the graphics which form neat square textures, and belong in some set of textures.  
+(maybe provide a zip with all the appropriate wall/floor graphics)  
 
 **This will be a lot of assets. Don't panic!  
 You probably aren't looking forward to creating all these sprites and assigning their textures individually. Neither am I. Fortunately for us, we can use a tool to do this ditch-digging work for us. Better yet, we don't even have to make it. Someone has already done that for us!  
@@ -38,12 +43,27 @@ The project for this tutorial has 295 tiles...
 **Go to the **AssetLib** tab at the top of the screen. You can find all kinds of different plugins for your projects here!  
 
 **Search for **"Tilesethelper"**. Download and install from Godot. Or, [here's the link](). Don't forget to enable it once installed.  
+You can enable plugins by going to the Plugins tab of your Project Settings. There is also a Plugins button at the top-right of the AssetLib panel that will bring you to the same place.  
+
+![][tilehelper_search]
 
 **This is how to use Tilesethelper to import all our Wall tiles. Give these LightOccluders. We'll want them soon.  
+Go to your tileset edit scene if you're not already there. It should now be an empty `Node` since we deleted the two tiles we made back in Step 1.  
+Select the top Node of this scene. With our Tilesethelper plugin enabled, we should now have a new tab in one of our docks called "Tileset". In here we have some options to play with.  
+Click the `PNG` icon in the dock. This should bring up a dialog window to let you select one or more images. Navigate to your `res://graphics/dun/wall/` folder and select *all* the graphics there. The PNG page image should now turn into a stack of PNG images, indicating we want to create several tiles from several images.  
+It is important that we fill in the Size field in the tileset dock. This will tell the helper what size we want our tiles to be. All our tiles are 32x32, so we want to set `32` as our Size. We don't need to worry about filling in `Name` or `Frame`.  
+Below this are three more options we can assign to our tiles. It might seem logical to give our walls Collision, but remember that our own data-driven collision system is already in place. Our "Navigation" system will also be hand-rolled to suit our purposes, so we have no need for the Navigation on tiles. We do however, want to use the mysterious `Occluder`. This is something we wont really need until later on in the project, but it will do us good to set it up now so we don't have to bother re-making our tileset later.  
+Later on, we'll be implementing some real-time lighting and so we want our wall tiles to cast shadows, and the Occluder will make this happen. We'll be going into this when we get to it, so if you don't quite understand what this Occluder business is yet, don't worry. Just know that it will look really cool.  
+When, and only when, all these options are set the way we want, double-check you have the top node of your tileset scene selected, and hit the `Create Tile(s)` button. Say some more magic words and watch the plugin auto-generate a bunch of tiles. Yay!  
 
-**Do the same to import all floor tiles. All they need is the Sprites...  
+Now we can do the same thing for all our floor textures in `res://graphics/dun/floor/`. This time though, we don't want to assign Occluders, so make sure that is disabled. Select all the floor textures, make sure your Size is still 32, and hit `Create Tile(s)` again. BAM! All our floor tiles are appended to the top node of the tileset scene.  
 
-**It's important to disable "Merge with Existing" option at the bottom of the convert to tileset window. If you don't, it will conserve the original tiles we deleted at the beginning, which will shift all your tiles' indices by 2. That's bad.  
+Before we can use any of these tiles, we need to export the scene as a tileset resource. `Click Scene > Convert To.. > Tileset` and replace the tileset you created earlier.
+
+**NOTE: It's important to disable "Merge with Existing" option at the bottom of the convert to tileset window. If you don't, it will conserve the original tiles we deleted at the beginning, which will shift all your tiles' indices by 2. That's bad.**  
+
+Now if you go to the Map scene and select the TileMap node there, you should see all the new tiles you added in the dock on the left.  
+This is going to totally brick the way our tilemap paints its tiles based on the data we give it, so we need to do some re-factoring to implement our new dynamic set of tiles.  
 
 ## Big Chunky Global Family
 **Make a new Singleton `res://global/TileFamily.gd`. Prepare to crunch. Unfortunately, we don't have a tool to dig this ditch for us.  
