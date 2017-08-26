@@ -13,14 +13,13 @@
 Last time, we created all the tools we need to give our game a randomly-generated dungeon. In this step, we're going to jazz up our map a little to include random varients of commonly-themed tiles. We are also going to download and utilize a plugin to help us get through a lot of the grunt work we'll be putting ourselves up against. After the last step, this one should feel quick and easy, so let's get right to it!  
 
 ## We Need a Bigger Boat, and by Boat I mean Tileset
-**The first thing we want to do is expand upon our current tileset.  
+What I'm trying to say is we need to expand upon our current tileset. I tried to come up with a witty title for this section, but fudge it! We have a game to make here.
 The paltry two tiles we're using have served their purpose well, but it is their time to go.  
 
-**So far we've only been using two tiles; one for floors and one for walls.  
-This works well for quickly giving us a visual description of a cell's state (wall or floor). This looks dull though, and our source graphics library gives us a great deal of wall and floor textures to work with.  
-If you look at the contents of `/dc-dngn/wall/` and `dc-dngn/floor/` you'll notice that many of the tiles are one of a handful of similar-looking textures which are all variations of some common theme; The textures are meant to be used together.  
+So far we've only been using two tiles; one for floors and one for walls. This works well for quickly giving us a visual description of a cell's state (wall or floor). This looks dull though, and our source graphics library gives us a great deal of wall and floor textures to work with. The temptation is too great to supress anymore...  
+If you look at the contents of `/dc-dngn/wall/` and `dc-dngn/floor/` you'll notice that many of the tiles are one of a handful of similar-looking textures which are all variations of some common theme; The textures are meant to be used together. A "Texture Family", if you will.
 
-**Open `res://core/Map/Tiles_edit.tscn`. Delete tile sprite nodes under the base node.  
+Time to get to work. Open `res://core/Map/Tiles_edit.tscn`. Delete tile sprite nodes under the base node.  
 
 
 ### Get All The Graphix!
