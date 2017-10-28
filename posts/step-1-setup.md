@@ -311,6 +311,6 @@ I've added plenty of comments to the code to verbally illustrate what a particul
 
 [here](https://github.com/YeOldeDM/realms-of-todog/tree/39c93e2e5a3b4ad1002e8b989e0235a6fb650226) you can download a snapshot of the project at this current step, if you'd like something to compare to your own project.  
 
-That's it for this step! In the next step we will make it so our player can't walk through walls, and expand on the movement mechanics we've established here. Since we spent the extra time in this step setting the stage, this next leap should be straight-forward and easy to get through. Once you're ready, it's time for [Step 2](../step-2-collision.html)  
+That's it for this step! In the next step we will make it so our player can't walk through walls, and expand on the movement mechanics we've established here. Since we spent the extra time in this step setting the stage, this next leap should be straight-forward and easy to get through. Once you're ready, it's time for [Step 2](../tutorials/step-2-collision.html)  
 
 
