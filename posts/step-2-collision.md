@@ -191,7 +191,7 @@ Fire up your game and you should now be able to move in all eight directions, us
 
 [here](https://github.com/YeOldeDM/realms-of-todog/tree/42988396607e866ef7051021e55aea65940496de) you can download a snapshot of the project at this current step, if you'd like something to compare to your own project. 
 
-That is it for this step! The next thing we're going to work on is it's own thing, so we will give it its own step. It's time for [Step 3!](../step-3-things.html)  
+That is it for this step! The next thing we're going to work on is it's own thing, so we will give it its own step. It's time for [Step 3!](../tutorials/step-3-things.html)  
 
 
 
