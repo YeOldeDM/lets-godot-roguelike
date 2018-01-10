@@ -5,7 +5,7 @@
 .. type: text
 -->
   
-[tilehelper_search] ""  
+[tilehelper_search]: https://github.com/YeOldeDM/lets-godot-roguelike/raw/master/img/5/tilehelper_search.png
 
 
 # WORK IN PROGRESS: DO NOT READ BELOW THIS LINE OR YOU WILL LOSE BRAIN CELLS
@@ -85,9 +85,9 @@ var FAMILY_BRICK_DARK = [FLOOR_GREY_DIRT, WALL_BRICK_DARK]
 
 
 ## Repainting The Map
-**Instead of linking map data directly with map index, we need a layer of complextion.  
+**Instead of linking map data directly with map index, we need another layer of complexity.
 
-**Declare a const in Map for MAP_FAMILY and ROOM_FAMILY.  
+**Declare a const in `Map.gd` for MAP_FAMILY and ROOM_FAMILY.  
 ```python
 extends TileMap
 
@@ -97,6 +97,8 @@ var MAP_FAM = TileFamily.FAMILY_BRICK_BROWN
 **In `Map.paint_cell()` we want a new argument, `family=MAP_FAMILY`.  
 ```python
 func paint_cell( cell, family=MAP_FAM ):
+	var c = self.data.map[cell.x][cell.y]
+	...
 ```
 
 In the `paint_cell()` function, we get a random index between the two numbers in the family array.  
